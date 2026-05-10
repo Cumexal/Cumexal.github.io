@@ -10,13 +10,13 @@
 
         :root {
             --bg: #0a0a0a;
-            --accent: #00ff66; /* Neon Green - change this for a new vibe */
+            --accent: #00ff66;
         }
 
         body {
             background-color: var(--bg);
             color: white;
-            font-family: 'Space+Grotesk', sans-serif;
+            font-family: 'Space Grotesk', sans-serif;
             overflow-x: hidden;
         }
 
@@ -27,7 +27,6 @@
             text-transform: uppercase;
         }
 
-        /* The "Anti-Stack" Grid */
         .bento-grid {
             display: grid;
             grid-template-columns: repeat(12, 1fr);
@@ -55,10 +54,9 @@
             border-bottom: 1px solid var(--accent);
         }
     </style>
-</head>
+<meta name="generator" content="Hexo 8.1.2"></head>
 <body>
 
-    <!-- Corner Nav (Minimalist) -->
     <nav class="fixed top-0 left-0 w-full p-6 flex justify-between z-50 mix-blend-difference">
         <div class="text-xl font-bold tracking-tighter" id="brand">CUMEXAL</div>
         <div class="space-x-8 text-sm uppercase tracking-widest">
@@ -69,58 +67,48 @@
     </nav>
 
     <main class="bento-grid mt-12">
-        <!-- Big Statement Header -->
         <div class="col-span-12 md:col-span-8 row-span-3 flex flex-col justify-end">
             <h1 class="hero-text text-[12vw] md:text-[15vw] text-white opacity-90" id="main-title">
                 CODE<br><span class="text-transparent" style="-webkit-text-stroke: 2px white;">LOGIC</span>
             </h1>
         </div>
 
-        <!-- Bio Card -->
         <div class="card col-span-12 md:col-span-4 row-span-2 flex flex-col justify-between">
-
             <p class="text-lg leading-tight" id="bio-text">Loading...</p>
         </div>
 
-        <!-- Quick Links / GitHub Stats -->
         <div class="card col-span-6 md:col-span-2 row-span-2 border-l-4 border-l-[var(--accent)]">
             <h3 class="text-xs uppercase mb-4 text-[var(--accent)]">Stack</h3>
             <ul class="text-sm space-y-1" id="tech-stack"></ul>
         </div>
 
-        <!-- Dynamic Content Box -->
         <div class="card col-span-6 md:col-span-3 row-span-4 bg-white text-black flex flex-col justify-between">
             <h3 class="font-bold text-4xl leading-none">最新<br>  日志_</h3>
             <div id="latest-post" class="text-sm italic">"Parsing the future of silicon..."</div>
         </div>
 
-        <!-- Image/Art Box (Replace src with your photo) -->
         <div class="col-span-12 md:col-span-7 row-span-3 relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700">
             <img src="https://images.unsplash.com/photo-1614850523296-d8c1af93d400?q=80&w=2070" class="object-cover w-full h-full">
             <div class="absolute bottom-4 left-4 bg-black p-2 text-[10px]" id="img-caption">LOCATION: SOUTHEAST UNIVERSITY / 2026</div>
         </div>
     </main>
 
-    <!-- Scrolling Sticker Text (Easy to modify below) -->
     <div class="marquee py-2 mt-4">
         <div class="animate-marquee inline-block text-sm uppercase" id="ticker">
-            <!-- Will be populated by JS -->
         </div>
     </div>
 
     <script>
-        // --- EDIT YOUR INFORMATION HERE ---
         const USER_DATA = {
             brand: "CUMEXAL",
             mainTitle: "CRAFTING<br>SYSTEMS",
             bio: "CUMEXAL.",
             stack: ["嵌入式", "硬件", "物联网", "计算机"],
-            latestPost: "智能球门",
+            latestPost: "智能球门\r\n你好",
             imageCaption: "OMS-海猴科技",
             tickerText: " • ESP-IDF • Arduino • STM32 • STC • PYTHON • C • HTML • ioT"
         };
 
-        // --- ASSIGNMENT LOGIC ---
         document.getElementById('brand').innerText = USER_DATA.brand;
         document.getElementById('main-title').innerHTML = USER_DATA.mainTitle;
         document.getElementById('bio-text').innerText = USER_DATA.bio;
