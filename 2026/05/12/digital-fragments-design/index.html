@@ -340,11 +340,48 @@
             }
 
             @media (max-width: 768px) {
-                #popup-card { width: 88vw; }
-                #popup-card .garden-svg { height: 130px; }
-                #popup-title { font-size: 1.3rem; }
-                #popup-body { padding: 1rem 1.2rem 1.5rem; }
-                #popup-message { font-size: 0.85rem; }
+                #popup-card {
+                    width: 92vw;
+                    max-height: 80vh;
+                    border-radius: 1rem;
+                }
+
+                #popup-card .garden-svg {
+                    height: 110px;
+                    border-radius: 1rem 1rem 0 0;
+                }
+
+                #popup-title {
+                    font-size: 1.1rem;
+                    margin-bottom: 0.6rem;
+                }
+
+                #popup-body {
+                    padding: 0.8rem 1rem 1.2rem;
+                }
+
+                #popup-message {
+                    font-size: 0.8rem;
+                    line-height: 1.6;
+                    margin-bottom: 0.8rem;
+                }
+
+                #popup-message p.empty {
+                    height: 0.3rem;
+                }
+
+                #popup-signature {
+                    font-size: 0.7rem;
+                    padding-top: 0.6rem;
+                }
+
+                #popup-close {
+                    top: 0.5rem;
+                    right: 0.5rem;
+                    width: 1.6rem;
+                    height: 1.6rem;
+                    font-size: 0.75rem;
+                }
             }
         </style>
     </main>
