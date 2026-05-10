@@ -30,7 +30,6 @@
             background: var(--card-bg);
             backdrop-filter: blur(10px);
             position: relative;
-            border: 1px solid #333;
         }
 
         .shatter-card.ready,
@@ -41,7 +40,6 @@
         .shatter-card.ready:hover,
         .fragment-block.ready:hover {
             transform: scale(1.02) translateY(-5px) rotate(1deg);
-            border-color: var(--primary);
             box-shadow: 10px 10px 0px var(--accent);
             z-index: 10;
         }
@@ -100,30 +98,30 @@
 
 <body>
     <nav class="fixed top-0 left-0 w-full p-6 flex justify-between z-50 mix-blend-difference" id="main-nav">
-    <a href="/" class="text-xl font-bold tracking-tighter text-white whitespace-nowrap" id="brand"></a>
-    <div class="space-x-8 text-sm uppercase tracking-widest text-white whitespace-nowrap" id="nav-links">
+    <a href="/" class="text-3xl font-bold tracking-tighter text-white whitespace-nowrap" id="brand"></a>
+    <div class="space-x-12 text-[1.3rem] uppercase tracking-widest text-white whitespace-nowrap" id="nav-links">
     </div>
 </nav>
 
 <style>
     @media (max-width: 768px) {
         #main-nav {
-            padding: 0.75rem 1rem;
+            padding: 1rem 1.25rem;
             flex-direction: column;
             align-items: center;
-            gap: 0.25rem;
+            gap: 0.5rem;
         }
 
         #main-nav #brand {
-            font-size: 0.9rem;
+            font-size: 1.8rem;
             line-height: 1.2;
         }
 
         #main-nav #nav-links {
-            font-size: 0.65rem;
+            font-size: 1.3rem;
             letter-spacing: 0.1em;
             display: flex;
-            gap: 1.25rem;
+            gap: 2rem;
         }
 
         #main-nav #nav-links a {
@@ -169,7 +167,7 @@
                 <img id="avatar-img" class="w-full h-full object-cover" src="/images/CUMEXAL.jpg" alt="avatar">
             </div>
 
-            <div class="fragment-block tilt-card absolute bottom-[15%] left-[10%] w-[60%] md:w-[25%] bg-[var(--card-bg)] backdrop-blur-md border border-[#333] p-6 z-30 hover:border-[var(--primary)] transition-colors" id="frag-stack">
+            <div class="fragment-block tilt-card absolute bottom-[15%] left-[10%] w-[60%] md:w-[25%] bg-[var(--card-bg)] backdrop-blur-md p-6 z-30" id="frag-stack">
                 <h3 class="text-xs uppercase mb-4 text-[var(--primary)] tracking-widest font-bold" id="stack-title">// TECH_STACK</h3>
                 <ul class="text-sm font-mono space-y-2 text-gray-300" id="tech-stack"></ul>
             </div>
