@@ -48,6 +48,11 @@
             transform-style: preserve-3d;
             will-change: transform;
         }
+
+        /* FOUC: 在 GSAP 接管之前隐藏动画元素 */
+        .fouc-hidden {
+            opacity: 0 !important;
+        }
     </style>
 
     <script>
@@ -198,7 +203,7 @@
 
             docs.forEach(function (doc) {
                 var article = document.createElement('article');
-                article.className = 'doc-card shatter-card tilt-card p-8 cursor-pointer';
+                article.className = 'doc-card shatter-card tilt-card p-8 cursor-pointer fouc-hidden';
                 article.onclick = function () { window.location.href = doc.link; };
 
                 var tagsHtml = doc.tags && doc.tags.length
@@ -214,15 +219,13 @@
                 container.appendChild(article);
             });
 
-            gsap.from('.doc-card', {
-                duration: 1,
-                x: 100,
-                opacity: 0,
-                stagger: 0.1,
-                ease: "power4.out",
+            gsap.fromTo('.doc-card',
+                { opacity: 0, x: 100 },
+                { duration: 1, opacity: 1, x: 0, stagger: 0.1, ease: "power4.out",
                 onComplete: function () {
                     requestAnimationFrame(function () {
                         document.querySelectorAll('.doc-card').forEach(function (el) {
+                            el.classList.remove('fouc-hidden');
                             el.style.transform = '';
                             el.style.opacity = '';
                             el.classList.add('ready');

@@ -48,6 +48,11 @@
             transform-style: preserve-3d;
             will-change: transform;
         }
+
+        /* FOUC: 在 GSAP 接管之前隐藏动画元素 */
+        .fouc-hidden {
+            opacity: 0 !important;
+        }
     </style>
 
     <script>
@@ -150,29 +155,29 @@
 </script>
 
     <main class="relative w-full h-screen overflow-hidden bg-[var(--bg)] flex items-center justify-center pt-16" id="page-main">
-        <h1 class="hero-text absolute z-0 text-[18vw] md:text-[22vw] text-white opacity-5 whitespace-nowrap top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none" id="bg-title">
+        <h1 class="hero-text absolute z-0 text-[18vw] md:text-[22vw] text-white opacity-5 whitespace-nowrap top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none fouc-hidden" id="bg-title">
             FRAGMENT
         </h1>
 
         <div class="relative w-full max-w-7xl h-[80vh] mx-auto p-4 fragment-container">
 
-            <div class="absolute top-[10%] left-[5%] z-40" id="hero-title-block">
+            <div class="absolute top-[10%] left-[5%] z-40 fouc-hidden" id="hero-title-block">
                 <h1 class="hero-text text-[10vw] md:text-[8vw] text-white leading-none mix-blend-difference" id="main-title">
                     CODE<br><span class="text-transparent" style="-webkit-text-stroke: 2px var(--primary);">LOGIC</span>
                 </h1>
                 <p class="mt-4 text-xl md:text-2xl text-[var(--accent)] font-mono tracking-widest uppercase" id="bio-text">Loading...</p>
             </div>
 
-            <div class="fragment-block tilt-card absolute top-[5%] right-[5%] z-30 w-28 h-28 md:w-36 md:h-36 rounded-full overflow-hidden border-2 border-[var(--accent)] shadow-lg shadow-[var(--accent)]/30" id="frag-avatar">
+            <div class="fragment-block tilt-card absolute top-[5%] right-[5%] z-30 w-28 h-28 md:w-36 md:h-36 rounded-full overflow-hidden border-2 border-[var(--accent)] shadow-lg shadow-[var(--accent)]/30 fouc-hidden" id="frag-avatar">
                 <img id="avatar-img" class="w-full h-full object-cover" src="/images/CUMEXAL.jpg" alt="avatar">
             </div>
 
-            <div class="fragment-block tilt-card absolute bottom-[15%] left-[10%] w-[60%] md:w-[25%] bg-[var(--card-bg)] backdrop-blur-md p-6 z-30" id="frag-stack">
+            <div class="fragment-block tilt-card absolute bottom-[15%] left-[10%] w-[60%] md:w-[25%] bg-[var(--card-bg)] backdrop-blur-md p-6 z-30 fouc-hidden" id="frag-stack">
                 <h3 class="text-xs uppercase mb-4 text-[var(--primary)] tracking-widest font-bold" id="stack-title">// TECH_STACK</h3>
                 <ul class="text-sm font-mono space-y-2 text-gray-300" id="tech-stack"></ul>
             </div>
 
-            <div class="fragment-block tilt-card absolute bottom-[10%] right-[15%] w-[70%] md:w-[30%] bg-white text-black p-8 z-30 hover:bg-[var(--accent)] hover:text-black transition-colors cursor-pointer" id="frag-log" onclick="window.location.href='/archives/'">
+            <div class="fragment-block tilt-card absolute bottom-[10%] right-[15%] w-[70%] md:w-[30%] bg-white text-black p-8 z-30 hover:bg-[var(--accent)] hover:text-black transition-colors cursor-pointer fouc-hidden" id="frag-log" onclick="window.location.href='/archives/'">
                 <h3 class="font-bold text-3xl md:text-4xl leading-none uppercase mb-6" id="log-title">Latest<br>Log_</h3>
                 <div id="latest-post" class="text-sm font-mono border-t border-black pt-4">"Parsing the future of silicon..."</div>
             </div>
@@ -224,8 +229,245 @@
                     width: 100%;
                 }
             }
+
+            /* ========== 通知弹窗 ========== */
+            #popup-overlay {
+                position: fixed;
+                inset: 0;
+                z-index: 9999;
+                background: rgba(0,0,0,0.7);
+                backdrop-filter: blur(8px);
+                -webkit-backdrop-filter: blur(8px);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                opacity: 0;
+                pointer-events: none;
+            }
+
+            #popup-overlay.active {
+                opacity: 1;
+                pointer-events: auto;
+            }
+
+            #popup-card {
+                position: relative;
+                width: 420px;
+                max-width: 90vw;
+                max-height: 85vh;
+                overflow-y: auto;
+                border-radius: 1.5rem;
+                background: linear-gradient(145deg, #1a0a12 0%, #2d0f1f 40%, #1a0a12 100%);
+                border: 1px solid rgba(255,105,180,0.3);
+                box-shadow:
+                    0 0 60px rgba(255,105,180,0.15),
+                    inset 0 1px 0 rgba(255,105,180,0.1);
+                transform: scale(0.8) translateY(40px);
+                transition: none;
+            }
+
+            #popup-card .garden-svg {
+                width: 100%;
+                height: 180px;
+                display: block;
+                border-radius: 1.5rem 1.5rem 0 0;
+                background: linear-gradient(180deg, rgba(255,182,193,0.1) 0%, transparent 100%);
+            }
+
+            #popup-close {
+                position: absolute;
+                top: 0.75rem;
+                right: 0.75rem;
+                width: 2rem;
+                height: 2rem;
+                border-radius: 50%;
+                border: 1px solid rgba(255,105,180,0.3);
+                background: rgba(0,0,0,0.4);
+                color: #FF69B4;
+                font-size: 1rem;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 10;
+                transition: all 0.3s ease;
+            }
+
+            #popup-close:hover {
+                background: rgba(255,105,180,0.2);
+                border-color: #FF69B4;
+                transform: scale(1.1);
+            }
+
+            #popup-body {
+                padding: 1.5rem 2rem 2rem;
+                text-align: center;
+            }
+
+            #popup-title {
+                font-family: 'Syne', sans-serif;
+                font-size: 1.6rem;
+                font-weight: 800;
+                color: #FF69B4;
+                margin-bottom: 1rem;
+                letter-spacing: 0.05em;
+                text-shadow: 0 0 30px rgba(255,105,180,0.3);
+            }
+
+            #popup-message {
+                font-size: 0.95rem;
+                line-height: 1.8;
+                color: rgba(255,255,255,0.85);
+                margin-bottom: 1.2rem;
+            }
+
+            #popup-message p {
+                margin: 0;
+            }
+
+            #popup-message p.empty {
+                height: 0.6rem;
+            }
+
+            #popup-signature {
+                font-size: 0.8rem;
+                color: rgba(255,105,180,0.6);
+                letter-spacing: 0.05em;
+                font-style: italic;
+                margin-top: 0.5rem;
+                padding-top: 1rem;
+                border-top: 1px solid rgba(255,105,180,0.15);
+            }
+
+            @media (max-width: 768px) {
+                #popup-card { width: 88vw; }
+                #popup-card .garden-svg { height: 130px; }
+                #popup-title { font-size: 1.3rem; }
+                #popup-body { padding: 1rem 1.2rem 1.5rem; }
+                #popup-message { font-size: 0.85rem; }
+            }
         </style>
     </main>
+
+    <!-- ========== 通知弹窗 ========== -->
+    <div id="popup-overlay">
+        <div id="popup-card">
+            <button id="popup-close">✕</button>
+            <!-- SVG 花园场景 -->
+            <svg class="garden-svg" viewBox="0 0 420 180" preserveAspectRatio="xMidYMid meet">
+                <!-- 天空渐变 -->
+                <defs>
+                    <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#2d1b2e"/>
+                        <stop offset="60%" stop-color="#1a0a12"/>
+                        <stop offset="100%" stop-color="#2d0f1f"/>
+                    </linearGradient>
+                    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+                        <stop offset="0%" stop-color="rgba(255,105,180,0.3)"/>
+                        <stop offset="100%" stop-color="rgba(255,105,180,0)"/>
+                    </radialGradient>
+                    <linearGradient id="grassGrad" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="#3a1a2a"/>
+                        <stop offset="100%" stop-color="#1a0a12"/>
+                    </linearGradient>
+                </defs>
+
+                <!-- 背景 -->
+                <rect width="420" height="180" fill="url(#skyGrad)"/>
+                <circle cx="210" cy="40" r="80" fill="url(#glow)" opacity="0.5"/>
+
+                <!-- === 左侧树 === -->
+                <!-- 树干 -->
+                <rect x="42" y="90" width="8" height="30" rx="3" fill="#4a2a1a" opacity="0.8"/>
+                <!-- 树冠（多层圆形） -->
+                <circle cx="46" cy="76" r="20" fill="#2a1a2a" opacity="0.7"/>
+                <circle cx="36" cy="82" r="16" fill="#3a1a2a" opacity="0.6"/>
+                <circle cx="56" cy="80" r="15" fill="#2a1a2a" opacity="0.5"/>
+                <!-- 树冠上的粉色小花点缀 -->
+                <circle cx="38" cy="70" r="2.5" fill="#FF69B4" opacity="0.7"/>
+                <circle cx="52" cy="74" r="2" fill="#FFB6C1" opacity="0.6"/>
+
+                <!-- === 右侧树（稍小） === -->
+                <rect x="360" y="100" width="6" height="22" rx="3" fill="#4a2a1a" opacity="0.7"/>
+                <circle cx="363" cy="88" r="16" fill="#2a1a2a" opacity="0.6"/>
+                <circle cx="356" cy="92" r="12" fill="#3a1a2a" opacity="0.5"/>
+                <circle cx="370" cy="91" r="11" fill="#2a1a2a" opacity="0.4"/>
+                <circle cx="358" cy="83" r="2" fill="#FF69B4" opacity="0.6"/>
+                <circle cx="368" cy="86" r="1.8" fill="#FFB6C1" opacity="0.5"/>
+
+                <!-- === 中央大花 === -->
+                <!-- 花茎 -->
+                <path d="M210 120 Q208 100 210 80" stroke="#3a2a1a" stroke-width="2.5" fill="none" opacity="0.6"/>
+                <!-- 叶子 -->
+                <path d="M210 105 Q195 100 200 92" stroke="#3a2a1a" stroke-width="1.5" fill="#2a1a2a" opacity="0.5"/>
+                <path d="M210 95 Q225 90 220 82" stroke="#3a2a1a" stroke-width="1.5" fill="#2a1a2a" opacity="0.5"/>
+                <!-- 花瓣 -->
+                <ellipse cx="210" cy="60" rx="8" ry="14" fill="#FF69B4" opacity="0.8" transform="rotate(0 210 67)"/>
+                <ellipse cx="210" cy="60" rx="8" ry="14" fill="#FF85C8" opacity="0.7" transform="rotate(51 210 67)"/>
+                <ellipse cx="210" cy="60" rx="8" ry="14" fill="#FF69B4" opacity="0.75" transform="rotate(102 210 67)"/>
+                <ellipse cx="210" cy="60" rx="8" ry="14" fill="#FF85C8" opacity="0.65" transform="rotate(153 210 67)"/>
+                <ellipse cx="210" cy="60" rx="8" ry="14" fill="#FF69B4" opacity="0.7" transform="rotate(204 210 67)"/>
+                <ellipse cx="210" cy="60" rx="8" ry="14" fill="#FF85C8" opacity="0.6" transform="rotate(255 210 67)"/>
+                <ellipse cx="210" cy="60" rx="8" ry="14" fill="#FFB6C1" opacity="0.5" transform="rotate(306 210 67)"/>
+                <!-- 花蕊 -->
+                <circle cx="210" cy="67" r="6" fill="#FFD700" opacity="0.8"/>
+                <circle cx="208" cy="65" r="1.5" fill="#FFF" opacity="0.5"/>
+                <circle cx="212" cy="69" r="1" fill="#FFF" opacity="0.4"/>
+
+                <!-- === 左侧小花 === -->
+                <path d="M120 130 Q118 118 120 110" stroke="#3a2a1a" stroke-width="1.8" fill="none" opacity="0.5"/>
+                <circle cx="120" cy="102" r="5" fill="#FFB6C1" opacity="0.7"/>
+                <circle cx="115" cy="105" r="4" fill="#FF69B4" opacity="0.5"/>
+                <circle cx="125" cy="105" r="4" fill="#FF85C8" opacity="0.5"/>
+                <circle cx="120" cy="107" r="2.5" fill="#FFD700" opacity="0.6"/>
+
+                <!-- === 右侧小花 === -->
+                <path d="M300 125 Q298 115 300 108" stroke="#3a2a1a" stroke-width="1.8" fill="none" opacity="0.5"/>
+                <circle cx="300" cy="100" r="5" fill="#FF85C8" opacity="0.7"/>
+                <circle cx="295" cy="103" r="4" fill="#FFB6C1" opacity="0.5"/>
+                <circle cx="305" cy="103" r="4" fill="#FF69B4" opacity="0.5"/>
+                <circle cx="300" cy="105" r="2.5" fill="#FFD700" opacity="0.6"/>
+
+                <!-- === 底部草丛 === -->
+                <path d="M0 155 Q10 135 20 155 Q30 130 40 155 Q50 132 60 155 Q70 128 80 155 Q90 133 100 155 Q110 130 120 155 Q130 126 140 155 Q150 131 160 155 Q170 128 180 155 Q190 125 200 155 Q210 130 220 155 Q230 127 240 155 Q250 132 260 155 Q270 129 280 155 Q290 126 300 155 Q310 131 320 155 Q330 128 340 155 Q350 124 360 155 Q370 130 380 155 Q390 127 400 155 Q410 132 420 155 L420 180 L0 180 Z" fill="#2a1a2a" opacity="0.6"/>
+                <path d="M0 162 Q15 145 30 162 Q45 140 60 162 Q75 142 90 162 Q105 138 120 162 Q135 143 150 162 Q165 140 180 162 Q195 137 210 162 Q225 142 240 162 Q255 139 270 162 Q285 144 300 162 Q315 141 330 162 Q345 138 360 162 Q375 143 390 162 Q405 140 420 162 L420 180 L0 180 Z" fill="#1a0a12" opacity="0.8"/>
+
+                <!-- 草叶上的粉色小花点缀 -->
+                <circle cx="30" cy="150" r="2" fill="#FFB6C1" opacity="0.5"/>
+                <circle cx="80" cy="145" r="1.8" fill="#FF69B4" opacity="0.4"/>
+                <circle cx="150" cy="142" r="2.2" fill="#FF85C8" opacity="0.5"/>
+                <circle cx="270" cy="148" r="1.5" fill="#FFB6C1" opacity="0.4"/>
+                <circle cx="340" cy="143" r="2" fill="#FF69B4" opacity="0.5"/>
+                <circle cx="390" cy="150" r="1.8" fill="#FF85C8" opacity="0.4"/>
+
+                <!-- 飘落的爱心 -->
+                <g opacity="0.4">
+                    <text x="80" y="40" font-size="10" fill="#FF69B4">♥</text>
+                    <text x="320" y="35" font-size="8" fill="#FFB6C1">♥</text>
+                    <text x="180" y="25" font-size="7" fill="#FF85C8">♥</text>
+                    <text x="260" y="45" font-size="9" fill="#FF69B4">♥</text>
+                    <text x="140" y="50" font-size="6" fill="#FFB6C1">♥</text>
+                    <text x="350" y="55" font-size="8" fill="#FF85C8">♥</text>
+                </g>
+
+                <!-- 星星闪烁 -->
+                <g opacity="0.3">
+                    <circle cx="60" cy="25" r="1" fill="#FFF"/>
+                    <circle cx="140" cy="18" r="1.2" fill="#FFF"/>
+                    <circle cx="280" cy="22" r="0.8" fill="#FFF"/>
+                    <circle cx="360" cy="28" r="1" fill="#FFF"/>
+                    <circle cx="100" cy="35" r="0.6" fill="#FFF"/>
+                    <circle cx="330" cy="15" r="0.7" fill="#FFF"/>
+                </g>
+            </svg>
+
+            <div id="popup-body">
+                <div id="popup-title">💐 母亲节快乐 💐</div>
+                <div id="popup-message"></div>
+                <div id="popup-signature">—— CUMEXAL · 2026 母亲节</div>
+            </div>
+        </div>
+    </div>
 
     <script>
         // =============================================
@@ -271,43 +513,127 @@
         window.addEventListener('load', function () {
             var tl = gsap.timeline();
 
-            tl.from('#bg-title', {
-                duration: 2,
-                opacity: 0,
-                scale: 0.5,
-                ease: "expo.out"
-            }, 0)
+            tl.fromTo('#bg-title',
+                { opacity: 0, scale: 0.5 },
+                { duration: 2, opacity: 0.05, scale: 1, ease: "expo.out" },
+            0)
 
-            .from('#hero-title-block', {
-                duration: 1.5,
-                scale: 0,
-                rotation: -15,
-                x: 200,
-                opacity: 0,
-                ease: "back.out(1.5)"
-            }, 0.1)
+            .fromTo('#hero-title-block',
+                { opacity: 0, scale: 0, rotation: -15, x: 200 },
+                { duration: 1.5, opacity: 1, scale: 1, rotation: 0, x: 0, ease: "back.out(1.5)" },
+            0.1)
 
-            .from('.fragment-block', {
-                duration: 1.5,
-                scale: 0,
-                rotation: function () { return Math.random() * 180 - 90; },
-                x: function () { return Math.random() * 800 - 400; },
-                y: function () { return Math.random() * 800 - 400; },
-                opacity: 0,
-                stagger: 0.1,
-                ease: "expo.out",
-                onComplete: function () {
-                    requestAnimationFrame(function () {
-                        document.querySelectorAll('.fragment-block').forEach(function (el) {
-                            el.style.transform = '';
-                            el.style.opacity = '';
-                            el.classList.add('ready');
+            .fromTo('.fragment-block',
+                { opacity: 0, scale: 0,
+                    rotation: function () { return Math.random() * 180 - 90; },
+                    x: function () { return Math.random() * 800 - 400; },
+                    y: function () { return Math.random() * 800 - 400; }
+                },
+                { duration: 1.5, opacity: 1, scale: 1, rotation: 0, x: 0, y: 0,
+                    stagger: 0.1, ease: "expo.out",
+                    onComplete: function () {
+                        requestAnimationFrame(function () {
+                            document.querySelectorAll('.fouc-hidden').forEach(function (el) {
+                                el.classList.remove('fouc-hidden');
+                                el.style.transform = '';
+                                el.style.opacity = '';
+                            });
+                            document.querySelectorAll('.fragment-block').forEach(function (el) {
+                                el.classList.add('ready');
+                            });
+                            if (typeof initTiltEffect === 'function') initTiltEffect();
+                            // 主页动画完成后再显示通知弹窗
+                            setTimeout(showPopup, 500);
                         });
-                        if (typeof initTiltEffect === 'function') initTiltEffect();
-                    });
-                }
-            }, 0.15);
+                    }
+                },
+            0.15);
         });
-    </script>
+
+        /* ========== 通知弹窗逻辑 ========== */
+        var popupCfg = cfg.popup || {};
+
+        // 填充消息内容
+        function renderPopupMessage() {
+            var msgEl = document.getElementById('popup-message');
+            if (!msgEl) return;
+            var lines = popupCfg.message || [];
+            lines.forEach(function (line) {
+                var p = document.createElement('p');
+                if (line === '') {
+                    p.className = 'empty';
+                }
+                p.innerText = line;
+                msgEl.appendChild(p);
+            });
+            // 标题
+            var titleEl = document.getElementById('popup-title');
+            if (titleEl && popupCfg.title) {
+                titleEl.innerHTML = popupCfg.title;
+            }
+            // 签名
+            var sigEl = document.getElementById('popup-signature');
+            if (sigEl && popupCfg.signature) {
+                sigEl.innerText = popupCfg.signature;
+            }
+        }
+
+        function showPopup() {
+            if (!popupCfg.enabled) return;
+            var overlay = document.getElementById('popup-overlay');
+            var card = document.getElementById('popup-card');
+            if (!overlay || !card) return;
+
+            renderPopupMessage();
+
+            // 先显示 overlay
+            overlay.classList.add('active');
+
+            // GSAP 动画：卡片弹入
+            gsap.fromTo(card,
+                { scale: 0.7, y: 60, opacity: 0 },
+                { duration: 0.8, scale: 1, y: 0, opacity: 1, ease: "back.out(1.7)" }
+            );
+
+            // overlay 淡入
+            gsap.fromTo(overlay,
+                { opacity: 0 },
+                { duration: 0.4, opacity: 1, ease: "power2.out", overwrite: true }
+            );
+        }
+
+        function closePopup() {
+            var overlay = document.getElementById('popup-overlay');
+            var card = document.getElementById('popup-card');
+            if (!overlay || !card) return;
+
+            gsap.to(card, {
+                duration: 0.4,
+                scale: 0.8,
+                y: 40,
+                opacity: 0,
+                ease: "power2.in"
+            });
+
+            gsap.to(overlay, {
+                duration: 0.3,
+                opacity: 0,
+                ease: "power2.in",
+                onComplete: function () {
+                    overlay.classList.remove('active');
+                }
+            });
+        }
+
+        // 绑定关闭事件
+        document.addEventListener('DOMContentLoaded', function () {
+            var closeBtn = document.getElementById('popup-close');
+            var overlay = document.getElementById('popup-overlay');
+            if (closeBtn) closeBtn.addEventListener('click', closePopup);
+            if (overlay) overlay.addEventListener('click', function (e) {
+                if (e.target === overlay) closePopup();
+            });
+        });
+        </script>
 </body>
 </html>

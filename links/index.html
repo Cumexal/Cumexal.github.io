@@ -48,6 +48,11 @@
             transform-style: preserve-3d;
             will-change: transform;
         }
+
+        /* FOUC: 在 GSAP 接管之前隐藏动画元素 */
+        .fouc-hidden {
+            opacity: 0 !important;
+        }
     </style>
 
     <script>
@@ -230,7 +235,7 @@
                     var card = document.createElement('a');
                     card.href = link.url;
                     card.target = "_blank";
-                    card.className = "group shatter-card tilt-card friend-card p-6 block";
+                    card.className = "group shatter-card tilt-card friend-card p-6 block fouc-hidden";
 
                     var tagsHtml = link.tags
                         ? link.tags.map(function (tag) { return '<span class="text-[10px] bg-[#222] px-2 py-0.5 rounded text-gray-300">#' + tag + '</span>'; }).join('')
@@ -247,15 +252,13 @@
                     grid.appendChild(card);
                 });
 
-                gsap.from('.shatter-card', {
-                    opacity: 0,
-                    x: -50,
-                    stagger: 0.1,
-                    duration: 0.8,
-                    ease: "back.out(1.5)",
+                gsap.fromTo('.shatter-card',
+                    { opacity: 0, x: -50 },
+                    { opacity: 1, x: 0, stagger: 0.1, duration: 0.8, ease: "back.out(1.5)",
                     onComplete: function () {
                         requestAnimationFrame(function () {
                             document.querySelectorAll('.shatter-card').forEach(function (el) {
+                                el.classList.remove('fouc-hidden');
                                 el.style.transform = '';
                                 el.style.opacity = '';
                                 el.classList.add('ready');

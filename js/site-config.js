@@ -169,6 +169,24 @@ const SiteConfig = {
         accentColor: "#00E5FF",    // 强调色（当前为青蓝色）
         animationSpeed: "0.8s",   // 全局动画持续时间
     },
+
+    // ==========================================
+    //  10. 首页通知弹窗
+    //      第一次加载页面时居中弹窗
+    //      enabled: false 即可关闭
+    // ==========================================
+    popup: {
+        enabled: true,                       // true = 显示, false = 关闭
+        themeColor: "#FF69B4",               // 主题色（粉色）
+        bgGradient: "linear-gradient(145deg, #1a0a12 0%, #2d0f1f 40%, #1a0a12 100%)", // 卡片背景渐变
+        glowColor: "rgba(255,105,180,0.4)", // 发光色
+        title: "🌸 母亲节快乐 🌸",           // 弹窗标题（支持 emoji）
+        message: [
+            "愿时光对您温柔以待",
+            "愿岁月让您笑靥如花",
+        ],
+        signature: "—— 楚",
+    },
 };
 
 // 浏览器环境挂载到全局
