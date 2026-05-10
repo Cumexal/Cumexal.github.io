@@ -20,23 +20,32 @@ const SiteConfig = {
     //  1. 站点基础信息
     // ==========================================
     site: {
-        title: "CUMEXAL",              // 浏览器标签页标题
-        brand: "CUMEXAL",              // 导航栏左上角品牌名
-        description: "打破常规，重构逻辑", // 站点描述（SEO用）
+        title: "(∼‾▽‾)→))*‾▽‾*)o[手指戳戳]",  // 浏览器标签页标题
+        brand: "(∼‾▽‾)→))*‾▽‾*)o[手指戳戳]",  // 导航栏左上角品牌名
+        description: "打破常规，重构逻辑",        // 站点描述（SEO用）
     },
 
     // ==========================================
     //  2. 首页大标题 (Hero 区域)
     // ==========================================
     hero: {
-        // 大标题 —— 支持 HTML 标签，<br> 可换行
         title: "CODE<br><span class=\"text-transparent\" style=\"-webkit-text-stroke: 2px var(--primary);\">LOGIC</span>",
-        subtitle: "打破常规，重构逻辑",                      // 副标题（彩色小字）
-        bgTitle: "FRAGMENT",                               // 背景衬底大字（很大很淡的那个）
+        subtitle: "打破常规，重构逻辑",
+        bgTitle: "FRAGMENT",
     },
 
     // ==========================================
-    //  3. 导航栏
+    //  3. 头像配置
+    //    PC端显示在右上角，移动端自动适配
+    // ==========================================
+    avatar: {
+        image: "/images/CUMEXAL.jpg",     // 头像图片路径
+        borderColor: "var(--accent)",     // 边框颜色
+        size: 36,                         // PC端尺寸(px) 36 = 9rem = 144px
+    },
+
+    // ==========================================
+    //  4. 导航栏
     // ==========================================
     nav: {
         links: [
@@ -48,7 +57,7 @@ const SiteConfig = {
     },
 
     // ==========================================
-    //  4. 首页 · 技术栈展示 (左下碎片块)
+    //  5. 首页 · 技术栈展示 (左下碎片块)
     // ==========================================
     techStack: {
         title: "// TECH_STACK",   // 区块标题
@@ -61,7 +70,7 @@ const SiteConfig = {
     },
 
     // ==========================================
-    //  5. 首页 · 最新日志 (右下碎片块)
+    //  6. 首页 · 最新日志 (右下碎片块)
     // ==========================================
     latestLog: {
         title: "Latest<br>Log_",  // 区块标题（支持 HTML）
@@ -70,7 +79,7 @@ const SiteConfig = {
     },
 
     // ==========================================
-    //  6. 文档 / 归档页卡片
+    //  7. 文档 / 归档页卡片
     //    ─────────────────────────────
     //    这里的每条数据会渲染成一张卡片，
     //    title / description / date / tags / link 都可在下方配置。
@@ -81,7 +90,7 @@ const SiteConfig = {
     // ==========================================
     documents: [
         {
-            title: "数字碎片：设计者的自我重构",                            // 卡片标题
+            title: "足球无人机积分系统",                            // 卡片标题
             description: "现代网页设计正在抛弃死板的网格，转向更加自由、充满动感的碎片化风格...", // 卡片摘要
             date: "2026-05-12",                                           // 日期（显示在卡片上）
             tags: ["设计", "UI/UX", "CSS"],                               // 标签列表
@@ -123,36 +132,36 @@ const SiteConfig = {
     ],
 
     // ==========================================
-    //  7. 友链展示页
+    //  8. 友链展示页
     //    ─────────────────────────────
     //    每项渲染为一张横躺的友链卡片
     // ==========================================
     links: [
         {
-            name: "林克",                                                       // 显示名称
-            url: "https://github.com",                                          // 点击跳转链接
-            avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Felix",   // 头像图片 URL
+            name: "OceanMonkeyScience",
+            url: "https://ocean-monkey.github.io",
+            avatar: "/images/OceanMonkeyScience.png",
+            desc: "海猴科技",
+            tags: ["科研", "开发" , "团队"],
+        },
+        {
+            name: "dokiuu",                                                       // 显示名称
+            url: "https://dokiuu.github.io",                                          // 点击跳转链接
+            avatar: "/images/dokiuu.jpg",   // 头像图片 URL
             desc: "探索代码宇宙的边界",                                          // 描述文字
-            tags: ["前端", "设计", "全栈"],                                     // 标签列表
+            tags: ["算法", "C++", "人工智能"],                                     // 标签列表
         },
         {
-            name: "Zelda",
-            url: "https://stackoverflow.com",
-            avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Zelda",
-            desc: "硬件极客，寻找真理",
-            tags: ["硬件", "IoT", "嵌入式"],
-        },
-        {
-            name: "Sam",
-            url: "https://twitter.com",
-            avatar: "https://api.dicebear.com/7.x/avataaars/svg?seed=Sam",
-            desc: "记录数字碎片与日常",
-            tags: ["UI/UX", "摄影"],
+            name: "qerhaps",
+            url: "https://github.com/qerhaps",
+            avatar: "/images/qerhaps.jpg",
+            desc: "明天让你看看全盛时期的我",
+            tags: ["电子", "废物", "海大"],
         },
     ],
 
     // ==========================================
-    //  8. 创意风格配置
+    //  9. 创意风格配置
     //    修改颜色可以改变整个站点的视觉风格
     // ==========================================
     style: {

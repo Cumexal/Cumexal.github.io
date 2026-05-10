@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hexo</title>
+    <title>(∼‾▽‾)→))*‾▽‾*)o[手指戳戳]</title>
+    <link rel="icon" href="/images/web.jpg">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="/js/site-config.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -31,13 +32,12 @@
             position: relative;
             border: 1px solid #333;
         }
-        
-        /* 仅在卡片拥有 ready 类时，启用 hover 过渡，防止与 GSAP 入场动画冲突 */
+
         .shatter-card.ready,
         .fragment-block.ready {
             transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        
+
         .shatter-card.ready:hover,
         .fragment-block.ready:hover {
             transform: scale(1.02) translateY(-5px) rotate(1deg);
@@ -45,20 +45,73 @@
             box-shadow: 10px 10px 0px var(--accent);
             z-index: 10;
         }
+
+        .tilt-card {
+            transform-style: preserve-3d;
+            will-change: transform;
+        }
     </style>
+
+    <script>
+        function initTiltEffect() {
+            document.querySelectorAll('.tilt-card').forEach(function (card) {
+                card.addEventListener('mousemove', handleTiltMouse);
+                card.addEventListener('mouseleave', handleTiltReset);
+                card.addEventListener('touchmove', handleTiltTouch, { passive: true });
+                card.addEventListener('touchend', handleTiltReset);
+            });
+        }
+
+        function handleTiltMouse(e) {
+            var card = this;
+            var rect = card.getBoundingClientRect();
+            var x = e.clientX - rect.left;
+            var y = e.clientY - rect.top;
+            var centerX = rect.width / 2;
+            var centerY = rect.height / 2;
+            var rotateY = ((x - centerX) / centerX) * 5;
+            var rotateX = ((centerY - y) / centerY) * 5;
+            card.style.transform = 'perspective(1000px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) scale3d(1.015, 1.015, 1.015)';
+        }
+
+        function handleTiltTouch(e) {
+            var card = this;
+            var touch = e.touches[0];
+            var rect = card.getBoundingClientRect();
+            var x = touch.clientX - rect.left;
+            var y = touch.clientY - rect.top;
+            var centerX = rect.width / 2;
+            var centerY = rect.height / 2;
+            var rotateY = ((x - centerX) / centerX) * 4;
+            var rotateX = ((centerY - y) / centerY) * 4;
+            card.style.transform = 'perspective(1000px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) scale3d(1.01, 1.01, 1.01)';
+        }
+
+        function handleTiltReset() {
+            var card = this;
+            card.style.transition = 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
+            card.style.transform = '';
+            setTimeout(function () {
+                card.style.transition = '';
+            }, 450);
+        }
+    </script>
 <meta name="generator" content="Hexo 8.1.2"></head>
 
 <body class="overflow-hidden">
     <nav class="fixed top-0 left-0 w-full p-6 flex justify-between z-50 mix-blend-difference">
-    <a href="/" class="text-xl font-bold tracking-tighter text-white" id="brand">CUMEXAL</a>
+    <a href="/" class="text-xl font-bold tracking-tighter text-white" id="brand"></a>
     <div class="space-x-8 text-sm uppercase tracking-widest text-white" id="nav-links">
-        <!-- 导航由 JS 渲染 -->
     </div>
 </nav>
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
+        const brand = document.getElementById('brand');
         const navContainer = document.getElementById('nav-links');
+        if(brand && window.SiteConfig) {
+            brand.innerText = SiteConfig.site.brand || 'CUMEXAL';
+        }
         if(navContainer && window.SiteConfig) {
             SiteConfig.nav.links.forEach(link => {
                 const a = document.createElement('a');
@@ -106,71 +159,68 @@
 
         <div class="w-full overflow-hidden select-none">
             <div class="horizontal-scroll-container" id="scroll-container">
-                <!-- 卡片由 JS 根据 SiteConfig.documents 渲染 -->
             </div>
         </div>
     </main>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const container = document.getElementById('scroll-container');
+        document.addEventListener('DOMContentLoaded', function () {
+            var container = document.getElementById('scroll-container');
 
-            // =============================================
-            //  从 SiteConfig.documents 渲染卡片
-            //  如果不存在或为空，则回退使用 Hexo 文章数据
-            // =============================================
-            const docs = window.SiteConfig && Array.isArray(window.SiteConfig.documents) && window.SiteConfig.documents.length > 0
+            var docs = window.SiteConfig && Array.isArray(window.SiteConfig.documents) && window.SiteConfig.documents.length > 0
                 ? window.SiteConfig.documents
                 : [{"title":"数字碎片：UI 设计的新风向","description":"现代网页设计正在抛弃死板的网格，转向更加自由、充满动感的“碎片化”风格。\n<a href=\"#什么是创意碎片风？\" class=\"headerlink\" title=\"什么是创意碎片风？\"","date":"2026-05-12","tags":["设计","UI/UX","CSS"],"link":"2026/05/12/digital-fragments-design/"}];
 
-            docs.forEach(doc => {
-                const article = document.createElement('article');
-                article.className = 'doc-card shatter-card p-8 cursor-pointer border border-[#333]';
-                article.onclick = () => { window.location.href = doc.link; };
+            docs.forEach(function (doc) {
+                var article = document.createElement('article');
+                article.className = 'doc-card shatter-card tilt-card p-8 cursor-pointer border border-[#333]';
+                article.onclick = function () { window.location.href = doc.link; };
 
-                const tagsHtml = doc.tags && doc.tags.length
-                    ? doc.tags.map(t => `<span class="text-xs bg-[#222] px-2 py-1 rounded text-gray-300">#${t}</span>`).join('')
+                var tagsHtml = doc.tags && doc.tags.length
+                    ? doc.tags.map(function (t) { return '<span class="text-xs bg-[#222] px-2 py-1 rounded text-gray-300">#' + t + '</span>'; }).join('')
                     : '';
 
-                article.innerHTML = `
-                    <div>
-                        <time class="text-[var(--accent)] text-sm font-mono block mb-4">${doc.date || ''}</time>
-                        <h2 class="text-3xl font-bold text-white mb-4 line-clamp-3">${doc.title}</h2>
-                        <p class="text-gray-400 text-sm line-clamp-4 mt-4">${doc.description}</p>
-                    </div>
-                    <div class="mt-6 flex gap-2 flex-wrap">
-                        ${tagsHtml}
-                    </div>
-                `;
+                article.innerHTML = '<div>'
+                    + '<time class="text-[var(--accent)] text-sm font-mono block mb-4">' + (doc.date || '') + '</time>'
+                    + '<h2 class="text-3xl font-bold text-white mb-4 line-clamp-3">' + doc.title + '</h2>'
+                    + '<p class="text-gray-400 text-sm line-clamp-4 mt-4">' + doc.description + '</p>'
+                    + '</div>'
+                    + '<div class="mt-6 flex gap-2 flex-wrap">' + tagsHtml + '</div>';
                 container.appendChild(article);
             });
 
-            // 进场动画
             gsap.from('.doc-card', {
                 duration: 1,
                 x: 100,
                 opacity: 0,
                 stagger: 0.1,
                 ease: "power4.out",
-                clearProps: "all",
-                onComplete: () => {
-                    document.querySelectorAll('.doc-card').forEach(el => el.classList.add('ready'));
+                onComplete: function () {
+                    requestAnimationFrame(function () {
+                        document.querySelectorAll('.doc-card').forEach(function (el) {
+                            el.style.transform = '';
+                            el.style.opacity = '';
+                            el.classList.add('ready');
+                        });
+                        if (typeof initTiltEffect === 'function') initTiltEffect();
+                    });
                 }
             });
 
-            // 初始化横向滚动（鼠标 + 触摸）
             initHorizontalScroll();
         });
 
         function initHorizontalScroll() {
-            const container = document.getElementById('scroll-container');
-            let currentX = 0;
-            let targetX = 0;
-            let isAnimating = false;
-            let maxScroll = 0;
+            var container = document.getElementById('scroll-container');
+            var currentX = 0;
+            var targetX = 0;
+            var isAnimating = false;
+            var maxScroll = 0;
+            var touchStartX = 0;
+            var touchStartTargetX = 0;
 
             function calculateMaxScroll() {
-                const totalWidth = Array.from(container.children).reduce((acc, child) => acc + child.offsetWidth, 0)
+                var totalWidth = Array.from(container.children).reduce(function (acc, child) { return acc + child.offsetWidth; }, 0)
                     + (container.children.length - 1) * 32
                     + window.innerWidth * 0.1;
                 maxScroll = Math.max(0, totalWidth - window.innerWidth);
@@ -179,44 +229,31 @@
             calculateMaxScroll();
             window.addEventListener('resize', calculateMaxScroll);
 
-            // ----- 鼠标滚轮滚动 -----
-            window.addEventListener('wheel', (e) => {
+            window.addEventListener('wheel', function (e) {
                 e.preventDefault();
                 targetX += e.deltaY * 1.5;
                 clampTarget();
                 startAnimation();
             }, { passive: false });
 
-            // ----- 触摸滚动 (移动端) -----
-            let touchStartX = 0;
-            let touchStartY = 0;
-            let isSwiping = false;
-
-            container.addEventListener('touchstart', (e) => {
-                const touch = e.touches[0];
-                touchStartX = touch.clientX;
-                touchStartY = touch.clientY;
-                isSwiping = false;
+            container.addEventListener('touchstart', function (e) {
+                touchStartX = e.touches[0].clientX;
+                touchStartTargetX = targetX;
             }, { passive: true });
 
-            container.addEventListener('touchmove', (e) => {
-                const touch = e.touches[0];
-                const deltaX = touch.clientX - touchStartX;
-                const deltaY = Math.abs(touch.clientY - touchStartY);
-
-                // 只有当水平滑动占主导时才拦截，避免与页面垂直滚动冲突
-                if (Math.abs(deltaX) > deltaY && Math.abs(deltaX) > 10) {
-                    e.preventDefault();
-                    targetX -= deltaX * 1.2;
-                    clampTarget();
-                    startAnimation();
-                    isSwiping = true;
+            container.addEventListener('touchmove', function (e) {
+                e.preventDefault();
+                var deltaX = (e.touches[0].clientX - touchStartX) * 2;
+                targetX = touchStartTargetX - deltaX;
+                clampTarget();
+                currentX = lerp(currentX, targetX, 0.3);
+                container.style.transform = 'translate3d(' + (-currentX) + 'px, 0, 0)';
+                if (!isAnimating) {
+                    isAnimating = true;
+                    requestAnimationFrame(updateScroll);
                 }
-                touchStartX = touch.clientX;
-                touchStartY = touch.clientY;
             }, { passive: false });
 
-            // ----- 辅助函数 -----
             function clampTarget() {
                 if (targetX < -100) targetX = -100;
                 if (targetX > maxScroll + 100) targetX = maxScroll + 100;
@@ -237,7 +274,7 @@
                 }
 
                 currentX = lerp(currentX, targetX, 0.08);
-                container.style.transform = `translate3d(${-currentX}px, 0, 0)`;
+                container.style.transform = 'translate3d(' + (-currentX) + 'px, 0, 0)';
 
                 if (Math.abs(targetX - currentX) < 0.1 && targetX >= 0 && targetX <= maxScroll) {
                     currentX = targetX;

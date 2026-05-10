@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hexo</title>
+    <title>(∼‾▽‾)→))*‾▽‾*)o[手指戳戳]</title>
+    <link rel="icon" href="/images/web.jpg">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="/js/site-config.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -31,13 +32,12 @@
             position: relative;
             border: 1px solid #333;
         }
-        
-        /* 仅在卡片拥有 ready 类时，启用 hover 过渡，防止与 GSAP 入场动画冲突 */
+
         .shatter-card.ready,
         .fragment-block.ready {
             transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        
+
         .shatter-card.ready:hover,
         .fragment-block.ready:hover {
             transform: scale(1.02) translateY(-5px) rotate(1deg);
@@ -45,20 +45,73 @@
             box-shadow: 10px 10px 0px var(--accent);
             z-index: 10;
         }
+
+        .tilt-card {
+            transform-style: preserve-3d;
+            will-change: transform;
+        }
     </style>
+
+    <script>
+        function initTiltEffect() {
+            document.querySelectorAll('.tilt-card').forEach(function (card) {
+                card.addEventListener('mousemove', handleTiltMouse);
+                card.addEventListener('mouseleave', handleTiltReset);
+                card.addEventListener('touchmove', handleTiltTouch, { passive: true });
+                card.addEventListener('touchend', handleTiltReset);
+            });
+        }
+
+        function handleTiltMouse(e) {
+            var card = this;
+            var rect = card.getBoundingClientRect();
+            var x = e.clientX - rect.left;
+            var y = e.clientY - rect.top;
+            var centerX = rect.width / 2;
+            var centerY = rect.height / 2;
+            var rotateY = ((x - centerX) / centerX) * 5;
+            var rotateX = ((centerY - y) / centerY) * 5;
+            card.style.transform = 'perspective(1000px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) scale3d(1.015, 1.015, 1.015)';
+        }
+
+        function handleTiltTouch(e) {
+            var card = this;
+            var touch = e.touches[0];
+            var rect = card.getBoundingClientRect();
+            var x = touch.clientX - rect.left;
+            var y = touch.clientY - rect.top;
+            var centerX = rect.width / 2;
+            var centerY = rect.height / 2;
+            var rotateY = ((x - centerX) / centerX) * 4;
+            var rotateX = ((centerY - y) / centerY) * 4;
+            card.style.transform = 'perspective(1000px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) scale3d(1.01, 1.01, 1.01)';
+        }
+
+        function handleTiltReset() {
+            var card = this;
+            card.style.transition = 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
+            card.style.transform = '';
+            setTimeout(function () {
+                card.style.transition = '';
+            }, 450);
+        }
+    </script>
 <meta name="generator" content="Hexo 8.1.2"></head>
 
 <body class="overflow-hidden">
     <nav class="fixed top-0 left-0 w-full p-6 flex justify-between z-50 mix-blend-difference">
-    <a href="/" class="text-xl font-bold tracking-tighter text-white" id="brand">CUMEXAL</a>
+    <a href="/" class="text-xl font-bold tracking-tighter text-white" id="brand"></a>
     <div class="space-x-8 text-sm uppercase tracking-widest text-white" id="nav-links">
-        <!-- 导航由 JS 渲染 -->
     </div>
 </nav>
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
+        const brand = document.getElementById('brand');
         const navContainer = document.getElementById('nav-links');
+        if(brand && window.SiteConfig) {
+            brand.innerText = SiteConfig.site.brand || 'CUMEXAL';
+        }
         if(navContainer && window.SiteConfig) {
             SiteConfig.nav.links.forEach(link => {
                 const a = document.createElement('a');
@@ -123,31 +176,27 @@
     </main>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const grid = document.getElementById('links-grid');
+        document.addEventListener('DOMContentLoaded', function () {
+            var grid = document.getElementById('links-grid');
             if (window.SiteConfig && SiteConfig.links) {
-                SiteConfig.links.forEach(link => {
-                    const card = document.createElement('a');
+                SiteConfig.links.forEach(function (link) {
+                    var card = document.createElement('a');
                     card.href = link.url;
                     card.target = "_blank";
-                    card.className = "group shatter-card friend-card p-6 block";
+                    card.className = "group shatter-card tilt-card friend-card p-6 block";
 
-                    const tagsHtml = link.tags
-                        ? link.tags.map(tag => `<span class="text-[10px] bg-[#222] px-2 py-0.5 rounded text-gray-300">#${tag}</span>`).join('')
+                    var tagsHtml = link.tags
+                        ? link.tags.map(function (tag) { return '<span class="text-[10px] bg-[#222] px-2 py-0.5 rounded text-gray-300">#' + tag + '</span>'; }).join('')
                         : '';
 
-                    card.innerHTML = `
-                        <div class="flex items-center gap-6">
-                            <img src="${link.avatar}" alt="${link.name}" class="w-20 h-20 rounded-full border-2 border-[#333] group-hover:border-[var(--primary)] transition-colors flex-shrink-0">
-                            <div>
-                                <h2 class="text-3xl font-bold text-white group-hover:text-[var(--accent)] transition-colors mb-2">${link.name}</h2>
-                                <p class="text-sm text-gray-400 group-hover:text-gray-200 transition-colors">${link.desc}</p>
-                            </div>
-                        </div>
-                        <div class="flex gap-2 flex-wrap justify-end mt-4 md:mt-0">
-                            ${tagsHtml}
-                        </div>
-                    `;
+                    card.innerHTML = '<div class="flex items-center gap-6">'
+                        + '<img src="' + link.avatar + '" alt="' + link.name + '" class="w-20 h-20 rounded-full border-2 border-[#333] group-hover:border-[var(--primary)] transition-colors flex-shrink-0">'
+                        + '<div>'
+                        + '<h2 class="text-3xl font-bold text-white group-hover:text-[var(--accent)] transition-colors mb-2">' + link.name + '</h2>'
+                        + '<p class="text-sm text-gray-400 group-hover:text-gray-200 transition-colors">' + link.desc + '</p>'
+                        + '</div>'
+                        + '</div>'
+                        + '<div class="flex gap-2 flex-wrap justify-end mt-4 md:mt-0">' + tagsHtml + '</div>';
                     grid.appendChild(card);
                 });
 
@@ -157,9 +206,15 @@
                     stagger: 0.1,
                     duration: 0.8,
                     ease: "back.out(1.5)",
-                    clearProps: "all",
-                    onComplete: () => {
-                        document.querySelectorAll('.shatter-card').forEach(el => el.classList.add('ready'));
+                    onComplete: function () {
+                        requestAnimationFrame(function () {
+                            document.querySelectorAll('.shatter-card').forEach(function (el) {
+                                el.style.transform = '';
+                                el.style.opacity = '';
+                                el.classList.add('ready');
+                            });
+                            if (typeof initTiltEffect === 'function') initTiltEffect();
+                        });
                     }
                 });
 
@@ -168,56 +223,48 @@
         });
 
         function initVerticalScroll() {
-            const container = document.getElementById('links-grid');
-            const wrapper = document.querySelector('.vertical-scroll-wrapper');
-            let currentY = 0;
-            let targetY = 0;
-            let isAnimating = false;
-            let maxScroll = 0;
+            var container = document.getElementById('links-grid');
+            var wrapper = document.querySelector('.vertical-scroll-wrapper');
+            var currentY = 0;
+            var targetY = 0;
+            var isAnimating = false;
+            var maxScroll = 0;
+            var touchStartY = 0;
+            var touchStartTargetY = 0;
 
             function calculateMaxScroll() {
-                const totalHeight = container.scrollHeight;
+                var totalHeight = container.scrollHeight;
                 maxScroll = Math.max(0, totalHeight - wrapper.clientHeight + 64);
             }
 
             setTimeout(calculateMaxScroll, 100);
             window.addEventListener('resize', calculateMaxScroll);
 
-            // ----- 鼠标滚轮滚动 -----
-            wrapper.addEventListener('wheel', (e) => {
+            wrapper.addEventListener('wheel', function (e) {
                 e.preventDefault();
                 targetY += e.deltaY * 1.2;
                 clampTarget();
                 startAnimation();
             }, { passive: false });
 
-            // ----- 触摸滚动 (移动端) -----
-            let touchStartX = 0;
-            let touchStartY = 0;
-
-            wrapper.addEventListener('touchstart', (e) => {
-                const touch = e.touches[0];
-                touchStartX = touch.clientX;
-                touchStartY = touch.clientY;
+            wrapper.addEventListener('touchstart', function (e) {
+                touchStartY = e.touches[0].clientY;
+                touchStartTargetY = targetY;
             }, { passive: true });
 
-            wrapper.addEventListener('touchmove', (e) => {
-                const touch = e.touches[0];
-                const deltaY = touch.clientY - touchStartY;
-                const deltaX = Math.abs(touch.clientX - touchStartX);
-
-                // 垂直滑动占主导时才拦截
-                if (Math.abs(deltaY) > deltaX && Math.abs(deltaY) > 10) {
-                    e.preventDefault();
-                    targetY -= deltaY * 1.2;
-                    clampTarget();
-                    startAnimation();
+            wrapper.addEventListener('touchmove', function (e) {
+                e.preventDefault();
+                var deltaY = (e.touches[0].clientY - touchStartY) * 2;
+                targetY = touchStartTargetY - deltaY;
+                clampTarget();
+                currentY = lerp(currentY, targetY, 0.3);
+                container.style.transform = 'translate3d(0, ' + (-currentY) + 'px, 0)';
+                if (!isAnimating) {
+                    isAnimating = true;
+                    requestAnimationFrame(updateScroll);
                 }
-                touchStartX = touch.clientX;
-                touchStartY = touch.clientY;
             }, { passive: false });
 
-            // ----- 辅助函数 -----
             function clampTarget() {
                 if (targetY < -150) targetY = -150;
                 if (targetY > maxScroll + 150) targetY = maxScroll + 150;
@@ -238,7 +285,7 @@
                 }
 
                 currentY = lerp(currentY, targetY, 0.08);
-                container.style.transform = `translate3d(0, ${-currentY}px, 0)`;
+                container.style.transform = 'translate3d(0, ' + (-currentY) + 'px, 0)';
 
                 if (Math.abs(targetY - currentY) < 0.1 && targetY >= 0 && targetY <= maxScroll) {
                     currentY = targetY;
