@@ -73,15 +73,12 @@
 
 
     <main class="relative w-full h-screen overflow-hidden bg-[var(--bg)] flex items-center justify-center pt-16">
-        <!-- 背景巨大的错位标题 -->
         <h1 class="hero-text absolute z-0 text-[18vw] md:text-[22vw] text-white opacity-5 whitespace-nowrap top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none" id="bg-title">
             FRAGMENT
         </h1>
 
-        <!-- 创意碎片容器 -->
         <div class="relative w-full max-w-7xl h-[80vh] mx-auto p-4 fragment-container">
-            
-            <!-- 核心标题块：绝对定位，确保不被遮挡，位于最上层 -->
+
             <div class="absolute top-[10%] left-[5%] z-40" id="hero-title-block">
                 <h1 class="hero-text text-[10vw] md:text-[8vw] text-white leading-none mix-blend-difference" id="main-title">
                     CODE<br><span class="text-transparent" style="-webkit-text-stroke: 2px var(--primary);">LOGIC</span>
@@ -89,15 +86,13 @@
                 <p class="mt-4 text-xl md:text-2xl text-[var(--accent)] font-mono tracking-widest uppercase" id="bio-text">Loading...</p>
             </div>
 
-            <!-- 碎片 1：技术栈，绝对定位在左下角，悬浮在标题下方 -->
             <div class="fragment-block absolute bottom-[15%] left-[10%] w-[60%] md:w-[25%] bg-[var(--card-bg)] backdrop-blur-md border border-[#333] p-6 z-30 hover:border-[var(--primary)] transition-colors" id="frag-stack">
-                <h3 class="text-xs uppercase mb-4 text-[var(--primary)] tracking-widest font-bold">// TECH_STACK</h3>
+                <h3 class="text-xs uppercase mb-4 text-[var(--primary)] tracking-widest font-bold" id="stack-title">// TECH_STACK</h3>
                 <ul class="text-sm font-mono space-y-2 text-gray-300" id="tech-stack"></ul>
             </div>
 
-            <!-- 碎片 2：最新日志，绝对定位在右下角，强对比色块 -->
             <div class="fragment-block absolute bottom-[10%] right-[15%] w-[70%] md:w-[30%] bg-white text-black p-8 z-30 hover:bg-[var(--accent)] hover:text-black transition-colors cursor-pointer" id="frag-log" onclick="window.location.href='/archives/'">
-                <h3 class="font-bold text-3xl md:text-4xl leading-none uppercase mb-6">Latest<br>Log_</h3>
+                <h3 class="font-bold text-3xl md:text-4xl leading-none uppercase mb-6" id="log-title">Latest<br>Log_</h3>
                 <div id="latest-post" class="text-sm font-mono border-t border-black pt-4">"Parsing the future of silicon..."</div>
             </div>
 
@@ -108,92 +103,104 @@
                 font-family: 'Syne', sans-serif;
                 letter-spacing: -0.05em;
             }
-            
-            /* 移动端碎片自适应重叠调整 */
+
             @media (max-width: 768px) {
-                /* 将高度调高以容纳堆叠的元素 */
                 .fragment-container { height: 100vh; padding-top: 20%; }
-                
-                #hero-title-block { 
-                    position: relative; 
-                    top: 0; left: 0; 
+
+                #hero-title-block {
+                    position: relative;
+                    top: 0; left: 0;
                     margin-bottom: 2rem;
                     text-align: center;
                 }
-                
-                #frag-stack { 
-                    position: relative; 
-                    bottom: auto; left: 0; 
-                    width: 100%; 
+
+                #frag-stack {
+                    position: relative;
+                    bottom: auto; left: 0;
+                    width: 100%;
                     margin-bottom: 1rem;
                 }
-                
-                #frag-log { 
-                    position: relative; 
-                    bottom: auto; right: 0; 
-                    width: 100%; 
+
+                #frag-log {
+                    position: relative;
+                    bottom: auto; right: 0;
+                    width: 100%;
                 }
             }
         </style>
     </main>
-    
-    <script>
-        const USER_DATA = {
-            stack: ["嵌入式", "硬件", "物联网", "计算机"],
-            latestPost: "智能球门\r\n你好"
-        };
 
-        // 初始化进场动画
+    <script>
+        // =============================================
+        //  从 SiteConfig 读取数据渲染首页
+        //  如果某些字段缺失，使用硬编码兜底
+        // =============================================
+        const cfg = window.SiteConfig || {};
+
+        // 标题
+        if (cfg.hero) {
+            document.getElementById('main-title').innerHTML = cfg.hero.title || 'CODE<br><span class="text-transparent" style="-webkit-text-stroke: 2px var(--primary);">LOGIC</span>';
+            document.getElementById('bio-text').innerText = cfg.hero.subtitle || '打破常规，重构逻辑';
+            document.getElementById('bg-title').innerText = cfg.hero.bgTitle || 'FRAGMENT';
+        }
+
+        // 技术栈
+        const stackConfig = cfg.techStack || {};
+        if (stackConfig.title) {
+            document.getElementById('stack-title').innerText = stackConfig.title;
+        }
+        const stackItems = stackConfig.items || ["嵌入式", "硬件", "物联网", "计算机"];
+        const stackList = document.getElementById('tech-stack');
+        stackItems.forEach(item => {
+            let li = document.createElement('li');
+            li.innerText = `> ${item}`;
+            stackList.appendChild(li);
+        });
+
+        // 最新日志
+        const logConfig = cfg.latestLog || {};
+        if (logConfig.title) {
+            document.getElementById('log-title').innerHTML = logConfig.title;
+        }
+        document.getElementById('latest-post').innerText = logConfig.content || '智能球门';
+        if (logConfig.link) {
+            document.getElementById('frag-log').onclick = function() { window.location.href = logConfig.link; };
+        }
+
+        // 进场动画
         window.addEventListener('load', () => {
             const tl = gsap.timeline();
-            
-            // 背景巨大文字淡入 (起点 0)
-            tl.from('#bg-title', { 
-                duration: 2, 
-                opacity: 0, 
-                scale: 0.5, 
-                ease: "expo.out" 
+
+            tl.from('#bg-title', {
+                duration: 2,
+                opacity: 0,
+                scale: 0.5,
+                ease: "expo.out"
             }, 0)
-            
-            // 核心标题块从中心爆炸飞出
+
             .from('#hero-title-block', {
                 duration: 1.5,
                 scale: 0,
                 rotation: -15,
-                x: 200, // 从屏幕中心飞向左上角
+                x: 200,
                 opacity: 0,
                 ease: "back.out(1.5)"
-            }, 0.1) // 稍微延迟 0.1 秒
-            
-            // 碎片块强烈的爆炸散开
+            }, 0.1)
+
             .from('.fragment-block', {
                 duration: 1.5,
                 scale: 0,
-                rotation: () => Math.random() * 180 - 90, // 随机大角度旋转
-                x: () => Math.random() * 800 - 400, // 大范围的爆发位移
+                rotation: () => Math.random() * 180 - 90,
+                x: () => Math.random() * 800 - 400,
                 y: () => Math.random() * 800 - 400,
                 opacity: 0,
-                stagger: 0.1, // 极短的交错，增强爆发感
-                ease: "expo.out", // 爆炸般迅速到位然后减速
+                stagger: 0.1,
+                ease: "expo.out",
                 clearProps: "all",
                 onComplete: () => {
                     document.querySelectorAll('.fragment-block').forEach(el => el.classList.add('ready'));
                 }
             }, 0.15);
-        });
-
-        if(window.SiteConfig) {
-            document.getElementById('main-title').innerHTML = SiteConfig.hero.title;
-            document.getElementById('bio-text').innerText = SiteConfig.hero.subtitle;
-        }
-        
-        document.getElementById('latest-post').innerText = USER_DATA.latestPost;
-        
-        const stackList = document.getElementById('tech-stack');
-        USER_DATA.stack.forEach(item => {
-            let li = document.createElement('li');
-            li.innerText = `> ${item}`;
-            stackList.appendChild(li);
         });
     </script>
 </body>
