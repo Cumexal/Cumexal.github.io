@@ -108,34 +108,39 @@
                 font-family: 'Syne', sans-serif;
                 letter-spacing: -0.05em;
             }
-
-            .marquee {
-                white-space: nowrap;
-                overflow: hidden;
-                border-top: 1px solid var(--accent);
-                border-bottom: 1px solid var(--accent);
-            }
             
             /* 移动端碎片自适应重叠调整 */
             @media (max-width: 768px) {
-                #hero-title-block { top: 5%; left: 5%; }
-                #frag-stack { bottom: 30%; left: 5%; width: 80%; }
-                #frag-log { bottom: 5%; right: 5%; width: 90%; }
+                /* 将高度调高以容纳堆叠的元素 */
+                .fragment-container { height: 100vh; padding-top: 20%; }
+                
+                #hero-title-block { 
+                    position: relative; 
+                    top: 0; left: 0; 
+                    margin-bottom: 2rem;
+                    text-align: center;
+                }
+                
+                #frag-stack { 
+                    position: relative; 
+                    bottom: auto; left: 0; 
+                    width: 100%; 
+                    margin-bottom: 1rem;
+                }
+                
+                #frag-log { 
+                    position: relative; 
+                    bottom: auto; right: 0; 
+                    width: 100%; 
+                }
             }
         </style>
     </main>
-
-    <!-- 底部跑马灯 -->
-    <div class="marquee py-3 absolute bottom-0 w-full z-50 bg-black bg-opacity-80 backdrop-blur-sm">
-        <div class="animate-marquee inline-block text-sm uppercase" id="ticker">
-        </div>
-    </div>
     
     <script>
         const USER_DATA = {
             stack: ["嵌入式", "硬件", "物联网", "计算机"],
-            latestPost: "智能球门\r\n你好",
-            tickerText: " • ESP-IDF • Arduino • STM32 • STC • PYTHON • C • HTML • ioT"
+            latestPost: "智能球门\r\n你好"
         };
 
         // 初始化进场动画
@@ -190,20 +195,6 @@
             li.innerText = `> ${item}`;
             stackList.appendChild(li);
         });
-
-        const ticker = document.getElementById('ticker');
-        ticker.innerText = (USER_DATA.tickerText + " ").repeat(10);
     </script>
-
-    <style>
-        @keyframes marquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-        .animate-marquee {
-            display: inline-block;
-            animation: marquee 20s linear infinite;
-        }
-    </style>
 </body>
 </html>
