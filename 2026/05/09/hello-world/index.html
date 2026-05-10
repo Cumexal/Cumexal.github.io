@@ -3,14 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cumexal | Personal Hub</title>
+    <title>Hexo</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="/js/site-config.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;700&family=Syne:wght@800&display=swap');
 
         :root {
             --bg: #0a0a0a;
-            --accent: #00ff66;
+            --primary: #FF3E00;
+            --accent: #00E5FF;
+            --card-bg: rgba(255,255,255,0.03);
         }
 
         body {
@@ -18,102 +22,167 @@
             color: white;
             font-family: 'Space Grotesk', sans-serif;
             overflow-x: hidden;
+            cursor: crosshair;
         }
 
-        .hero-text {
-            font-family: 'Syne', sans-serif;
-            line-height: 0.8;
-            letter-spacing: -5px;
-            text-transform: uppercase;
-        }
-
-        .bento-grid {
-            display: grid;
-            grid-template-columns: repeat(12, 1fr);
-            grid-template-rows: repeat(8, 10vh);
-            gap: 1rem;
-            padding: 1rem;
-        }
-
-        .card {
+        .shatter-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            position: relative;
             border: 1px solid #333;
-            padding: 1.5rem;
-            transition: all 0.3s ease;
-            background: rgba(255,255,255,0.02);
         }
-
-        .card:hover {
-            border-color: var(--accent);
-            box-shadow: 0 0 20px rgba(0, 255, 102, 0.2);
+        
+        /* 仅在卡片拥有 ready 类时，启用 hover 过渡，防止与 GSAP 入场动画冲突 */
+        .shatter-card.ready,
+        .fragment-block.ready {
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
-
-        .marquee {
-            white-space: nowrap;
-            overflow: hidden;
-            border-top: 1px solid var(--accent);
-            border-bottom: 1px solid var(--accent);
+        
+        .shatter-card.ready:hover,
+        .fragment-block.ready:hover {
+            transform: scale(1.02) translateY(-5px) rotate(1deg);
+            border-color: var(--primary);
+            box-shadow: 10px 10px 0px var(--accent);
+            z-index: 10;
         }
     </style>
 <meta name="generator" content="Hexo 8.1.2"></head>
+
 <body>
-
     <nav class="fixed top-0 left-0 w-full p-6 flex justify-between z-50 mix-blend-difference">
-        <div class="text-xl font-bold tracking-tighter" id="brand">CUMEXAL</div>
-        <div class="space-x-8 text-sm uppercase tracking-widest">
-            <a href="#" class="hover:text-[var(--accent)]">Work</a>
-            <a href="#" class="hover:text-[var(--accent)]">Bits</a>
-            <a href="#" class="hover:text-[var(--accent)]">About</a>
-        </div>
-    </nav>
+    <a href="/" class="text-xl font-bold tracking-tighter text-white" id="brand">CUMEXAL</a>
+    <div class="space-x-8 text-sm uppercase tracking-widest text-white" id="nav-links">
+        <!-- 导航由 JS 渲染 -->
+    </div>
+</nav>
 
-    <main class="bento-grid mt-12">
-        <div class="col-span-12 md:col-span-8 row-span-3 flex flex-col justify-end">
-            <h1 class="hero-text text-[12vw] md:text-[15vw] text-white opacity-90" id="main-title">
-                CODE<br><span class="text-transparent" style="-webkit-text-stroke: 2px white;">LOGIC</span>
-            </h1>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const navContainer = document.getElementById('nav-links');
+        if(navContainer && window.SiteConfig) {
+            SiteConfig.nav.links.forEach(link => {
+                const a = document.createElement('a');
+                a.href = link.url;
+                a.className = "hover:text-[var(--accent)] transition-colors";
+                a.innerText = link.name;
+                navContainer.appendChild(a);
+            });
+        }
+    });
+</script>
+
+
+    <main class="relative w-full h-screen overflow-hidden bg-[var(--bg)] flex items-center justify-center pt-16">
+        <!-- 背景巨大的错位标题 -->
+        <h1 class="hero-text absolute z-0 text-[18vw] md:text-[22vw] text-white opacity-5 whitespace-nowrap top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none" id="bg-title">
+            FRAGMENT
+        </h1>
+
+        <!-- 创意碎片容器 -->
+        <div class="relative w-full max-w-7xl h-[80vh] mx-auto p-4 fragment-container">
+            
+            <!-- 核心标题块：绝对定位，确保不被遮挡，位于最上层 -->
+            <div class="absolute top-[10%] left-[5%] z-40" id="hero-title-block">
+                <h1 class="hero-text text-[10vw] md:text-[8vw] text-white leading-none mix-blend-difference" id="main-title">
+                    CODE<br><span class="text-transparent" style="-webkit-text-stroke: 2px var(--primary);">LOGIC</span>
+                </h1>
+                <p class="mt-4 text-xl md:text-2xl text-[var(--accent)] font-mono tracking-widest uppercase" id="bio-text">Loading...</p>
+            </div>
+
+            <!-- 碎片 1：技术栈，绝对定位在左下角，悬浮在标题下方 -->
+            <div class="fragment-block absolute bottom-[15%] left-[10%] w-[60%] md:w-[25%] bg-[var(--card-bg)] backdrop-blur-md border border-[#333] p-6 z-30 hover:border-[var(--primary)] transition-colors" id="frag-stack">
+                <h3 class="text-xs uppercase mb-4 text-[var(--primary)] tracking-widest font-bold">// TECH_STACK</h3>
+                <ul class="text-sm font-mono space-y-2 text-gray-300" id="tech-stack"></ul>
+            </div>
+
+            <!-- 碎片 2：最新日志，绝对定位在右下角，强对比色块 -->
+            <div class="fragment-block absolute bottom-[10%] right-[15%] w-[70%] md:w-[30%] bg-white text-black p-8 z-30 hover:bg-[var(--accent)] hover:text-black transition-colors cursor-pointer" id="frag-log" onclick="window.location.href='/archives/'">
+                <h3 class="font-bold text-3xl md:text-4xl leading-none uppercase mb-6">Latest<br>Log_</h3>
+                <div id="latest-post" class="text-sm font-mono border-t border-black pt-4">"Parsing the future of silicon..."</div>
+            </div>
+
         </div>
 
-        <div class="card col-span-12 md:col-span-4 row-span-2 flex flex-col justify-between">
-            <p class="text-lg leading-tight" id="bio-text">Loading...</p>
-        </div>
+        <style>
+            .hero-text {
+                font-family: 'Syne', sans-serif;
+                letter-spacing: -0.05em;
+            }
 
-        <div class="card col-span-6 md:col-span-2 row-span-2 border-l-4 border-l-[var(--accent)]">
-            <h3 class="text-xs uppercase mb-4 text-[var(--accent)]">Stack</h3>
-            <ul class="text-sm space-y-1" id="tech-stack"></ul>
-        </div>
-
-        <div class="card col-span-6 md:col-span-3 row-span-4 bg-white text-black flex flex-col justify-between">
-            <h3 class="font-bold text-4xl leading-none">最新<br>  日志_</h3>
-            <div id="latest-post" class="text-sm italic">"Parsing the future of silicon..."</div>
-        </div>
-
-        <div class="col-span-12 md:col-span-7 row-span-3 relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700">
-            <img src="https://images.unsplash.com/photo-1614850523296-d8c1af93d400?q=80&w=2070" class="object-cover w-full h-full">
-            <div class="absolute bottom-4 left-4 bg-black p-2 text-[10px]" id="img-caption">LOCATION: SOUTHEAST UNIVERSITY / 2026</div>
-        </div>
+            .marquee {
+                white-space: nowrap;
+                overflow: hidden;
+                border-top: 1px solid var(--accent);
+                border-bottom: 1px solid var(--accent);
+            }
+            
+            /* 移动端碎片自适应重叠调整 */
+            @media (max-width: 768px) {
+                #hero-title-block { top: 5%; left: 5%; }
+                #frag-stack { bottom: 30%; left: 5%; width: 80%; }
+                #frag-log { bottom: 5%; right: 5%; width: 90%; }
+            }
+        </style>
     </main>
 
-    <div class="marquee py-2 mt-4">
+    <!-- 底部跑马灯 -->
+    <div class="marquee py-3 absolute bottom-0 w-full z-50 bg-black bg-opacity-80 backdrop-blur-sm">
         <div class="animate-marquee inline-block text-sm uppercase" id="ticker">
         </div>
     </div>
-
+    
     <script>
         const USER_DATA = {
-            brand: "CUMEXAL",
-            mainTitle: "CRAFTING<br>SYSTEMS",
-            bio: "CUMEXAL.",
             stack: ["嵌入式", "硬件", "物联网", "计算机"],
             latestPost: "智能球门\r\n你好",
-            imageCaption: "OMS-海猴科技",
             tickerText: " • ESP-IDF • Arduino • STM32 • STC • PYTHON • C • HTML • ioT"
         };
 
-        document.getElementById('brand').innerText = USER_DATA.brand;
-        document.getElementById('main-title').innerHTML = USER_DATA.mainTitle;
-        document.getElementById('bio-text').innerText = USER_DATA.bio;
+        // 初始化进场动画
+        window.addEventListener('load', () => {
+            const tl = gsap.timeline();
+            
+            // 背景巨大文字淡入 (起点 0)
+            tl.from('#bg-title', { 
+                duration: 2, 
+                opacity: 0, 
+                scale: 0.5, 
+                ease: "expo.out" 
+            }, 0)
+            
+            // 核心标题块从中心爆炸飞出
+            .from('#hero-title-block', {
+                duration: 1.5,
+                scale: 0,
+                rotation: -15,
+                x: 200, // 从屏幕中心飞向左上角
+                opacity: 0,
+                ease: "back.out(1.5)"
+            }, 0.1) // 稍微延迟 0.1 秒
+            
+            // 碎片块强烈的爆炸散开
+            .from('.fragment-block', {
+                duration: 1.5,
+                scale: 0,
+                rotation: () => Math.random() * 180 - 90, // 随机大角度旋转
+                x: () => Math.random() * 800 - 400, // 大范围的爆发位移
+                y: () => Math.random() * 800 - 400,
+                opacity: 0,
+                stagger: 0.1, // 极短的交错，增强爆发感
+                ease: "expo.out", // 爆炸般迅速到位然后减速
+                clearProps: "all",
+                onComplete: () => {
+                    document.querySelectorAll('.fragment-block').forEach(el => el.classList.add('ready'));
+                }
+            }, 0.15);
+        });
+
+        if(window.SiteConfig) {
+            document.getElementById('main-title').innerHTML = SiteConfig.hero.title;
+            document.getElementById('bio-text').innerText = SiteConfig.hero.subtitle;
+        }
+        
         document.getElementById('latest-post').innerText = USER_DATA.latestPost;
-        document.getElementById('img-caption').innerText = USER_DATA.imageCaption;
         
         const stackList = document.getElementById('tech-stack');
         USER_DATA.stack.forEach(item => {

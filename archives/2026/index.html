@@ -3,14 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cumexal | Personal Hub</title>
+    <title>Hexo</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="/js/site-config.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;700&family=Syne:wght@800&display=swap');
 
         :root {
             --bg: #0a0a0a;
-            --accent: #00ff66;
+            --primary: #FF3E00;
+            --accent: #00E5FF;
+            --card-bg: rgba(255,255,255,0.03);
         }
 
         body {
@@ -18,123 +22,141 @@
             color: white;
             font-family: 'Space Grotesk', sans-serif;
             overflow-x: hidden;
+            cursor: crosshair;
         }
 
-        .hero-text {
-            font-family: 'Syne', sans-serif;
-            line-height: 0.8;
-            letter-spacing: -5px;
-            text-transform: uppercase;
-        }
-
-        .bento-grid {
-            display: grid;
-            grid-template-columns: repeat(12, 1fr);
-            grid-template-rows: repeat(8, 10vh);
-            gap: 1rem;
-            padding: 1rem;
-        }
-
-        .card {
+        .shatter-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            position: relative;
             border: 1px solid #333;
-            padding: 1.5rem;
-            transition: all 0.3s ease;
-            background: rgba(255,255,255,0.02);
         }
-
-        .card:hover {
-            border-color: var(--accent);
-            box-shadow: 0 0 20px rgba(0, 255, 102, 0.2);
+        
+        /* 仅在卡片拥有 ready 类时，启用 hover 过渡，防止与 GSAP 入场动画冲突 */
+        .shatter-card.ready,
+        .fragment-block.ready {
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
         }
-
-        .marquee {
-            white-space: nowrap;
-            overflow: hidden;
-            border-top: 1px solid var(--accent);
-            border-bottom: 1px solid var(--accent);
+        
+        .shatter-card.ready:hover,
+        .fragment-block.ready:hover {
+            transform: scale(1.02) translateY(-5px) rotate(1deg);
+            border-color: var(--primary);
+            box-shadow: 10px 10px 0px var(--accent);
+            z-index: 10;
         }
     </style>
 <meta name="generator" content="Hexo 8.1.2"></head>
+
 <body>
-
     <nav class="fixed top-0 left-0 w-full p-6 flex justify-between z-50 mix-blend-difference">
-        <div class="text-xl font-bold tracking-tighter" id="brand">CUMEXAL</div>
-        <div class="space-x-8 text-sm uppercase tracking-widest">
-            <a href="#" class="hover:text-[var(--accent)]">Work</a>
-            <a href="#" class="hover:text-[var(--accent)]">Bits</a>
-            <a href="#" class="hover:text-[var(--accent)]">About</a>
-        </div>
-    </nav>
+    <a href="/" class="text-xl font-bold tracking-tighter text-white" id="brand">CUMEXAL</a>
+    <div class="space-x-8 text-sm uppercase tracking-widest text-white" id="nav-links">
+        <!-- 导航由 JS 渲染 -->
+    </div>
+</nav>
 
-    <main class="bento-grid mt-12">
-        <div class="col-span-12 md:col-span-8 row-span-3 flex flex-col justify-end">
-            <h1 class="hero-text text-[12vw] md:text-[15vw] text-white opacity-90" id="main-title">
-                CODE<br><span class="text-transparent" style="-webkit-text-stroke: 2px white;">LOGIC</span>
-            </h1>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const navContainer = document.getElementById('nav-links');
+        if(navContainer && window.SiteConfig) {
+            SiteConfig.nav.links.forEach(link => {
+                const a = document.createElement('a');
+                a.href = link.url;
+                a.className = "hover:text-[var(--accent)] transition-colors";
+                a.innerText = link.name;
+                navContainer.appendChild(a);
+            });
+        }
+    });
+</script>
+
+    
+    <main class="p-10 mt-20 min-h-screen">
+        <h1 class="text-6xl font-bold mb-12 uppercase tracking-tighter text-white">Archives_</h1>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            
+                <article class="shatter-card p-8 cursor-pointer" onclick="window.location.href='/2026/05/12/digital-fragments-design/'">
+                    <time class="text-[var(--accent)] text-sm font-mono block mb-4">2026-05-12</time>
+                    <h2 class="text-3xl font-bold text-white mb-4 line-clamp-2">数字碎片：UI 设计的新风向</h2>
+                    <p class="text-gray-400 text-sm line-clamp-3">
+                        
+                            现代网页设计正在抛弃死板的网格，转向更加自由、充满动感的“碎片化”风格。
+什么是创意碎片风？它不仅仅是不规则的排版，更是一种打破常规的视觉表达。利用高对比度色彩、非对称布局和顺滑的缓动动画，给用户带来沉浸式的体验。
+在这篇文章中，我们将剖析...
+                        
+                    </p>
+                    <div class="mt-6 flex gap-2">
+                        
+                            
+                                <span class="text-xs bg-[#222] px-2 py-1 rounded text-gray-300">#设计</span>
+                            
+                                <span class="text-xs bg-[#222] px-2 py-1 rounded text-gray-300">#UI/UX</span>
+                            
+                                <span class="text-xs bg-[#222] px-2 py-1 rounded text-gray-300">#CSS</span>
+                            
+                        
+                    </div>
+                </article>
+            
+                <article class="shatter-card p-8 cursor-pointer" onclick="window.location.href='/2026/05/11/hardware-exploration/'">
+                    <time class="text-[var(--accent)] text-sm font-mono block mb-4">2026-05-11</time>
+                    <h2 class="text-3xl font-bold text-white mb-4 line-clamp-2">探索硬件开发的边界：ESP-IDF 与 STM32</h2>
+                    <p class="text-gray-400 text-sm line-clamp-3">
+                        
+                            在物联网快速发展的今天，如何优雅地驱动硬件成了一个关键问题。本文将带你深入探索 ESP-IDF 的底层架构，并对比 STM32 的传统开发模式，寻找最高效的代码逻辑。
+为什么选择 ESP-IDF？相比于 Arduino 库，ESP-IDF ...
+                        
+                    </p>
+                    <div class="mt-6 flex gap-2">
+                        
+                            
+                                <span class="text-xs bg-[#222] px-2 py-1 rounded text-gray-300">#硬件</span>
+                            
+                                <span class="text-xs bg-[#222] px-2 py-1 rounded text-gray-300">#嵌入式</span>
+                            
+                                <span class="text-xs bg-[#222] px-2 py-1 rounded text-gray-300">#C语言</span>
+                            
+                        
+                    </div>
+                </article>
+            
+                <article class="shatter-card p-8 cursor-pointer" onclick="window.location.href='/2026/05/09/hello-world/'">
+                    <time class="text-[var(--accent)] text-sm font-mono block mb-4">2026-05-09</time>
+                    <h2 class="text-3xl font-bold text-white mb-4 line-clamp-2">Hello World</h2>
+                    <p class="text-gray-400 text-sm line-clamp-3">
+                        
+                            Welcome to Hexo! This is your very first post. Check documentation for more info. If you get any problems when using Hex...
+                        
+                    </p>
+                    <div class="mt-6 flex gap-2">
+                        
+                    </div>
+                </article>
+            
         </div>
 
-        <div class="card col-span-12 md:col-span-4 row-span-2 flex flex-col justify-between">
-            <p class="text-lg leading-tight" id="bio-text">Loading...</p>
-        </div>
-
-        <div class="card col-span-6 md:col-span-2 row-span-2 border-l-4 border-l-[var(--accent)]">
-            <h3 class="text-xs uppercase mb-4 text-[var(--accent)]">Stack</h3>
-            <ul class="text-sm space-y-1" id="tech-stack"></ul>
-        </div>
-
-        <div class="card col-span-6 md:col-span-3 row-span-4 bg-white text-black flex flex-col justify-between">
-            <h3 class="font-bold text-4xl leading-none">最新<br>  日志_</h3>
-            <div id="latest-post" class="text-sm italic">"Parsing the future of silicon..."</div>
-        </div>
-
-        <div class="col-span-12 md:col-span-7 row-span-3 relative overflow-hidden grayscale hover:grayscale-0 transition-all duration-700">
-            <img src="https://images.unsplash.com/photo-1614850523296-d8c1af93d400?q=80&w=2070" class="object-cover w-full h-full">
-            <div class="absolute bottom-4 left-4 bg-black p-2 text-[10px]" id="img-caption">LOCATION: SOUTHEAST UNIVERSITY / 2026</div>
-        </div>
+        <!-- Pagination -->
+        
     </main>
 
-    <div class="marquee py-2 mt-4">
-        <div class="animate-marquee inline-block text-sm uppercase" id="ticker">
-        </div>
-    </div>
-
     <script>
-        const USER_DATA = {
-            brand: "CUMEXAL",
-            mainTitle: "CRAFTING<br>SYSTEMS",
-            bio: "CUMEXAL.",
-            stack: ["嵌入式", "硬件", "物联网", "计算机"],
-            latestPost: "智能球门\r\n你好",
-            imageCaption: "OMS-海猴科技",
-            tickerText: " • ESP-IDF • Arduino • STM32 • STC • PYTHON • C • HTML • ioT"
-        };
-
-        document.getElementById('brand').innerText = USER_DATA.brand;
-        document.getElementById('main-title').innerHTML = USER_DATA.mainTitle;
-        document.getElementById('bio-text').innerText = USER_DATA.bio;
-        document.getElementById('latest-post').innerText = USER_DATA.latestPost;
-        document.getElementById('img-caption').innerText = USER_DATA.imageCaption;
-        
-        const stackList = document.getElementById('tech-stack');
-        USER_DATA.stack.forEach(item => {
-            let li = document.createElement('li');
-            li.innerText = `> ${item}`;
-            stackList.appendChild(li);
+        // 文档页面的碎片进场动画
+        window.addEventListener('load', () => {
+            gsap.from('h1', { duration: 1, x: -50, opacity: 0, ease: "power3.out" });
+            gsap.from('article', { 
+                duration: 0.8, 
+                y: 50, 
+                opacity: 0, 
+                stagger: 0.1, 
+                ease: "back.out(1.5)",
+                clearProps: "all", // 动画结束后清除行内样式
+                onComplete: () => {
+                    document.querySelectorAll('.shatter-card').forEach(el => el.classList.add('ready'));
+                }
+            });
         });
-
-        const ticker = document.getElementById('ticker');
-        ticker.innerText = (USER_DATA.tickerText + " ").repeat(10);
     </script>
-
-    <style>
-        @keyframes marquee {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-        .animate-marquee {
-            display: inline-block;
-            animation: marquee 20s linear infinite;
-        }
-    </style>
 </body>
 </html>
