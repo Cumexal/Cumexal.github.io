@@ -98,7 +98,7 @@
 
 <body class="overflow-hidden">
     <nav class="fixed top-0 left-0 w-full p-6 flex justify-between z-50 mix-blend-difference" id="main-nav">
-    <a href="/" class="text-2xl font-bold tracking-tighter text-white whitespace-nowrap" id="brand"></a>
+    <a href="/" class="text-3xl font-bold tracking-tighter text-white whitespace-nowrap" id="brand"></a>
     <div class="space-x-12 text-[1.3rem] uppercase tracking-widest text-white whitespace-nowrap" id="nav-links">
     </div>
 </nav>
@@ -113,12 +113,12 @@
         }
 
         #main-nav #brand {
-            font-size: 1.2rem;
+            font-size: 1.8rem;
             line-height: 1.2;
         }
 
         #main-nav #nav-links {
-            font-size: 0.8rem;
+            font-size: 1.3rem;
             letter-spacing: 0.1em;
             display: flex;
             gap: 2rem;
@@ -190,6 +190,7 @@
         }
 
         @media (max-width: 768px) {
+            main { padding-top: 8rem; }
             .friend-card {
                 flex-direction: column;
                 align-items: flex-start;
