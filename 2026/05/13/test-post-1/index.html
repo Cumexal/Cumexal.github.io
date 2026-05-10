@@ -99,11 +99,38 @@
 <meta name="generator" content="Hexo 8.1.2"></head>
 
 <body>
-    <nav class="fixed top-0 left-0 w-full p-6 flex justify-between z-50 mix-blend-difference">
-    <a href="/" class="text-xl font-bold tracking-tighter text-white" id="brand"></a>
-    <div class="space-x-8 text-sm uppercase tracking-widest text-white" id="nav-links">
+    <nav class="fixed top-0 left-0 w-full p-6 flex justify-between z-50 mix-blend-difference" id="main-nav">
+    <a href="/" class="text-xl font-bold tracking-tighter text-white whitespace-nowrap" id="brand"></a>
+    <div class="space-x-8 text-sm uppercase tracking-widest text-white whitespace-nowrap" id="nav-links">
     </div>
 </nav>
+
+<style>
+    @media (max-width: 768px) {
+        #main-nav {
+            padding: 0.75rem 1rem;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        #main-nav #brand {
+            font-size: 0.9rem;
+            line-height: 1.2;
+        }
+
+        #main-nav #nav-links {
+            font-size: 0.65rem;
+            letter-spacing: 0.1em;
+            display: flex;
+            gap: 1.25rem;
+        }
+
+        #main-nav #nav-links a {
+            padding: 0.25rem 0;
+        }
+    }
+</style>
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
@@ -123,7 +150,6 @@
         }
     });
 </script>
-
 
     <main class="relative w-full h-screen overflow-hidden bg-[var(--bg)] flex items-center justify-center pt-16">
         <h1 class="hero-text absolute z-0 text-[18vw] md:text-[22vw] text-white opacity-5 whitespace-nowrap top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none" id="bg-title">
@@ -159,10 +185,6 @@
             .hero-text {
                 font-family: 'Syne', sans-serif;
                 letter-spacing: -0.05em;
-            }
-
-            #frag-avatar {
-                transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
             }
 
             #frag-avatar.ready:hover {
