@@ -187,7 +187,6 @@
         .horizontal-scroll-container {
             display: flex;
             gap: 2rem;
-            padding: 0 5vw;
             height: 70vh;
             align-items: center;
             flex-wrap: nowrap;
@@ -213,11 +212,11 @@
         }
     </style>
 
-    <main class="w-full h-screen flex flex-col justify-center pt-20" id="page-main">
+    <main class="relative w-full h-screen flex flex-col justify-center pt-20 overflow-x-hidden" id="page-main">
         <h1 class="hero-text absolute z-0 text-[18vw] md:text-[22vw] text-white opacity-[0.04] whitespace-nowrap top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none" id="archive-bg-title"></h1>
-        <h1 class="text-6xl font-bold mb-8 uppercase tracking-tighter text-white px-10">Archives_</h1>
+        <h1 class="text-6xl font-bold mb-8 uppercase tracking-tighter text-white w-full max-w-7xl mx-auto px-10">Archives_</h1>
 
-        <div class="w-full overflow-hidden select-none">
+        <div class="w-full max-w-7xl mx-auto overflow-hidden select-none px-10">
             <div class="horizontal-scroll-container" id="scroll-container">
             </div>
         </div>
