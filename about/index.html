@@ -109,7 +109,7 @@
 <body class="overflow-hidden">
     <nav class="fixed top-0 left-0 w-full p-6 flex justify-between z-50" id="main-nav">
     <a href="/" class="text-3xl font-bold tracking-tighter whitespace-nowrap" id="brand">CUMEXAL</a>
-    <div class="space-x-12 text-[1.3rem] uppercase tracking-widest whitespace-nowrap" id="nav-links">
+    <div class="text-[1.3rem] uppercase tracking-widest whitespace-nowrap" id="nav-links">
         <a href="/archives/" class="hover:text-[var(--accent)] transition-colors">文档</a>
         <a href="/links/" class="hover:text-[var(--accent)] transition-colors">友链</a>
         <a href="/about/" class="hover:text-[var(--accent)] transition-colors">关于</a>
@@ -127,6 +127,11 @@
     #main-nav #brand,
     #main-nav #nav-links a {
         color: rgba(255,255,255,0.85);
+    }
+
+    #main-nav #nav-links {
+        display: flex;
+        gap: 1.5rem;
     }
 
     @media (max-width: 768px) {
