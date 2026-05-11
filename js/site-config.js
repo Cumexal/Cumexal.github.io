@@ -30,8 +30,8 @@ const SiteConfig = {
     // ==========================================
     hero: {
         title: "CODE<br><span class=\"text-transparent\" style=\"-webkit-text-stroke: 2px var(--primary);\">LOGIC</span>",
-        subtitle: "打破常规，重构逻辑",
-        bgTitle: "FRAGMENT",
+        subtitle: "打破常规，重构逻辑",     // 副标题（彩色小字）
+        bgTitle: "CMXL",             // 背景衬底大字（很大很淡的那个）
     },
 
     // ==========================================
@@ -88,6 +88,10 @@ const SiteConfig = {
     //    - 如果此数组为空或不存在，则自动回退使用 Hexo 文章列表
     //    - link 可以指向站内文章，也可以指向外部链接
     // ==========================================
+
+    // 归档页背景衬底大字
+    documentsBgTitle: "ARCHIVES",
+
     documents: [
         {
             title: "足球无人机积分系统",                            // 卡片标题
@@ -136,6 +140,10 @@ const SiteConfig = {
     //    ─────────────────────────────
     //    每项渲染为一张横躺的友链卡片
     // ==========================================
+
+    // 友链页背景衬底大字
+    linksBgTitle: "FRIENDS",
+
     links: [
         {
             name: "OceanMonkeyScience",
@@ -173,17 +181,35 @@ const SiteConfig = {
     // ==========================================
     //  10. 关于页面
     //      ─────────────────────────────
-    //      博客运营数据展示 & 外链按钮
-    //      stats 的数据支持 JS 自动计算运行时间
-    //      links 支持添加任意多个外链按钮
+    //      页面所有文案都在这里配置
     // ==========================================
     about: {
-        // 站点启用日期（用于自动计算已运行时间）
+        // 是否启用关于页面
+        enabled: true,
+
+        // 页面标题
+        title: "About_",
+
+        // 背景衬底大字（很大很淡的那个）
+        bgTitle: "ABOUT",
+
+        // 站点启用日期（用于自动计算已运行天数）
         startDate: "2026-05-09",
 
-        // 博客统计数据（由 Hexo 构建时自动计算 & 不蒜子实时统计提供）
-        // 此处无需手动填写
-        // 移除 stats 字段即可关闭页面显示
+        // 个人资料
+        profile: {
+            avatar: "/images/CUMEXAL.jpg",   // 头像图片路径
+            name: "CUMEXAL",                  // 显示名称
+            description: "打破常规，重构逻辑", // 个人简介（支持 HTML）
+        },
+
+        // 统计卡片（数值由 Hexo 构建时自动计算 & localStorage 统计）
+        stats: {
+            runtime: { label: "运行天数" },   // 已运行时间
+            visits:  { label: "访问次数" },   // 访问次数
+            words:   { label: "本站字数" },   // 总字数
+            articles:{ label: "文章数量" },   // 文章数量
+        },
 
         // 外链按钮（可随意增删）
         links: [

@@ -49,6 +49,11 @@
             will-change: transform;
         }
 
+        .hero-text {
+            font-family: 'Syne', sans-serif;
+            letter-spacing: -0.05em;
+        }
+
         /* FOUC: 在 GSAP 接管之前隐藏动画元素 */
         .fouc-hidden {
             opacity: 0;
@@ -237,6 +242,7 @@
     </style>
 
     <main class="w-full h-screen flex flex-col justify-center items-center pt-20 px-4" id="page-main">
+        <h1 class="hero-text absolute z-0 text-[18vw] md:text-[22vw] text-white opacity-[0.04] whitespace-nowrap top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none" id="links-bg-title"></h1>
         <h1 class="text-6xl font-bold mb-8 uppercase tracking-tighter text-white self-start max-w-7xl mx-auto w-full px-4">Friends_</h1>
 
         <div class="vertical-scroll-wrapper max-w-7xl w-full">
@@ -248,6 +254,12 @@
         document.addEventListener('DOMContentLoaded', function () {
             var grid = document.getElementById('links-grid');
             if (window.SiteConfig && SiteConfig.links) {
+                // 背景衬底大字
+                var bgTitleEl = document.getElementById('links-bg-title');
+                if (bgTitleEl && window.SiteConfig.linksBgTitle) {
+                    bgTitleEl.innerText = window.SiteConfig.linksBgTitle;
+                }
+
                 SiteConfig.links.forEach(function (link) {
                     var card = document.createElement('a');
                     card.href = link.url;
@@ -317,20 +329,21 @@
             wrapper.addEventListener('touchstart', function (e) {
                 touchStartY = e.touches[0].clientY;
                 touchStartTargetY = targetY;
+                currentY = targetY;
             }, { passive: true });
 
             wrapper.addEventListener('touchmove', function (e) {
                 e.preventDefault();
-                var deltaY = (e.touches[0].clientY - touchStartY) * 2;
+                var deltaY = e.touches[0].clientY - touchStartY;
                 targetY = touchStartTargetY - deltaY;
                 clampTarget();
-                currentY = lerp(currentY, targetY, 0.3);
+                currentY = targetY;
                 container.style.transform = 'translate3d(0, ' + (-currentY) + 'px, 0)';
-                if (!isAnimating) {
-                    isAnimating = true;
-                    requestAnimationFrame(updateScroll);
-                }
             }, { passive: false });
+
+            wrapper.addEventListener('touchend', function () {
+                startAnimation();
+            }, { passive: true });
 
             function clampTarget() {
                 if (targetY < -150) targetY = -150;

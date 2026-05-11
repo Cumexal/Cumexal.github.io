@@ -49,6 +49,11 @@
             will-change: transform;
         }
 
+        .hero-text {
+            font-family: 'Syne', sans-serif;
+            letter-spacing: -0.05em;
+        }
+
         /* FOUC: 在 GSAP 接管之前隐藏动画元素 */
         .fouc-hidden {
             opacity: 0;
@@ -202,11 +207,6 @@
         </div>
 
         <style>
-            .hero-text {
-                font-family: 'Syne', sans-serif;
-                letter-spacing: -0.05em;
-            }
-
             #frag-avatar.ready:hover {
                 transform: scale(1.08);
                 border-color: var(--primary);

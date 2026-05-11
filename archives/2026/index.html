@@ -49,6 +49,11 @@
             will-change: transform;
         }
 
+        .hero-text {
+            font-family: 'Syne', sans-serif;
+            letter-spacing: -0.05em;
+        }
+
         /* FOUC: 在 GSAP 接管之前隐藏动画元素 */
         .fouc-hidden {
             opacity: 0;
@@ -202,6 +207,7 @@
     </style>
 
     <main class="w-full h-screen flex flex-col justify-center pt-20" id="page-main">
+        <h1 class="hero-text absolute z-0 text-[18vw] md:text-[22vw] text-white opacity-[0.04] whitespace-nowrap top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none" id="archive-bg-title"></h1>
         <h1 class="text-6xl font-bold mb-8 uppercase tracking-tighter text-white px-10">Archives_</h1>
 
         <div class="w-full overflow-hidden select-none">
@@ -212,6 +218,12 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
+            // 背景衬底大字
+            var bgTitleEl = document.getElementById('archive-bg-title');
+            if (bgTitleEl && window.SiteConfig && window.SiteConfig.documentsBgTitle) {
+                bgTitleEl.innerText = window.SiteConfig.documentsBgTitle;
+            }
+
             var container = document.getElementById('scroll-container');
 
             var docs = window.SiteConfig && Array.isArray(window.SiteConfig.documents)
@@ -284,20 +296,21 @@
             container.addEventListener('touchstart', function (e) {
                 touchStartX = e.touches[0].clientX;
                 touchStartTargetX = targetX;
+                currentX = targetX;
             }, { passive: true });
 
             container.addEventListener('touchmove', function (e) {
                 e.preventDefault();
-                var deltaX = (e.touches[0].clientX - touchStartX) * 2;
+                var deltaX = e.touches[0].clientX - touchStartX;
                 targetX = touchStartTargetX - deltaX;
                 clampTarget();
-                currentX = lerp(currentX, targetX, 0.3);
+                currentX = targetX;
                 container.style.transform = 'translate3d(' + (-currentX) + 'px, 0, 0)';
-                if (!isAnimating) {
-                    isAnimating = true;
-                    requestAnimationFrame(updateScroll);
-                }
             }, { passive: false });
+
+            container.addEventListener('touchend', function () {
+                startAnimation();
+            }, { passive: true });
 
             function clampTarget() {
                 if (targetX < -100) targetX = -100;
