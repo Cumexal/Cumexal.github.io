@@ -139,6 +139,7 @@
             padding: 0.75rem 1.25rem;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             gap: 0.35rem;
         }
 
@@ -146,12 +147,15 @@
             font-size: 1.8rem;
             line-height: 1.2;
             letter-spacing: 0.02em;
+            text-align: center;
+            width: 100%;
         }
 
         #main-nav #nav-links {
             font-size: 1.2rem;
             letter-spacing: 0.1em;
             display: flex;
+            justify-content: center;
             gap: 1.5rem;
         }
 
@@ -328,7 +332,7 @@
 
             wrapper.addEventListener('wheel', function (e) {
                 e.preventDefault();
-                targetY += e.deltaY * 1.2;
+                targetY += e.deltaY * 1.5;
                 clampTarget();
                 startAnimation();
             }, { passive: false });
@@ -354,15 +358,15 @@
 
             wrapper.addEventListener('touchend', function () {
                 if (Math.abs(velocityY) > 1) {
-                    targetY -= velocityY * 8;
+                    targetY -= velocityY * 10;
                     clampTarget();
                 }
                 startAnimation();
             }, { passive: true });
 
             function clampTarget() {
-                if (targetY < -150) targetY = -150;
-                if (targetY > maxScroll + 150) targetY = maxScroll + 150;
+                if (targetY < -100) targetY = -100;
+                if (targetY > maxScroll + 100) targetY = maxScroll + 100;
             }
 
             function startAnimation() {
@@ -374,12 +378,12 @@
 
             function updateScroll() {
                 if (targetY < 0) {
-                    targetY = lerp(targetY, 0, 0.1);
+                    targetY = lerp(targetY, 0, 0.08);
                 } else if (targetY > maxScroll) {
-                    targetY = lerp(targetY, maxScroll, 0.1);
+                    targetY = lerp(targetY, maxScroll, 0.08);
                 }
 
-                currentY = lerp(currentY, targetY, 0.08);
+                currentY = lerp(currentY, targetY, 0.05);
                 container.style.transform = 'translate3d(0, ' + (-currentY) + 'px, 0)';
 
                 if (Math.abs(targetY - currentY) < 0.1 && targetY >= 0 && targetY <= maxScroll) {
