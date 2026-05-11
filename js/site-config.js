@@ -155,7 +155,7 @@ const SiteConfig = {
             name: "qerhaps",
             url: "https://github.com/qerhaps",
             avatar: "/images/qerhaps.jpg",
-            desc: "明天让你看看全盛时期的我",
+            desc: "明天开始努力",
             tags: ["电子", "废物", "海大"],
         },
     ],
@@ -171,12 +171,38 @@ const SiteConfig = {
     },
 
     // ==========================================
-    //  10. 首页通知弹窗
+    //  10. 关于页面
+    //      ─────────────────────────────
+    //      博客运营数据展示 & 外链按钮
+    //      stats 的数据支持 JS 自动计算运行时间
+    //      links 支持添加任意多个外链按钮
+    // ==========================================
+    about: {
+        // 站点启用日期（用于自动计算已运行时间）
+        startDate: "2026-05-09",
+
+        // 博客统计数据（由 Hexo 构建时自动计算 & 不蒜子实时统计提供）
+        // 此处无需手动填写
+        // 移除 stats 字段即可关闭页面显示
+
+        // 外链按钮（可随意增删）
+        links: [
+            {
+                name: "GitHub",
+                url: "https://github.com/CUMEXAL",
+                icon: "github",          // 内置图标: github | mail | twitter | globe
+                color: "#fff",
+            },
+        ],
+    },
+
+    // ==========================================
+    //  11. 首页通知弹窗
     //      第一次加载页面时居中弹窗
     //      enabled: false 即可关闭
     // ==========================================
     popup: {
-        enabled: true,                       // true = 显示, false = 关闭
+        enabled: false,                       // true = 显示, false = 关闭
         themeColor: "#FF69B4",               // 主题色（粉色）
         bgGradient: "linear-gradient(145deg, #1a0a12 0%, #2d0f1f 40%, #1a0a12 100%)", // 卡片背景渐变
         glowColor: "rgba(255,105,180,0.4)", // 发光色

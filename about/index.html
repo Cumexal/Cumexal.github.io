@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>(∼‾▽‾)→))*‾▽‾*)o[手指戳戳]</title>
+    <link rel="icon" href="/images/web.jpg">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="/js/site-config.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;700&family=Syne:wght@800&display=swap');
+
+        :root {
+            --bg: #0a0a0a;
+            --primary: #FF3E00;
+            --accent: #00E5FF;
+            --card-bg: rgba(255,255,255,0.03);
+        }
+
+        body {
+            background-color: var(--bg);
+            color: white;
+            font-family: 'Space Grotesk', sans-serif;
+            overflow-x: hidden;
+            cursor: crosshair;
+        }
+
+        .shatter-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            position: relative;
+        }
+
+        .shatter-card.ready,
+        .fragment-block.ready {
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .shatter-card.ready:hover,
+        .fragment-block.ready:hover {
+            transform: scale(1.02) translateY(-5px) rotate(1deg);
+            box-shadow: 10px 10px 0px var(--accent);
+            z-index: 10;
+        }
+
+        .tilt-card {
+            transform-style: preserve-3d;
+            will-change: transform;
+        }
+
+        /* FOUC: 在 GSAP 接管之前隐藏动画元素 */
+        .fouc-hidden {
+            opacity: 0;
+        }
+    </style>
+
+    <script>
+        function initTiltEffect() {
+            document.querySelectorAll('.tilt-card').forEach(function (card) {
+                card.addEventListener('mousemove', handleTiltMouse);
+                card.addEventListener('mouseleave', handleTiltReset);
+                card.addEventListener('touchmove', handleTiltTouch, { passive: true });
+                card.addEventListener('touchend', handleTiltReset);
+            });
+        }
+
+        function handleTiltMouse(e) {
+            var card = this;
+            var rect = card.getBoundingClientRect();
+            var x = e.clientX - rect.left;
+            var y = e.clientY - rect.top;
+            var centerX = rect.width / 2;
+            var centerY = rect.height / 2;
+            var rotateY = ((x - centerX) / centerX) * 5;
+            var rotateX = ((centerY - y) / centerY) * 5;
+            card.style.transform = 'perspective(1000px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) scale3d(1.015, 1.015, 1.015)';
+        }
+
+        function handleTiltTouch(e) {
+            var card = this;
+            var touch = e.touches[0];
+            var rect = card.getBoundingClientRect();
+            var x = touch.clientX - rect.left;
+            var y = touch.clientY - rect.top;
+            var centerX = rect.width / 2;
+            var centerY = rect.height / 2;
+            var rotateY = ((x - centerX) / centerX) * 4;
+            var rotateX = ((centerY - y) / centerY) * 4;
+            card.style.transform = 'perspective(1000px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) scale3d(1.01, 1.01, 1.01)';
+        }
+
+        function handleTiltReset() {
+            var card = this;
+            card.style.transition = 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
+            card.style.transform = '';
+            setTimeout(function () {
+                card.style.transition = '';
+            }, 450);
+        }
+    </script>
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body class="overflow-hidden">
+    <nav class="fixed top-0 left-0 w-full p-6 flex justify-between z-50" id="main-nav">
+    <a href="/" class="text-3xl font-bold tracking-tighter whitespace-nowrap" id="brand">CUMEXAL</a>
+    <div class="space-x-12 text-[1.3rem] uppercase tracking-widest whitespace-nowrap" id="nav-links">
+        <a href="/archives/" class="hover:text-[var(--accent)] transition-colors">文档</a>
+        <a href="/links/" class="hover:text-[var(--accent)] transition-colors">友链</a>
+        <a href="/about/" class="hover:text-[var(--accent)] transition-colors">关于</a>
+    </div>
+</nav>
+
+<style>
+    #main-nav {
+        background: rgba(10,10,10,0.6);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    #main-nav #brand,
+    #main-nav #nav-links a {
+        color: rgba(255,255,255,0.85);
+    }
+
+    @media (max-width: 768px) {
+        #main-nav {
+            padding: 0.75rem 1.25rem;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        #main-nav #brand {
+            font-size: 1.8rem;
+            line-height: 1.2;
+            letter-spacing: 0.02em;
+        }
+
+        #main-nav #nav-links {
+            font-size: 1.2rem;
+            letter-spacing: 0.1em;
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        #main-nav #nav-links a {
+            padding: 0.15rem 0;
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        var brand = document.getElementById('brand');
+        var navContainer = document.getElementById('nav-links');
+        if (brand && window.SiteConfig && SiteConfig.site.brand) {
+            brand.innerText = SiteConfig.site.brand;
+        }
+        if (navContainer && window.SiteConfig && SiteConfig.nav && SiteConfig.nav.links) {
+            navContainer.innerHTML = '';
+            SiteConfig.nav.links.forEach(function (link) {
+                var a = document.createElement('a');
+                a.href = link.url;
+                a.className = "hover:text-[var(--accent)] transition-colors";
+                a.innerText = link.name;
+                navContainer.appendChild(a);
+            });
+        }
+    });
+</script>
+
+    <style>
+        .about-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-width: 1000px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0 2rem;
+            gap: 2rem;
+        }
+
+        .about-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            width: 100%;
+        }
+
+        .about-card.profile {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .about-avatar {
+            width: 6rem;
+            height: 6rem;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--accent);
+            box-shadow: 0 0 30px rgba(0,229,255,0.2);
+            flex-shrink: 0;
+        }
+
+        .about-bio h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.6rem;
+            color: #fff;
+            margin-bottom: 0.3rem;
+        }
+
+        .about-bio p {
+            color: rgba(255,255,255,0.6);
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        .stats-row {
+            display: flex;
+            gap: 1rem;
+            width: 100%;
+        }
+
+        .stat-card {
+            flex: 1;
+            min-width: 0;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            padding: 1.25rem 1rem;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stat-card .stat-value {
+            font-family: 'Syne', sans-serif;
+            font-size: 2rem;
+            font-weight: 800;
+            color: #fff;
+            line-height: 1.2;
+        }
+
+        .stat-card .stat-label {
+            font-size: 0.75rem;
+            color: rgba(255,255,255,0.5);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-top: 0.3rem;
+        }
+
+        .stat-card.running .stat-value {
+            color: var(--accent);
+        }
+
+        .stat-card.visits .stat-value {
+            color: var(--primary);
+        }
+
+        .stat-card.visitors .stat-value {
+            color: #FF69B4;
+        }
+
+        .stat-card.words .stat-value {
+            color: #FFD700;
+        }
+
+        .stat-card.articles .stat-value {
+            color: #7CFF7C;
+        }
+
+        .link-buttons {
+            width: 100%;
+            display: flex;
+            gap: 0;
+            flex-wrap: wrap;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-left: 0.5rem;
+        }
+
+        .link-btn {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.65rem 1.4rem 0.5rem;
+            margin-bottom: -1px;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-bottom: none;
+            color: rgba(255,255,255,0.5);
+            font-size: 0.85rem;
+            font-family: 'Space Grotesk', sans-serif;
+            text-decoration: none;
+            cursor: pointer;
+            clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+            transition: all 0.3s ease;
+            order: 1;
+        }
+
+        .link-btn:hover {
+            background: rgba(0,229,255,0.08);
+            border-color: var(--accent);
+            color: #fff;
+            z-index: 2;
+            order: 0;
+        }
+
+        .link-btn svg {
+            width: 1.1rem;
+            height: 1.1rem;
+            flex-shrink: 0;
+            opacity: 0.6;
+            transition: opacity 0.3s ease;
+        }
+
+        .link-btn:hover svg {
+            opacity: 1;
+        }
+
+        @media (max-width: 768px) {
+            #page-main { padding-top: 6rem; justify-content: flex-start; padding-bottom: 2rem; }
+
+            .about-container {
+                gap: 1rem;
+                padding: 0 1rem;
+            }
+
+            .about-card.profile {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+                padding: 1.25rem;
+            }
+
+            .about-avatar {
+                width: 5rem;
+                height: 5rem;
+            }
+
+            .about-bio h2 {
+                font-size: 1.3rem;
+            }
+
+            .about-bio p {
+                font-size: 0.8rem;
+            }
+
+            .stats-row {
+                flex-wrap: wrap;
+                gap: 0.75rem;
+            }
+
+            .stat-card {
+                flex: 0 0 calc(50% - 0.375rem);
+                padding: 0.75rem 0.5rem;
+            }
+
+            .stat-card .stat-value {
+                font-size: 1.3rem;
+            }
+
+            .stat-card .stat-label {
+                font-size: 0.6rem;
+            }
+
+            .link-buttons {
+                justify-content: center;
+                padding-left: 0;
+            }
+
+            .link-btn {
+                padding: 0.5rem 1rem 0.4rem;
+                font-size: 0.75rem;
+                clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+            }
+
+            .link-btn svg {
+                width: 0.9rem;
+                height: 0.9rem;
+            }
+        }
+    </style>
+
+    <main class="w-full h-screen flex flex-col justify-center items-center" id="page-main">
+        <h1 class="text-6xl font-bold mb-10 uppercase tracking-tighter text-white w-full max-w-7xl mx-auto px-10" id="page-title" style="opacity:0">About_</h1>
+
+        <div class="about-container" id="about-content">
+            <div class="about-card profile shatter-card tilt-card fouc-hidden" id="about-profile">
+                <img class="about-avatar" id="about-avatar-img" src="/images/CUMEXAL.jpg" alt="avatar">
+                <div class="about-bio">
+                    <h2 id="about-name">CUMEXAL</h2>
+                    <p id="about-desc">一个热爱代码、硬件与物联网的开发者。<br>记录技术思考，分享创造乐趣。</p>
+                </div>
+            </div>
+
+            <div class="stats-row">
+                <div class="stat-card running shatter-card tilt-card fouc-hidden" id="stat-runtime">
+                    <div class="stat-value" id="runtime-value">--</div>
+                    <div class="stat-label">已运行天数</div>
+                </div>
+
+                <div class="stat-card visits shatter-card tilt-card fouc-hidden" id="stat-visits">
+                    <div class="stat-value" id="visits-value">--</div>
+                    <div class="stat-label">访问次数</div>
+                </div>
+
+                <div class="stat-card visitors shatter-card tilt-card fouc-hidden" id="stat-visitors">
+                    <div class="stat-value" id="visitors-value">--</div>
+                    <div class="stat-label">访客数</div>
+                </div>
+
+                <div class="stat-card words shatter-card tilt-card fouc-hidden" id="stat-words">
+                    <div class="stat-value" id="words-value">--</div>
+                    <div class="stat-label">总字数</div>
+                </div>
+
+                <div class="stat-card articles shatter-card tilt-card fouc-hidden" id="stat-articles">
+                    <div class="stat-value" id="articles-value">--</div>
+                    <div class="stat-label">文章数量</div>
+                </div>
+            </div>
+
+            <div class="link-buttons fouc-hidden" id="link-buttons"></div>
+        </div>
+    </main>
+
+    
+
+    <script>
+        // 注入 Hexo 构建时计算的真实数据
+        var _realStats = {
+            articleCount: 6,
+            wordCount: 832
+        };
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var cfg = window.SiteConfig;
+            var about = cfg && cfg.about ? cfg.about : {};
+
+            // ===== 个人资料 =====
+            var avatarImg = document.getElementById('about-avatar-img');
+            if (avatarImg && cfg && cfg.avatar && cfg.avatar.image) {
+                avatarImg.src = cfg.avatar.image;
+            }
+
+            var nameEl = document.getElementById('about-name');
+            if (nameEl && cfg && cfg.site && cfg.site.brand) {
+                nameEl.innerText = cfg.site.brand;
+            }
+
+            var descEl = document.getElementById('about-desc');
+            if (descEl && cfg && cfg.site && cfg.site.description) {
+                descEl.innerText = cfg.site.description;
+            }
+
+            // ===== 统计数据 =====
+            function formatNumber(num) {
+                if (num >= 10000) return (num / 10000).toFixed(1) + 'w';
+                if (num >= 1000) return (num / 1000).toFixed(1) + 'k';
+                return num.toString();
+            }
+
+            // 文章数量 & 总字数 —— 从 Hexo 构建数据注入
+            if (_realStats.articleCount) {
+                document.getElementById('articles-value').innerText = _realStats.articleCount;
+            }
+            if (_realStats.wordCount) {
+                document.getElementById('words-value').innerText = formatNumber(_realStats.wordCount);
+            }
+
+            // 访问次数 & 访客数 —— 基于 localStorage 的本地统计
+            function initLocalStats() {
+                var pvKey = 'cumexal_pv';
+                var uvKey = 'cumexal_uv';
+
+                // 访问次数：每次加载页面 +1
+                var pv = parseInt(localStorage.getItem(pvKey) || '0', 10) + 1;
+                localStorage.setItem(pvKey, pv);
+                document.getElementById('visits-value').innerText = formatNumber(pv);
+
+                // 访客数：检查是否首次访问
+                var uv = parseInt(localStorage.getItem(uvKey) || '0', 10);
+                var visited = localStorage.getItem('cumexal_visited');
+                if (!visited) {
+                    uv += 1;
+                    localStorage.setItem(uvKey, uv);
+                    localStorage.setItem('cumexal_visited', '1');
+                }
+                document.getElementById('visitors-value').innerText = formatNumber(uv);
+            }
+
+            initLocalStats();
+
+            // ===== 运行时间自动计算（按天） =====
+            function calcRuntime() {
+                var start = new Date(about.startDate || '2026-05-09').getTime();
+                var now = Date.now();
+                var diff = Math.max(0, now - start);
+                var days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                document.getElementById('runtime-value').innerText = days + ' days';
+            }
+
+            calcRuntime();
+            setInterval(calcRuntime, 1000 * 60 * 60);
+
+            // ===== SVG 图标映射 =====
+            function getSvgIcon(iconName) {
+                var icons = {
+                    github: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>',
+                    mail: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>',
+                    twitter: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>',
+                    globe: '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>',
+                };
+                return icons[iconName] || icons.globe;
+            }
+
+            // ===== 外链按钮 =====
+            var linkBtns = document.getElementById('link-buttons');
+            var aboutLinks = about.links || [];
+            aboutLinks.forEach(function (item) {
+                var a = document.createElement('a');
+                a.href = item.url;
+                a.target = '_blank';
+                a.className = 'link-btn';
+                a.innerHTML = getSvgIcon(item.icon || 'globe') + '<span>' + item.name + '</span>';
+                linkBtns.appendChild(a);
+            });
+
+            // ===== GSAP 入场动画 =====
+            var pageTitle = document.getElementById('page-title');
+
+            gsap.fromTo(pageTitle,
+                { opacity: 0, y: -30, rotation: -5 },
+                { duration: 1, opacity: 1, y: 0, rotation: 0, ease: "power4.out",
+                onComplete: function () {
+                    pageTitle.classList.remove('fouc-hidden');
+                    pageTitle.style.opacity = '';
+                    pageTitle.style.transform = '';
+                }
+            });
+
+            gsap.fromTo('.fouc-hidden',
+                { opacity: 0, y: 40, scale: 0.9 },
+                { duration: 0.8, opacity: 1, y: 0, scale: 1, stagger: 0.08, ease: "back.out(1.5)",
+                delay: 0.2,
+                onComplete: function () {
+                    requestAnimationFrame(function () {
+                        document.querySelectorAll('.fouc-hidden').forEach(function (el) {
+                            el.classList.remove('fouc-hidden');
+                            el.style.transform = '';
+                            el.style.opacity = '';
+                            el.classList.add('ready');
+                        });
+                        document.querySelectorAll('.tilt-card').forEach(function (el) {
+                            el.classList.add('ready');
+                        });
+                        if (typeof initTiltEffect === 'function') initTiltEffect();
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

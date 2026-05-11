@@ -51,7 +51,7 @@
 
         /* FOUC: 在 GSAP 接管之前隐藏动画元素 */
         .fouc-hidden {
-            opacity: 0 !important;
+            opacity: 0;
         }
     </style>
 
@@ -102,49 +102,66 @@
 <meta name="generator" content="Hexo 8.1.2"></head>
 
 <body class="overflow-hidden">
-    <nav class="fixed top-0 left-0 w-full p-6 flex justify-between z-50 mix-blend-difference" id="main-nav">
-    <a href="/" class="text-3xl font-bold tracking-tighter text-white whitespace-nowrap" id="brand"></a>
-    <div class="space-x-12 text-[1.3rem] uppercase tracking-widest text-white whitespace-nowrap" id="nav-links">
+    <nav class="fixed top-0 left-0 w-full p-6 flex justify-between z-50" id="main-nav">
+    <a href="/" class="text-3xl font-bold tracking-tighter whitespace-nowrap" id="brand">CUMEXAL</a>
+    <div class="space-x-12 text-[1.3rem] uppercase tracking-widest whitespace-nowrap" id="nav-links">
+        <a href="/archives/" class="hover:text-[var(--accent)] transition-colors">文档</a>
+        <a href="/links/" class="hover:text-[var(--accent)] transition-colors">友链</a>
+        <a href="/about/" class="hover:text-[var(--accent)] transition-colors">关于</a>
     </div>
 </nav>
 
 <style>
+    #main-nav {
+        background: rgba(10,10,10,0.6);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    #main-nav #brand,
+    #main-nav #nav-links a {
+        color: rgba(255,255,255,0.85);
+    }
+
     @media (max-width: 768px) {
         #main-nav {
-            padding: 1rem 1.25rem;
+            padding: 0.75rem 1.25rem;
             flex-direction: column;
             align-items: center;
-            gap: 0.5rem;
+            gap: 0.35rem;
         }
 
         #main-nav #brand {
             font-size: 1.8rem;
             line-height: 1.2;
+            letter-spacing: 0.02em;
         }
 
         #main-nav #nav-links {
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             letter-spacing: 0.1em;
             display: flex;
-            gap: 2rem;
+            gap: 1.5rem;
         }
 
         #main-nav #nav-links a {
-            padding: 0.25rem 0;
+            padding: 0.15rem 0;
         }
     }
 </style>
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const brand = document.getElementById('brand');
-        const navContainer = document.getElementById('nav-links');
-        if(brand && window.SiteConfig) {
-            brand.innerText = SiteConfig.site.brand || 'CUMEXAL';
+        var brand = document.getElementById('brand');
+        var navContainer = document.getElementById('nav-links');
+        if (brand && window.SiteConfig && SiteConfig.site.brand) {
+            brand.innerText = SiteConfig.site.brand;
         }
-        if(navContainer && window.SiteConfig) {
-            SiteConfig.nav.links.forEach(link => {
-                const a = document.createElement('a');
+        if (navContainer && window.SiteConfig && SiteConfig.nav && SiteConfig.nav.links) {
+            navContainer.innerHTML = '';
+            SiteConfig.nav.links.forEach(function (link) {
+                var a = document.createElement('a');
                 a.href = link.url;
                 a.className = "hover:text-[var(--accent)] transition-colors";
                 a.innerText = link.name;
@@ -197,9 +214,9 @@
         document.addEventListener('DOMContentLoaded', function () {
             var container = document.getElementById('scroll-container');
 
-            var docs = window.SiteConfig && Array.isArray(window.SiteConfig.documents) && window.SiteConfig.documents.length > 0
+            var docs = window.SiteConfig && Array.isArray(window.SiteConfig.documents)
                 ? window.SiteConfig.documents
-                : [{"title":"测试文章：占位符以展示横向滑动","description":"这是一篇测试文章，用来增加卡片数量，展示极其丝滑的横向滚动效果。\n","date":"2026-05-13","tags":["测试"],"link":"2026/05/13/test-post-1/"}];
+                : [];
 
             docs.forEach(function (doc) {
                 var article = document.createElement('article');
