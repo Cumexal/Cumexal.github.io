@@ -90,48 +90,48 @@ const SiteConfig = {
     // 归档页背景衬底大字
     documentsBgTitle: "ARCHIVES",
 
-    documents: [
-        {
-            title: "足球无人机积分系统",                            // 卡片标题
-            description: "现代网页设计正在抛弃死板的网格，转向更加自由、充满动感的碎片化风格...", // 卡片摘要
-            date: "2026-05-12",                                           // 日期（显示在卡片上）
-            tags: ["设计", "UI/UX", "CSS"],                               // 标签列表
-            link: "/docs/football-drone/",                // 点击卡片跳转链接
-            coverImage: "",                                               // 可选：封面图 URL（留空则不显示）
-        },
-        {
-            title: "探索硬件开发的边界：ESP-IDF 与 STM32",
-            description: "在物联网快速发展的今天，如何优雅地驱动硬件成了一个关键问题。本文将带你深入探索 ESP-IDF 的底层架构，并对比 STM32 的传统开发模式，寻找最高效的代码逻辑。",
-            date: "2026-05-11",
-            tags: ["硬件", "嵌入式", "C语言"],
-            link: "/2026/05/09/hardware-exploration/",
-            coverImage: "",
-        },
-        {
-            title: "测试文章 1",
-            description: "这是一个测试文档...",
-            date: "2026-05-10",
-            tags: ["测试"],
-            link: "/2026/05/09/test-post-1/",
-            coverImage: "",
-        },
-        {
-            title: "测试文章 2",
-            description: "这是另一个测试文档...",
-            date: "2026-05-09",
-            tags: ["测试"],
-            link: "/2026/05/09/test-post-2/",
-            coverImage: "",
-        },
-        {
-            title: "测试文章 3",
-            description: "这是第三个测试文档...",
-            date: "2026-05-08",
-            tags: ["测试"],
-            link: "/2026/05/09/test-post-3/",
-            coverImage: "",
-        },
-    ],
+    // documents: [
+    //     {
+    //         title: "足球无人机积分系统",                            // 卡片标题
+    //         description: "现代网页设计正在抛弃死板的网格，转向更加自由、充满动感的碎片化风格...", // 卡片摘要
+    //         date: "2026-05-12",                                           // 日期（显示在卡片上）
+    //         tags: ["设计", "UI/UX", "CSS"],                               // 标签列表
+    //         link: "/docs/football-drone/",                // 点击卡片跳转链接
+    //         coverImage: "",                                               // 可选：封面图 URL（留空则不显示）
+    //     },
+    //     {
+    //         title: "探索硬件开发的边界：ESP-IDF 与 STM32",
+    //         description: "在物联网快速发展的今天，如何优雅地驱动硬件成了一个关键问题。本文将带你深入探索 ESP-IDF 的底层架构，并对比 STM32 的传统开发模式，寻找最高效的代码逻辑。",
+    //         date: "2026-05-11",
+    //         tags: ["硬件", "嵌入式", "C语言"],
+    //         link: "/2026/05/09/hardware-exploration/",
+    //         coverImage: "",
+    //     },
+    //     {
+    //         title: "测试文章 1",
+    //         description: "这是一个测试文档...",
+    //         date: "2026-05-10",
+    //         tags: ["测试"],
+    //         link: "/2026/05/09/test-post-1/",
+    //         coverImage: "",
+    //     },
+    //     {
+    //         title: "测试文章 2",
+    //         description: "这是另一个测试文档...",
+    //         date: "2026-05-09",
+    //         tags: ["测试"],
+    //         link: "/2026/05/09/test-post-2/",
+    //         coverImage: "",
+    //     },
+    //     {
+    //         title: "测试文章 3",
+    //         description: "这是第三个测试文档...",
+    //         date: "2026-05-08",
+    //         tags: ["测试"],
+    //         link: "/2026/05/09/test-post-3/",
+    //         coverImage: "",
+    //     },
+    // ],
 
     // ==========================================
     //  8. 友链展示页
@@ -151,7 +151,7 @@ const SiteConfig = {
             tags: ["科研", "开发" , "团队"],
         },
         {
-            name: "dokiuu",                                                       // 显示名称
+            name: "dokidoki",                                                       // 显示名称
             url: "https://dokiuu.github.io",                                          // 点击跳转链接
             avatar: "/images/dokiuu.jpg",   // 头像图片 URL
             desc: "探索代码宇宙的边界",                                          // 描述文字
