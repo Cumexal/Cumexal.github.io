@@ -217,6 +217,18 @@ const SiteConfig = {
                 icon: "github",          // 内置图标: github | mail | twitter | globe
                 color: "#fff",
             },
+            {
+                name: "Oshwhub",
+                url: "https://oshwhub.com/cmxl/works",
+                icon: "/images/oshwhub.svg",          // 自定义图标
+                color: "#fff",
+            },
+            {
+                name: "Bilibili",
+                url: "https://space.bilibili.com/509574917",
+                icon: "/images/bilibili.svg",          // 自定义图标
+                color: "#fff",
+            },
         ],
     },
 
