@@ -222,7 +222,12 @@
         </div>
     </main>
 
+    
+
     <script>
+        // 注入 Hexo 构建时自动扫描的文档数据
+        var _docs = [{"title":"足球无人机积分系统","description":"项目背景足球无人机积分系统是一个面向无人机足球竞赛的数字化积分与管理平台。该系统旨在替代传统手动计分方式，提供实时、精准、可视化的比赛数据追踪与展示。\n无人机足球（Drone Soccer）是一项新兴的竞技运动，两队无人机在封闭场地内进行攻","date":"2026-05-12","tags":["设计","UI/UX","CSS"],"link":"docs/football-drone/"}];
+
         document.addEventListener('DOMContentLoaded', function () {
             // 背景衬底大字
             var bgTitleEl = document.getElementById('archive-bg-title');
@@ -232,14 +237,15 @@
 
             var container = document.getElementById('scroll-container');
 
-            var docs = window.SiteConfig && Array.isArray(window.SiteConfig.documents)
-                ? window.SiteConfig.documents
-                : [];
-
-            docs.forEach(function (doc) {
+            (_docs || []).forEach(function (doc) {
                 var article = document.createElement('article');
                 article.className = 'doc-card shatter-card tilt-card p-8 cursor-pointer fouc-hidden';
-                article.onclick = function () { window.location.href = doc.link; };
+
+                var link = doc.link;
+                if (link && link.indexOf('/') !== 0) {
+                    link = '/' + link;
+                }
+                article.onclick = function () { window.location.href = link; };
 
                 var tagsHtml = doc.tags && doc.tags.length
                     ? doc.tags.map(function (t) { return '<span class="text-xs bg-[#222] px-2 py-1 rounded text-gray-300">#' + t + '</span>'; }).join('')

@@ -529,6 +529,8 @@
         </div>
     </div>
 
+    
+
     <script>
         // =============================================
         //  从 SiteConfig 读取数据渲染首页
@@ -561,13 +563,22 @@
             stackList.appendChild(li);
         });
 
-        var logConfig = cfg.latestLog || {};
-        if (logConfig.title) {
-            document.getElementById('log-title').innerHTML = logConfig.title;
-        }
-        document.getElementById('latest-post').innerText = logConfig.content || '智能球门';
-        if (logConfig.link) {
-            document.getElementById('frag-log').onclick = function () { window.location.href = logConfig.link; };
+        // Latest Log —— 自动绑定最新文档
+        var latestTitle = '足球无人机积分系统';
+        var latestLink = 'docs/football-drone/';
+        if (latestTitle) {
+            document.getElementById('log-title').innerHTML = 'Latest<br>Log_';
+            document.getElementById('latest-post').innerText = latestTitle;
+            document.getElementById('frag-log').onclick = function () { window.location.href = '/' + latestLink; };
+        } else {
+            var logConfig = cfg.latestLog || {};
+            if (logConfig.title) {
+                document.getElementById('log-title').innerHTML = logConfig.title;
+            }
+            document.getElementById('latest-post').innerText = logConfig.content || '智能球门';
+            if (logConfig.link) {
+                document.getElementById('frag-log').onclick = function () { window.location.href = logConfig.link; };
+            }
         }
 
         window.addEventListener('load', function () {

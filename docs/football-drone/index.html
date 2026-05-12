@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>(∼‾▽‾)→))*‾▽‾*)o[手指戳戳]</title>
+    <link rel="icon" href="/images/web.jpg">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="/js/site-config.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;700&family=Syne:wght@800&display=swap');
+
+        :root {
+            --bg: #0a0a0a;
+            --primary: #FF3E00;
+            --accent: #00E5FF;
+            --card-bg: rgba(255,255,255,0.03);
+        }
+
+        body {
+            background-color: var(--bg);
+            color: white;
+            font-family: 'Space Grotesk', sans-serif;
+            overflow-x: hidden;
+            cursor: crosshair;
+        }
+
+        .shatter-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            position: relative;
+        }
+
+        .shatter-card.ready,
+        .fragment-block.ready {
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .shatter-card.ready:hover,
+        .fragment-block.ready:hover {
+            transform: scale(1.02) translateY(-5px) rotate(1deg);
+            box-shadow: 10px 10px 0px var(--accent);
+            z-index: 10;
+        }
+
+        .tilt-card {
+            transform-style: preserve-3d;
+            will-change: transform;
+        }
+
+        .hero-text {
+            font-family: 'Syne', sans-serif;
+            letter-spacing: -0.05em;
+        }
+
+        /* FOUC: 在 GSAP 接管之前隐藏动画元素 */
+        .fouc-hidden {
+            opacity: 0;
+        }
+    </style>
+
+    <script>
+        function initTiltEffect() {
+            document.querySelectorAll('.tilt-card').forEach(function (card) {
+                card.addEventListener('mousemove', handleTiltMouse);
+                card.addEventListener('mouseleave', handleTiltReset);
+                card.addEventListener('touchmove', handleTiltTouch, { passive: true });
+                card.addEventListener('touchend', handleTiltReset);
+            });
+        }
+
+        function handleTiltMouse(e) {
+            var card = this;
+            var rect = card.getBoundingClientRect();
+            var x = e.clientX - rect.left;
+            var y = e.clientY - rect.top;
+            var centerX = rect.width / 2;
+            var centerY = rect.height / 2;
+            var rotateY = ((x - centerX) / centerX) * 5;
+            var rotateX = ((centerY - y) / centerY) * 5;
+            card.style.transform = 'perspective(1000px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) scale3d(1.015, 1.015, 1.015)';
+        }
+
+        function handleTiltTouch(e) {
+            var card = this;
+            var touch = e.touches[0];
+            var rect = card.getBoundingClientRect();
+            var x = touch.clientX - rect.left;
+            var y = touch.clientY - rect.top;
+            var centerX = rect.width / 2;
+            var centerY = rect.height / 2;
+            var rotateY = ((x - centerX) / centerX) * 4;
+            var rotateX = ((centerY - y) / centerY) * 4;
+            card.style.transform = 'perspective(1000px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) scale3d(1.01, 1.01, 1.01)';
+        }
+
+        function handleTiltReset() {
+            var card = this;
+            card.style.transition = 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
+            card.style.transform = '';
+            setTimeout(function () {
+                card.style.transition = '';
+            }, 450);
+        }
+    </script>
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body class="overflow-x-hidden">
+    <nav class="fixed top-0 left-0 w-full p-6 flex justify-between z-50" id="main-nav">
+    <a href="/" class="text-3xl font-bold tracking-tighter whitespace-nowrap" id="brand">CUMEXAL</a>
+    <div class="text-[1.3rem] uppercase tracking-widest whitespace-nowrap" id="nav-links">
+        <a href="/archives/" class="hover:text-[var(--accent)] transition-colors">文档</a>
+        <a href="/links/" class="hover:text-[var(--accent)] transition-colors">友链</a>
+        <a href="/about/" class="hover:text-[var(--accent)] transition-colors">关于</a>
+    </div>
+</nav>
+
+<style>
+    #main-nav {
+        background: rgba(10,10,10,0.6);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    #main-nav #brand,
+    #main-nav #nav-links a {
+        color: rgba(255,255,255,0.85);
+    }
+
+    #main-nav #nav-links {
+        display: flex;
+        gap: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+        #main-nav {
+            padding: 0.75rem 1.25rem;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        #main-nav #brand {
+            font-size: 1.8rem;
+            line-height: 1.2;
+            letter-spacing: 0.02em;
+            text-align: left;
+        }
+
+        #main-nav #nav-links {
+            font-size: 1.2rem;
+            letter-spacing: 0.1em;
+            display: flex;
+            justify-content: flex-end;
+            gap: 1.5rem;
+        }
+
+        #main-nav #nav-links a {
+            padding: 0.15rem 0;
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        var brand = document.getElementById('brand');
+        var navContainer = document.getElementById('nav-links');
+        if (brand && window.SiteConfig && SiteConfig.site.brand) {
+            brand.innerText = SiteConfig.site.brand;
+        }
+        if (navContainer && window.SiteConfig && SiteConfig.nav && SiteConfig.nav.links) {
+            navContainer.innerHTML = '';
+            SiteConfig.nav.links.forEach(function (link) {
+                var a = document.createElement('a');
+                a.href = link.url;
+                a.className = "hover:text-[var(--accent)] transition-colors";
+                a.innerText = link.name;
+                navContainer.appendChild(a);
+            });
+        }
+    });
+</script>
+
+    <style>
+        .doc-wrapper {
+            max-width: 48rem;
+            width: 100%;
+            margin: 0 auto;
+            padding: 2rem 1.5rem 4rem;
+        }
+
+        .doc-header {
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+        }
+
+        .doc-header h1 {
+            font-family: 'Syne', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #fff;
+            line-height: 1.2;
+            letter-spacing: -0.03em;
+            margin-bottom: 0.8rem;
+        }
+
+        .doc-meta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.4);
+        }
+
+        .doc-meta .doc-tag {
+            display: inline-block;
+            padding: 0.15rem 0.6rem;
+            border-radius: 0.25rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: rgba(255,255,255,0.5);
+            font-size: 0.7rem;
+        }
+
+        .doc-content {
+            font-size: 0.95rem;
+            line-height: 1.9;
+            color: rgba(255,255,255,0.82);
+        }
+
+        .doc-content h2 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #fff;
+            margin: 2rem 0 0.8rem;
+            padding-bottom: 0.4rem;
+            letter-spacing: -0.02em;
+        }
+
+        .doc-content h3 {
+            font-family: 'Syne', sans-serif;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin: 1.5rem 0 0.5rem;
+        }
+
+        .doc-content p {
+            margin-bottom: 1rem;
+        }
+
+        .doc-content strong {
+            color: #fff;
+        }
+
+        .doc-content code {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 0.15rem 0.4rem;
+            border-radius: 0.25rem;
+            font-size: 0.85em;
+            color: var(--accent);
+        }
+
+        .doc-content pre {
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 0.75rem;
+            padding: 1.2rem;
+            overflow-x: auto;
+            margin: 1.2rem 0;
+        }
+
+        .doc-content pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            color: rgba(255,255,255,0.85);
+            font-size: 0.8rem;
+            line-height: 1.6;
+        }
+
+        .doc-content ul, .doc-content ol {
+            margin: 0.5rem 0 1rem;
+            padding-left: 1.5rem;
+        }
+
+        .doc-content li {
+            margin-bottom: 0.3rem;
+        }
+
+        .doc-content blockquote {
+            border-left: 2px solid var(--accent);
+            padding: 0.5rem 0 0.5rem 1.2rem;
+            margin: 1.2rem 0;
+            background: rgba(0,229,255,0.03);
+            border-radius: 0 0.5rem 0.5rem 0;
+            color: rgba(255,255,255,0.6);
+        }
+
+        .doc-content a {
+            color: var(--accent);
+            text-decoration: underline;
+            text-underline-offset: 2px;
+            transition: opacity 0.2s;
+        }
+
+        .doc-content a:hover {
+            opacity: 0.7;
+        }
+
+        .doc-content img {
+            max-width: 100%;
+            border-radius: 0.75rem;
+            margin: 1.5rem 0;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .doc-content hr {
+            border: none;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            margin: 2rem 0;
+        }
+
+        .doc-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.85rem;
+        }
+
+        .doc-content th, .doc-content td {
+            padding: 0.6rem 0.8rem;
+            border: 1px solid rgba(255,255,255,0.06);
+            text-align: left;
+        }
+
+        .doc-content th {
+            background: rgba(255,255,255,0.03);
+            color: rgba(255,255,255,0.6);
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .doc-wrapper {
+                padding: 1rem 1rem 3rem;
+            }
+
+            .doc-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .doc-content {
+                font-size: 0.88rem;
+                line-height: 1.8;
+            }
+
+            .doc-content h2 {
+                font-size: 1.2rem;
+            }
+
+            .doc-content h3 {
+                font-size: 1rem;
+            }
+
+            .doc-content pre {
+                padding: 0.8rem;
+            }
+        }
+    </style>
+
+    <main class="relative w-full min-h-screen pt-24" id="page-main">
+        <h1 class="hero-text fixed z-0 text-[18vw] md:text-[22vw] text-white opacity-[0.03] whitespace-nowrap top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none">DOCS</h1>
+
+        <div class="doc-wrapper">
+            <div class="doc-header">
+                <h1>足球无人机积分系统</h1>
+                <div class="doc-meta">
+                    
+                    <time>2026-05-12</time>
+                    
+                    
+                    
+                        
+                            <span class="doc-tag">#设计</span>
+                        
+                            <span class="doc-tag">#UI/UX</span>
+                        
+                            <span class="doc-tag">#CSS</span>
+                        
+                    
+                </div>
+            </div>
+
+            <div class="doc-content">
+                <h2 id="项目背景"><a href="#项目背景" class="headerlink" title="项目背景"></a>项目背景</h2><p>足球无人机积分系统是一个面向无人机足球竞赛的数字化积分与管理平台。该系统旨在替代传统手动计分方式，提供实时、精准、可视化的比赛数据追踪与展示。</p>
+<p>无人机足球（Drone Soccer）是一项新兴的竞技运动，两队无人机在封闭场地内进行攻防对抗，需要高效的积分系统来支撑比赛判罚与观众体验。</p>
+<h2 id="系统架构"><a href="#系统架构" class="headerlink" title="系统架构"></a>系统架构</h2><p>系统采用前后端分离架构：</p>
+<ul>
+<li><strong>前端</strong>：基于 React + TypeScript，使用 WebSocket 实现实时数据推送</li>
+<li><strong>后端</strong>：Node.js + Express，对接比赛裁判系统 API</li>
+<li><strong>数据库</strong>：PostgreSQL，存储比赛记录、选手数据和积分历史</li>
+<li><strong>可视化层</strong>：ECharts + D3.js，用于数据大屏展示</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">┌─────────────┐     ┌──────────────┐     ┌─────────────┐</span><br><span class="line">│  比赛现场    │────▶│  积分服务     │────▶│  数据大屏    │</span><br><span class="line">│  (裁判端)    │     │  (后端API)   │     │  (可视化)   │</span><br><span class="line">└─────────────┘     └──────────────┘     └─────────────┘</span><br><span class="line">       │                    │                    │</span><br><span class="line">       ▼                    ▼                    ▼</span><br><span class="line">┌─────────────┐     ┌──────────────┐     ┌─────────────┐</span><br><span class="line">│  WebSocket  │     │  PostgreSQL  │     │  历史查询    │</span><br><span class="line">│  实时推送    │     │  持久化存储   │     │  统计分析    │</span><br><span class="line">└─────────────┘     └──────────────┘     └─────────────┘</span><br></pre></td></tr></table></figure>
+
+<h2 id="核心功能"><a href="#核心功能" class="headerlink" title="核心功能"></a>核心功能</h2><h3 id="实时积分面板"><a href="#实时积分面板" class="headerlink" title="实时积分面板"></a>实时积分面板</h3><p>比赛过程中，裁判通过平板设备操作计分界面。每次得分事件通过 WebSocket 实时同步到所有终端：</p>
+<ul>
+<li>大屏展示端：显示实时比分、比赛倒计时、犯规次数</li>
+<li>观众端：扫码进入移动端观赛页，查看实时数据</li>
+<li>解说端：辅助解说员获取数据支持</li>
+</ul>
+<h3 id="积分规则引擎"><a href="#积分规则引擎" class="headerlink" title="积分规则引擎"></a>积分规则引擎</h3><p>系统内置可配置的积分规则引擎，支持不同赛制的计分逻辑：</p>
+<ul>
+<li><strong>进球得分</strong>：无人机带球穿过对方球门 +1 分</li>
+<li><strong>技术分</strong>：完成指定飞行动作获得技术加分</li>
+<li><strong>罚分</strong>：犯规、碰撞、越界等扣除相应分数</li>
+<li><strong>加时赛</strong>：平局时自动切换至加时赛计分模式</li>
+</ul>
+<h3 id="数据统计与分析"><a href="#数据统计与分析" class="headerlink" title="数据统计与分析"></a>数据统计与分析</h3><blockquote>
+<p>数据不仅仅是数字，更是比赛的另一种语言。</p>
+</blockquote>
+<p>系统自动采集每场比赛的全量数据，生成多维度的统计报告：</p>
+<table>
+<thead>
+<tr>
+<th>统计维度</th>
+<th>指标</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>进攻数据</td>
+<td>射门次数、进球率、控球时间</td>
+<td>衡量队伍进攻效率</td>
+</tr>
+<tr>
+<td>防守数据</td>
+<td>拦截次数、解围成功率</td>
+<td>评估防守表现</td>
+</tr>
+<tr>
+<td>飞手数据</td>
+<td>平均滞空时间、操控精度</td>
+<td>分析飞手技术水平</td>
+</tr>
+<tr>
+<td>比赛节奏</td>
+<td>得分频率、攻防转换速度</td>
+<td>反映比赛激烈程度</td>
+</tr>
+</tbody></table>
+<h2 id="界面设计"><a href="#界面设计" class="headerlink" title="界面设计"></a>界面设计</h2><p>界面设计遵循碎片化风格，与博客整体视觉语言保持一致：</p>
+<ul>
+<li><strong>深色主题</strong>：<code>#0a0a0a</code> 纯黑背景，降低观赛时的视觉干扰</li>
+<li><strong>霓虹配色</strong>：橙红色 <code>#FF3E00</code> 作为主色，青蓝 <code>#00E5FF</code> 作为强调</li>
+<li><strong>动态数据</strong>：积分变化时带有弹入动画，关键得分触发全屏特效</li>
+<li><strong>响应式布局</strong>：同时适配 16:9 大屏、平板和手机竖屏</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-class">.score-board</span> &#123;</span><br><span class="line">  <span class="attribute">font-family</span>: <span class="string">&#x27;Syne&#x27;</span>, sans-serif;</span><br><span class="line">  <span class="attribute">font-size</span>: <span class="number">4rem</span>;</span><br><span class="line">  <span class="attribute">font-weight</span>: <span class="number">800</span>;</span><br><span class="line">  <span class="attribute">color</span>: <span class="number">#FF3E00</span>;</span><br><span class="line">  <span class="attribute">text-shadow</span>: <span class="number">0</span> <span class="number">0</span> <span class="number">40px</span> <span class="built_in">rgba</span>(<span class="number">255</span>,<span class="number">62</span>,<span class="number">0</span>,<span class="number">0.3</span>);</span><br><span class="line">  <span class="attribute">transition</span>: all <span class="number">0.3s</span> <span class="built_in">cubic-bezier</span>(<span class="number">0.16</span>, <span class="number">1</span>, <span class="number">0.3</span>, <span class="number">1</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-class">.score-board</span><span class="selector-class">.updated</span> &#123;</span><br><span class="line">  <span class="attribute">transform</span>: <span class="built_in">scale</span>(<span class="number">1.1</span>);</span><br><span class="line">  <span class="attribute">text-shadow</span>: <span class="number">0</span> <span class="number">0</span> <span class="number">60px</span> <span class="built_in">rgba</span>(<span class="number">255</span>,<span class="number">62</span>,<span class="number">0</span>,<span class="number">0.6</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="部署与运行"><a href="#部署与运行" class="headerlink" title="部署与运行"></a>部署与运行</h2><h3 id="环境要求"><a href="#环境要求" class="headerlink" title="环境要求"></a>环境要求</h3><ul>
+<li>Node.js &gt;&#x3D; 18</li>
+<li>PostgreSQL &gt;&#x3D; 14</li>
+<li>支持 WebSocket 的负载均衡器</li>
+</ul>
+<h3 id="快速启动"><a href="#快速启动" class="headerlink" title="快速启动"></a>快速启动</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 克隆项目</span></span><br><span class="line">git <span class="built_in">clone</span> https://github.com/CUMEXAL/drone-soccer-score.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装依赖</span></span><br><span class="line"><span class="built_in">cd</span> drone-soccer-score</span><br><span class="line">npm install</span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置环境变量</span></span><br><span class="line"><span class="built_in">cp</span> .env.example .<span class="built_in">env</span></span><br><span class="line"><span class="comment"># 编辑 .env 填入数据库连接信息</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 初始化数据库</span></span><br><span class="line">npm run db:migrate</span><br><span class="line"></span><br><span class="line"><span class="comment"># 启动开发服务</span></span><br><span class="line">npm run dev</span><br></pre></td></tr></table></figure>
+
+<h2 id="项目状态"><a href="#项目状态" class="headerlink" title="项目状态"></a>项目状态</h2><p>当前系统已完成 v1.0 核心功能开发，正在进行赛场实地测试。</p>
+<hr>
+<p><em>本文档最后更新于 2026-05-12</em></p>
+
+            </div>
+        </div>
+    </main>
+</body>
+</html>
