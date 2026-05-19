@@ -529,7 +529,7 @@
 </thead>
 <tbody><tr>
 <td>主控芯片</td>
-<td>STC8H系列单片机（增强型51内核）</td>
+<td>STC8H系列单片机</td>
 </tr>
 <tr>
 <td>触摸输入</td>
@@ -537,7 +537,7 @@
 </tr>
 <tr>
 <td>PWM输出</td>
-<td>2路PWM信号（频率约4.8kHz），通过P33&#x2F;P34引脚输出</td>
+<td>2路PWM信号（频率约4.8kHz）</td>
 </tr>
 <tr>
 <td>状态指示</td>
@@ -550,18 +550,17 @@
 </tbody></table>
 <h2 id="控制逻辑详解"><a href="#控制逻辑详解" class="headerlink" title="控制逻辑详解"></a>控制逻辑详解</h2><h3 id="调光基本原理"><a href="#调光基本原理" class="headerlink" title="调光基本原理"></a>调光基本原理</h3><p>系统采用PWM（脉冲宽度调制）技术实现调光控制。PWM信号的占空比决定了负载的平均功率，从而控制灯光亮度：</p>
 <ul>
-<li><strong>最大亮度</strong>：占空比 100%（PWM计数值 2303）</li>
-<li><strong>最小亮度</strong>：占空比 10%（PWM计数值 230）</li>
+<li><strong>最大亮度</strong>：占空比 100%</li>
+<li><strong>最小亮度</strong>：占空比 10%</li>
 <li><strong>调光步进</strong>：每次调整减少或增加20个计数值，实现平滑过渡</li>
-<li><strong>PWM频率</strong>：约 4.8kHz，无频闪，适合LED照明</li>
+<li><strong>PWM频率</strong>：约 4.8kHz，无危害频闪，适合LED照明</li>
 </ul>
-<h3 id="按键功能逻辑"><a href="#按键功能逻辑" class="headerlink" title="按键功能逻辑"></a>按键功能逻辑</h3><p>系统包含4个触摸按键，每个按键支持<strong>短按</strong>和<strong>长按</strong>两种操作模式：</p>
+<h3 id="按键功能逻辑"><a href="#按键功能逻辑" class="headerlink" title="按键功能逻辑"></a>按键功能逻辑</h3><p>系统包含4个触摸按键，按键支持<strong>短按</strong>和<strong>长按</strong>两种操作模式：</p>
 <h4 id="1-SWITCH（开关键）——-主控通断"><a href="#1-SWITCH（开关键）——-主控通断" class="headerlink" title="1. SWITCH（开关键）—— 主控通断"></a>1. SWITCH（开关键）—— 主控通断</h4><ul>
 <li><strong>功能</strong>：控制系统的总开关状态</li>
 <li><strong>短按一次</strong>：开启输出（两路恢复至最大亮度）</li>
 <li><strong>再次短按</strong>：关闭输出（两路亮度归零）</li>
-<li><strong>状态保持</strong>：再次开启时自动恢复至最大亮度</li>
-<li>每次操作伴随指示灯亮起反馈</li>
+<li><strong>注意事项</strong>：在关闭状态其他按键操作无效，仅通过”开关键”开启输出</li>
 </ul>
 <h4 id="2-UP（上调键）——-控制通道A"><a href="#2-UP（上调键）——-控制通道A" class="headerlink" title="2. UP（上调键）—— 控制通道A"></a>2. UP（上调键）—— 控制通道A</h4><ul>
 <li><strong>短按</strong>：切换通道A的调光<strong>方向</strong>（正在变亮则切换为变暗，正在变暗则切换为变亮），实现步进式方向切换</li>
@@ -573,16 +572,14 @@
 <li><strong>长按（&gt;500ms）</strong>：进入<strong>连续调光模式</strong>，通道B的亮度沿当前方向持续变化</li>
 <li><strong>边界处理</strong>：同上，到达边界自动翻转方向</li>
 </ul>
-<h4 id="4-READ（读取键）——-一键恢复"><a href="#4-READ（读取键）——-一键恢复" class="headerlink" title="4. READ（读取键）—— 一键恢复"></a>4. READ（读取键）—— 一键恢复</h4><ul>
+<h4 id="4-READ（阅读模式键）——-调到最大亮度"><a href="#4-READ（阅读模式键）——-调到最大亮度" class="headerlink" title="4. READ（阅读模式键）—— 调到最大亮度"></a>4. READ（阅读模式键）—— 调到最大亮度</h4><ul>
 <li><strong>功能</strong>：将两路输出同时恢复至最大亮度（100%）</li>
 <li><strong>典型场景</strong>：用户将亮度调低后需要快速恢复至最亮状态</li>
 <li>操作后有指示灯反馈</li>
 </ul>
-<h3 id="开关机与状态切换流程"><a href="#开关机与状态切换流程" class="headerlink" title="开关机与状态切换流程"></a>开关机与状态切换流程</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">关机状态（输出关闭）</span><br><span class="line">      │</span><br><span class="line"> 按下 SWITCH 键</span><br><span class="line">      │</span><br><span class="line">      ▼</span><br><span class="line">开机状态（两路最大亮度）</span><br><span class="line">      │</span><br><span class="line">  ├── UP短按 → 切换通道A方向 → 通道A开始变化</span><br><span class="line">  ├── UP长按 → 通道A连续调光</span><br><span class="line">  ├── DOWN短按 → 切换通道B方向 → 通道B开始变化</span><br><span class="line">  ├── DOWN长按 → 通道B连续调光</span><br><span class="line">  ├── READ键 → 两路恢复至最大亮度</span><br><span class="line">  └── SWITCH键 → 返回关机状态</span><br></pre></td></tr></table></figure>
-
 <h3 id="指示灯控制逻辑"><a href="#指示灯控制逻辑" class="headerlink" title="指示灯控制逻辑"></a>指示灯控制逻辑</h3><ul>
 <li><strong>操作响应</strong>：每次检测到按键操作，对应功能的LED指示灯立即点亮</li>
-<li><strong>自动熄灭</strong>：无操作超过设定时间后（约1.5秒），所有指示灯自动熄灭，降低功耗</li>
+<li><strong>自动熄灭</strong>：无操作超过设定时间后（约1.5秒），所有指示灯亮灯操作1.5秒后自动熄灭，熄灯操作15秒后自动熄灭，既能及时反馈操作状态，又能降低功耗</li>
 <li><strong>开机提示</strong>：系统上电时所有指示灯短暂闪烁，提示系统正常运行</li>
 </ul>
 <h3 id="防抖与误触处理"><a href="#防抖与误触处理" class="headerlink" title="防抖与误触处理"></a>防抖与误触处理</h3><ul>
