@@ -160,7 +160,7 @@
     </script>
 <meta name="generator" content="Hexo 8.1.2"></head>
 
-<body>
+<body class="overflow-x-hidden">
     <nav class="fixed top-0 left-0 w-full p-6 flex justify-between z-50" id="main-nav">
     <a href="/" class="text-3xl font-bold tracking-tighter whitespace-nowrap" id="brand">CUMEXAL</a>
     <div class="text-[1.3rem] uppercase tracking-widest whitespace-nowrap" id="nav-links">
@@ -237,530 +237,583 @@
     });
 </script>
 
-    <main class="relative w-full h-screen overflow-hidden bg-[var(--bg)] flex items-center justify-center pt-16" id="page-main">
-        <h1 class="hero-text absolute z-0 text-[18vw] md:text-[22vw] text-white opacity-5 whitespace-nowrap top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none fouc-hidden" id="bg-title">
-            FRAGMENT
-        </h1>
+    <style>
+        .doc-wrapper {
+            max-width: 48rem;
+            width: 100%;
+            margin: 0 auto;
+            padding: 2rem 3.5rem 4rem 1.5rem;
+        }
 
-        <div class="relative w-full max-w-7xl h-[80vh] mx-auto p-4 fragment-container">
+        .doc-header {
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+        }
 
-            <div class="absolute top-[10%] left-[5%] z-40 fouc-hidden" id="hero-title-block">
-                <h1 class="hero-text text-[10vw] md:text-[8vw] text-white leading-none mix-blend-difference" id="main-title">
-                    CODE<br><span class="text-transparent" style="-webkit-text-stroke: 2px var(--primary);">LOGIC</span>
-                </h1>
-                <p class="mt-4 text-xl md:text-2xl text-[var(--accent)] tracking-widest uppercase" id="bio-text">Loading...</p>
-            </div>
+        .doc-header h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #fff;
+            line-height: 1.2;
+            letter-spacing: -0.03em;
+            margin-bottom: 0.8rem;
+        }
 
-            <div class="fragment-block tilt-card absolute top-[5%] right-[5%] z-30 w-28 h-28 md:w-36 md:h-36 rounded-full overflow-hidden border-2 border-[var(--accent)] shadow-lg shadow-[var(--accent)]/30 fouc-hidden" id="frag-avatar">
-                <img id="avatar-img" class="w-full h-full object-cover" src="/images/CUMEXAL.jpg" alt="avatar">
-            </div>
+        .doc-meta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.4);
+        }
 
-            <div class="fragment-block tilt-card absolute bottom-[15%] left-[10%] w-[60%] md:w-[25%] bg-[var(--card-bg)] backdrop-blur-md p-6 z-30 fouc-hidden" id="frag-stack">
-                <h3 class="text-xs uppercase mb-4 text-[var(--primary)] tracking-widest font-bold" id="stack-title">// TECH_STACK</h3>
-                <ul class="text-sm space-y-2 text-gray-300" id="tech-stack"></ul>
-            </div>
+        .doc-meta .doc-tag {
+            display: inline-block;
+            padding: 0.15rem 0.6rem;
+            border-radius: 0.25rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: rgba(255,255,255,0.5);
+            font-size: 0.7rem;
+        }
 
-            <div class="fragment-block tilt-card absolute bottom-[10%] right-[15%] w-[70%] md:w-[30%] bg-white text-black p-8 z-30 hover:bg-[var(--accent)] hover:text-black transition-colors cursor-pointer fouc-hidden" id="frag-log" onclick="window.location.href='/archives/'">
-                <h3 class="font-bold text-3xl md:text-4xl leading-none uppercase mb-6" id="log-title">Latest<br>Log_</h3>
-                <div id="latest-post" class="text-sm border-t border-black pt-4">"Parsing the future of silicon..."</div>
-            </div>
+        .doc-content {
+            font-size: 0.95rem;
+            line-height: 1.9;
+            color: rgba(255,255,255,0.82);
+        }
 
-        </div>
+        .doc-content h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #fff;
+            margin: 2rem 0 0.8rem;
+            padding-bottom: 0.4rem;
+            letter-spacing: -0.02em;
+        }
 
-        <style>
-            #frag-avatar.ready:hover {
-                transform: scale(1.08);
-                border-color: var(--primary);
-                box-shadow: 0 0 30px var(--primary);
+        .doc-content h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #fff;
+            margin: 2rem 0 0.8rem;
+            padding-bottom: 0.4rem;
+            letter-spacing: -0.02em;
+        }
+
+        .doc-content h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin: 1.5rem 0 0.5rem;
+        }
+
+        /* 隐藏正文中的目录内容，只由侧边浮动面板提供 */
+        .doc-content h2#目录 {
+            display: none;
+        }
+        .doc-content h2#目录 + ol,
+        .doc-content h2#目录 + ul,
+        .doc-content h2#目录 + hr {
+            display: none;
+        }
+
+        .doc-content p {
+            margin-bottom: 1rem;
+        }
+
+        .doc-content strong {
+            color: #fff;
+        }
+
+        .doc-content code {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 0.15rem 0.4rem;
+            border-radius: 0.25rem;
+            font-size: 0.85em;
+            color: var(--accent);
+        }
+
+        .doc-content pre {
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 0.75rem;
+            padding: 1.2rem;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 1.2rem 0;
+        }
+
+        .doc-content pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            color: rgba(255,255,255,0.85);
+            font-size: 0.8rem;
+            line-height: 1.6;
+        }
+
+        .doc-content ul, .doc-content ol {
+            margin: 0.5rem 0 1rem;
+            padding-left: 1.5rem;
+        }
+
+        .doc-content li {
+            margin-bottom: 0.3rem;
+        }
+
+        .doc-content blockquote {
+            border-left: 2px solid var(--accent);
+            padding: 0.5rem 0 0.5rem 1.2rem;
+            margin: 1.2rem 0;
+            background: rgba(0,229,255,0.03);
+            border-radius: 0 0.5rem 0.5rem 0;
+            color: rgba(255,255,255,0.6);
+        }
+
+        .doc-content a {
+            color: var(--accent);
+            text-decoration: underline;
+            text-underline-offset: 2px;
+            transition: opacity 0.2s;
+        }
+
+        .doc-content a:hover {
+            opacity: 0.7;
+        }
+
+        .doc-content img {
+            max-width: 100%;
+            border-radius: 0.75rem;
+            margin: 1.5rem 0;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .doc-content hr {
+            border: none;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            margin: 2rem 0;
+        }
+
+        .doc-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.85rem;
+            overflow-x: auto;
+            display: block;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .doc-content th, .doc-content td {
+            padding: 0.6rem 0.8rem;
+            border: 1px solid rgba(255,255,255,0.06);
+            text-align: left;
+        }
+
+        .doc-content th {
+            background: rgba(255,255,255,0.03);
+            color: rgba(255,255,255,0.6);
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .doc-wrapper {
+                padding: 0.75rem 0.75rem 3rem;
+                max-width: 100%;
             }
 
-            @media (max-width: 768px) {
-                .fragment-container { height: 100vh; padding-top: 10%; }
-
-                #page-main { padding-top: 10rem; }
-
-                #hero-title-block {
-                    position: relative;
-                    top: 0; left: 0;
-                    margin-bottom: 1.5rem;
-                    text-align: center;
-                }
-
-                #frag-avatar {
-                    position: relative;
-                    top: auto; right: auto;
-                    width: 5rem;
-                    height: 5rem;
-                    margin: 0 auto 1rem;
-                }
-
-                #frag-stack {
-                    position: relative;
-                    bottom: auto; left: 0;
-                    width: 100%;
-                    margin-bottom: 1rem;
-                }
-
-                #frag-log {
-                    position: relative;
-                    bottom: auto; right: 0;
-                    width: 100%;
-                }
-            }
-
-            /* ========== 通知弹窗 ========== */
-            #popup-overlay {
-                position: fixed;
-                inset: 0;
-                z-index: 9999;
-                background: rgba(0,0,0,0.7);
-                backdrop-filter: blur(8px);
-                -webkit-backdrop-filter: blur(8px);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                opacity: 0;
-                pointer-events: none;
-            }
-
-            #popup-overlay.active {
-                opacity: 1;
-                pointer-events: auto;
-            }
-
-            #popup-card {
-                position: relative;
-                width: 420px;
-                max-width: 90vw;
-                max-height: 85vh;
-                overflow-y: auto;
-                border-radius: 1.5rem;
-                background: linear-gradient(145deg, #1a0a12 0%, #2d0f1f 40%, #1a0a12 100%);
-                box-shadow:
-                    0 0 60px rgba(255,105,180,0.15),
-                    inset 0 1px 0 rgba(255,105,180,0.1);
-                transform: scale(0.8) translateY(40px);
-                transition: none;
-            }
-
-            #popup-card .garden-svg {
-                width: 100%;
-                height: 180px;
-                display: block;
-                border-radius: 1.5rem 1.5rem 0 0;
-                background: linear-gradient(180deg, rgba(255,182,193,0.1) 0%, transparent 100%);
-            }
-
-            #popup-close {
-                position: absolute;
-                top: 0.75rem;
-                right: 0.75rem;
-                width: 2rem;
-                height: 2rem;
-                border-radius: 50%;
-                border: 1px solid rgba(255,105,180,0.3);
-                background: rgba(0,0,0,0.4);
-                color: #FF69B4;
-                font-size: 1rem;
-                cursor: pointer;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                z-index: 10;
-                transition: all 0.3s ease;
-            }
-
-            #popup-close:hover {
-                background: rgba(255,105,180,0.2);
-                border-color: #FF69B4;
-                transform: scale(1.1);
-            }
-
-            #popup-body {
-                padding: 1.5rem 2rem 2rem;
-                text-align: center;
-            }
-
-            #popup-title {
-                font-size: 1.6rem;
-                font-weight: 800;
-                color: #FF69B4;
-                margin-bottom: 1rem;
-                letter-spacing: 0.05em;
-                text-shadow: 0 0 30px rgba(255,105,180,0.3);
-            }
-
-            #popup-message {
-                font-size: 0.95rem;
+            .doc-content {
+                overflow-x: hidden;
+                font-size: 0.88rem;
                 line-height: 1.8;
-                color: rgba(255,255,255,0.85);
-                margin-bottom: 1.2rem;
             }
 
-            #popup-message p {
-                margin: 0;
+            .doc-header {
+                margin-bottom: 1.5rem;
+                padding-bottom: 0.75rem;
             }
 
-            #popup-message p.empty {
-                height: 0.6rem;
+            .doc-header h1 {
+                font-size: 1.4rem;
             }
 
-            #popup-signature {
-                font-size: 0.8rem;
-                color: rgba(255,105,180,0.6);
-                letter-spacing: 0.05em;
-                font-style: italic;
-                margin-top: 0.5rem;
-                padding-top: 1rem;
-                border-top: 1px solid rgba(255,105,180,0.15);
+            .doc-content h1 {
+                font-size: 1.3rem;
             }
 
-            @media (max-width: 768px) {
-                #popup-card {
-                    width: 92vw;
-                    max-height: 80vh;
-                    border-radius: 1rem;
-                }
-
-                #popup-card .garden-svg {
-                    height: 110px;
-                    border-radius: 1rem 1rem 0 0;
-                }
-
-                #popup-title {
-                    font-size: 1.1rem;
-                    margin-bottom: 0.6rem;
-                }
-
-                #popup-body {
-                    padding: 0.8rem 1rem 1.2rem;
-                }
-
-                #popup-message {
-                    font-size: 0.8rem;
-                    line-height: 1.6;
-                    margin-bottom: 0.8rem;
-                }
-
-                #popup-message p.empty {
-                    height: 0.3rem;
-                }
-
-                #popup-signature {
-                    font-size: 0.7rem;
-                    padding-top: 0.6rem;
-                }
-
-                #popup-close {
-                    top: 0.5rem;
-                    right: 0.5rem;
-                    width: 1.6rem;
-                    height: 1.6rem;
-                    font-size: 0.75rem;
-                }
+            .doc-meta {
+                font-size: 0.7rem;
+                gap: 0.5rem;
             }
-        </style>
+
+            .doc-content h2 {
+                font-size: 1.15rem;
+            }
+
+            .doc-content h3 {
+                font-size: 0.95rem;
+            }
+
+            .doc-content pre {
+                padding: 0.6rem;
+                font-size: 0.75rem;
+            }
+
+            .doc-content table {
+                font-size: 0.75rem;
+            }
+
+            .doc-content th,
+            .doc-content td {
+                padding: 0.4rem 0.5rem;
+            }
+
+            .doc-content blockquote {
+                padding: 0.4rem 0 0.4rem 0.8rem;
+                margin: 0.8rem 0;
+            }
+
+            .doc-content img {
+                margin: 1rem 0;
+            }
+        }
+    </style>
+
+    <main class="relative w-full min-h-screen pt-24" id="page-main">
+        <h1 class="hero-text fixed z-0 text-[18vw] md:text-[22vw] text-white opacity-[0.03] whitespace-nowrap top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none">DOCS</h1>
+
+        <div class="doc-wrapper">
+            <div class="doc-header">
+                <h1>四触摸双通道PWM调光控制器</h1>
+                <div class="doc-meta">
+                    
+                    <time>2026-05-01</time>
+                    
+                    
+                    
+                        
+                            <span class="doc-tag">#Touch</span>
+                        
+                            <span class="doc-tag">#PWM</span>
+                        
+                            <span class="doc-tag">#STC8H</span>
+                        
+                            <span class="doc-tag">#交互</span>
+                        
+                    
+                </div>
+            </div>
+
+            <div class="doc-content">
+                <h1 id="四触摸双通道PWM调光控制器"><a href="#四触摸双通道PWM调光控制器" class="headerlink" title="四触摸双通道PWM调光控制器"></a>四触摸双通道PWM调光控制器</h1><h2 id="项目概述"><a href="#项目概述" class="headerlink" title="项目概述"></a>项目概述</h2><p>本项目基于 <strong>STC8H系列单片机</strong>，实现了一款<strong>4通道触摸输入、2路PWM输出的智能调光控制器</strong>。通过4个触摸按键（开关、上调、下调、读取），用户可以灵活控制两路LED灯光的亮度和开关状态，适用于家居照明、氛围灯带、展柜照明等场景。</p>
+<p><img src="/touchdimming.png" alt="触摸调光器"><br><img src="/touchdimming1.png" alt="触摸调光器"></p>
+<h2 id="核心特性"><a href="#核心特性" class="headerlink" title="核心特性"></a>核心特性</h2><ul>
+<li><strong>4路电容式触摸输入</strong>：提供开关、亮度上调、亮度下调、读取恢复四个功能按键</li>
+<li><strong>2路独立PWM输出</strong>：可独立控制两路负载的亮度</li>
+<li><strong>宽范围无极调光</strong>：支持 10% ~ 100% 的亮度调节范围</li>
+<li><strong>方向记忆与连续调节</strong>：短按切换调光方向，长按实现连续平滑调光</li>
+<li><strong>一键全亮恢复</strong>：按下”读取”键，两路同时恢复至最大亮度</li>
+<li><strong>主开关控制</strong>：一键通断，同时控制两路输出的开启与关闭</li>
+<li><strong>LED状态指示</strong>：各按键操作伴有独立的LED指示灯反馈</li>
+<li><strong>自动熄灯节能</strong>：无操作一段时间后，指示灯自动熄灭</li>
+</ul>
+<h2 id="硬件架构"><a href="#硬件架构" class="headerlink" title="硬件架构"></a>硬件架构</h2><table>
+<thead>
+<tr>
+<th>组件</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>主控芯片</td>
+<td>STC8H系列单片机（增强型51内核）</td>
+</tr>
+<tr>
+<td>触摸输入</td>
+<td>4通道电容式触摸按键</td>
+</tr>
+<tr>
+<td>PWM输出</td>
+<td>2路PWM信号（频率约4.8kHz），通过P33&#x2F;P34引脚输出</td>
+</tr>
+<tr>
+<td>状态指示</td>
+<td>4颗LED指示灯对应各按键状态</td>
+</tr>
+<tr>
+<td>工作频率</td>
+<td>22.1184MHz</td>
+</tr>
+</tbody></table>
+<h2 id="控制逻辑详解"><a href="#控制逻辑详解" class="headerlink" title="控制逻辑详解"></a>控制逻辑详解</h2><h3 id="调光基本原理"><a href="#调光基本原理" class="headerlink" title="调光基本原理"></a>调光基本原理</h3><p>系统采用PWM（脉冲宽度调制）技术实现调光控制。PWM信号的占空比决定了负载的平均功率，从而控制灯光亮度：</p>
+<ul>
+<li><strong>最大亮度</strong>：占空比 100%（PWM计数值 2303）</li>
+<li><strong>最小亮度</strong>：占空比 10%（PWM计数值 230）</li>
+<li><strong>调光步进</strong>：每次调整减少或增加20个计数值，实现平滑过渡</li>
+<li><strong>PWM频率</strong>：约 4.8kHz，无频闪，适合LED照明</li>
+</ul>
+<h3 id="按键功能逻辑"><a href="#按键功能逻辑" class="headerlink" title="按键功能逻辑"></a>按键功能逻辑</h3><p>系统包含4个触摸按键，每个按键支持<strong>短按</strong>和<strong>长按</strong>两种操作模式：</p>
+<h4 id="1-SWITCH（开关键）——-主控通断"><a href="#1-SWITCH（开关键）——-主控通断" class="headerlink" title="1. SWITCH（开关键）—— 主控通断"></a>1. SWITCH（开关键）—— 主控通断</h4><ul>
+<li><strong>功能</strong>：控制系统的总开关状态</li>
+<li><strong>短按一次</strong>：开启输出（两路恢复至最大亮度）</li>
+<li><strong>再次短按</strong>：关闭输出（两路亮度归零）</li>
+<li><strong>状态保持</strong>：再次开启时自动恢复至最大亮度</li>
+<li>每次操作伴随指示灯亮起反馈</li>
+</ul>
+<h4 id="2-UP（上调键）——-控制通道A"><a href="#2-UP（上调键）——-控制通道A" class="headerlink" title="2. UP（上调键）—— 控制通道A"></a>2. UP（上调键）—— 控制通道A</h4><ul>
+<li><strong>短按</strong>：切换通道A的调光<strong>方向</strong>（正在变亮则切换为变暗，正在变暗则切换为变亮），实现步进式方向切换</li>
+<li><strong>长按（&gt;500ms）</strong>：进入<strong>连续调光模式</strong>，通道A的亮度沿当前方向持续变化，直至达到上限（100%）或下限（10%）自动停止</li>
+<li><strong>边界处理</strong>：当亮度达到上限时自动切换为减方向，达到下限时自动切换为加方向，确保始终可调</li>
+</ul>
+<h4 id="3-DOWN（下调键）——-控制通道B"><a href="#3-DOWN（下调键）——-控制通道B" class="headerlink" title="3. DOWN（下调键）—— 控制通道B"></a>3. DOWN（下调键）—— 控制通道B</h4><ul>
+<li><strong>短按</strong>：切换通道B的调光<strong>方向</strong></li>
+<li><strong>长按（&gt;500ms）</strong>：进入<strong>连续调光模式</strong>，通道B的亮度沿当前方向持续变化</li>
+<li><strong>边界处理</strong>：同上，到达边界自动翻转方向</li>
+</ul>
+<h4 id="4-READ（读取键）——-一键恢复"><a href="#4-READ（读取键）——-一键恢复" class="headerlink" title="4. READ（读取键）—— 一键恢复"></a>4. READ（读取键）—— 一键恢复</h4><ul>
+<li><strong>功能</strong>：将两路输出同时恢复至最大亮度（100%）</li>
+<li><strong>典型场景</strong>：用户将亮度调低后需要快速恢复至最亮状态</li>
+<li>操作后有指示灯反馈</li>
+</ul>
+<h3 id="开关机与状态切换流程"><a href="#开关机与状态切换流程" class="headerlink" title="开关机与状态切换流程"></a>开关机与状态切换流程</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">关机状态（输出关闭）</span><br><span class="line">      │</span><br><span class="line"> 按下 SWITCH 键</span><br><span class="line">      │</span><br><span class="line">      ▼</span><br><span class="line">开机状态（两路最大亮度）</span><br><span class="line">      │</span><br><span class="line">  ├── UP短按 → 切换通道A方向 → 通道A开始变化</span><br><span class="line">  ├── UP长按 → 通道A连续调光</span><br><span class="line">  ├── DOWN短按 → 切换通道B方向 → 通道B开始变化</span><br><span class="line">  ├── DOWN长按 → 通道B连续调光</span><br><span class="line">  ├── READ键 → 两路恢复至最大亮度</span><br><span class="line">  └── SWITCH键 → 返回关机状态</span><br></pre></td></tr></table></figure>
+
+<h3 id="指示灯控制逻辑"><a href="#指示灯控制逻辑" class="headerlink" title="指示灯控制逻辑"></a>指示灯控制逻辑</h3><ul>
+<li><strong>操作响应</strong>：每次检测到按键操作，对应功能的LED指示灯立即点亮</li>
+<li><strong>自动熄灭</strong>：无操作超过设定时间后（约1.5秒），所有指示灯自动熄灭，降低功耗</li>
+<li><strong>开机提示</strong>：系统上电时所有指示灯短暂闪烁，提示系统正常运行</li>
+</ul>
+<h3 id="防抖与误触处理"><a href="#防抖与误触处理" class="headerlink" title="防抖与误触处理"></a>防抖与误触处理</h3><ul>
+<li>系统采用<strong>软件消抖</strong>机制，通过10ms的采样间隔对按键状态进行多次确认</li>
+<li>采用<strong>边沿检测</strong>方式（上升沿&#x2F;下降沿）识别按键动作，避免电平抖动导致的误触发</li>
+<li>短按与长按通过<strong>计时累加</strong>区分，500ms为区分阈值</li>
+</ul>
+<h2 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h2><ul>
+<li><strong>双色温LED灯具</strong>：两路分别控制冷白和暖白灯珠，通过亮度比例调节色温</li>
+<li><strong>分区照明</strong>：两个独立区域的灯光分别控制</li>
+<li><strong>氛围灯带</strong>：两路RGB灯带的基础亮度控制</li>
+<li><strong>展柜照明</strong>：独立控制上下两层或左右两个区域的展品照明</li>
+</ul>
+<hr>
+<p><em>文档版本：v1.0 | 最后更新：2026-05-01</em><br><em>作者：<a target="_blank" rel="noopener" href="https://github.com/CUMEXAL">CUMEXAL</a></em></p>
+
+            </div>
+        </div>
     </main>
 
-    <!-- ========== 通知弹窗 ========== -->
-    <div id="popup-overlay">
-        <div id="popup-card">
-            <button id="popup-close">✕</button>
-            <!-- SVG 花园场景 -->
-            <svg class="garden-svg" viewBox="0 0 420 180" preserveAspectRatio="xMidYMid meet">
-                <!-- 天空渐变 -->
-                <defs>
-                    <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="#2d1b2e"/>
-                        <stop offset="60%" stop-color="#1a0a12"/>
-                        <stop offset="100%" stop-color="#2d0f1f"/>
-                    </linearGradient>
-                    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
-                        <stop offset="0%" stop-color="rgba(255,105,180,0.3)"/>
-                        <stop offset="100%" stop-color="rgba(255,105,180,0)"/>
-                    </radialGradient>
-                    <linearGradient id="grassGrad" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stop-color="#3a1a2a"/>
-                        <stop offset="100%" stop-color="#1a0a12"/>
-                    </linearGradient>
-                </defs>
-
-                <!-- 背景 -->
-                <rect width="420" height="180" fill="url(#skyGrad)"/>
-                <circle cx="210" cy="40" r="80" fill="url(#glow)" opacity="0.5"/>
-
-                <!-- === 左侧树 === -->
-                <!-- 树干 -->
-                <rect x="42" y="90" width="8" height="30" rx="3" fill="#4a2a1a" opacity="0.8"/>
-                <!-- 树冠（多层圆形） -->
-                <circle cx="46" cy="76" r="20" fill="#2a1a2a" opacity="0.7"/>
-                <circle cx="36" cy="82" r="16" fill="#3a1a2a" opacity="0.6"/>
-                <circle cx="56" cy="80" r="15" fill="#2a1a2a" opacity="0.5"/>
-                <!-- 树冠上的粉色小花点缀 -->
-                <circle cx="38" cy="70" r="2.5" fill="#FF69B4" opacity="0.7"/>
-                <circle cx="52" cy="74" r="2" fill="#FFB6C1" opacity="0.6"/>
-
-                <!-- === 右侧树（稍小） === -->
-                <rect x="360" y="100" width="6" height="22" rx="3" fill="#4a2a1a" opacity="0.7"/>
-                <circle cx="363" cy="88" r="16" fill="#2a1a2a" opacity="0.6"/>
-                <circle cx="356" cy="92" r="12" fill="#3a1a2a" opacity="0.5"/>
-                <circle cx="370" cy="91" r="11" fill="#2a1a2a" opacity="0.4"/>
-                <circle cx="358" cy="83" r="2" fill="#FF69B4" opacity="0.6"/>
-                <circle cx="368" cy="86" r="1.8" fill="#FFB6C1" opacity="0.5"/>
-
-                <!-- === 中央大花 === -->
-                <!-- 花茎 -->
-                <path d="M210 120 Q208 100 210 80" stroke="#3a2a1a" stroke-width="2.5" fill="none" opacity="0.6"/>
-                <!-- 叶子 -->
-                <path d="M210 105 Q195 100 200 92" stroke="#3a2a1a" stroke-width="1.5" fill="#2a1a2a" opacity="0.5"/>
-                <path d="M210 95 Q225 90 220 82" stroke="#3a2a1a" stroke-width="1.5" fill="#2a1a2a" opacity="0.5"/>
-                <!-- 花瓣 -->
-                <ellipse cx="210" cy="60" rx="8" ry="14" fill="#FF69B4" opacity="0.8" transform="rotate(0 210 67)"/>
-                <ellipse cx="210" cy="60" rx="8" ry="14" fill="#FF85C8" opacity="0.7" transform="rotate(51 210 67)"/>
-                <ellipse cx="210" cy="60" rx="8" ry="14" fill="#FF69B4" opacity="0.75" transform="rotate(102 210 67)"/>
-                <ellipse cx="210" cy="60" rx="8" ry="14" fill="#FF85C8" opacity="0.65" transform="rotate(153 210 67)"/>
-                <ellipse cx="210" cy="60" rx="8" ry="14" fill="#FF69B4" opacity="0.7" transform="rotate(204 210 67)"/>
-                <ellipse cx="210" cy="60" rx="8" ry="14" fill="#FF85C8" opacity="0.6" transform="rotate(255 210 67)"/>
-                <ellipse cx="210" cy="60" rx="8" ry="14" fill="#FFB6C1" opacity="0.5" transform="rotate(306 210 67)"/>
-                <!-- 花蕊 -->
-                <circle cx="210" cy="67" r="6" fill="#FFD700" opacity="0.8"/>
-                <circle cx="208" cy="65" r="1.5" fill="#FFF" opacity="0.5"/>
-                <circle cx="212" cy="69" r="1" fill="#FFF" opacity="0.4"/>
-
-                <!-- === 左侧小花 === -->
-                <path d="M120 130 Q118 118 120 110" stroke="#3a2a1a" stroke-width="1.8" fill="none" opacity="0.5"/>
-                <circle cx="120" cy="102" r="5" fill="#FFB6C1" opacity="0.7"/>
-                <circle cx="115" cy="105" r="4" fill="#FF69B4" opacity="0.5"/>
-                <circle cx="125" cy="105" r="4" fill="#FF85C8" opacity="0.5"/>
-                <circle cx="120" cy="107" r="2.5" fill="#FFD700" opacity="0.6"/>
-
-                <!-- === 右侧小花 === -->
-                <path d="M300 125 Q298 115 300 108" stroke="#3a2a1a" stroke-width="1.8" fill="none" opacity="0.5"/>
-                <circle cx="300" cy="100" r="5" fill="#FF85C8" opacity="0.7"/>
-                <circle cx="295" cy="103" r="4" fill="#FFB6C1" opacity="0.5"/>
-                <circle cx="305" cy="103" r="4" fill="#FF69B4" opacity="0.5"/>
-                <circle cx="300" cy="105" r="2.5" fill="#FFD700" opacity="0.6"/>
-
-                <!-- === 底部草丛 === -->
-                <path d="M0 155 Q10 135 20 155 Q30 130 40 155 Q50 132 60 155 Q70 128 80 155 Q90 133 100 155 Q110 130 120 155 Q130 126 140 155 Q150 131 160 155 Q170 128 180 155 Q190 125 200 155 Q210 130 220 155 Q230 127 240 155 Q250 132 260 155 Q270 129 280 155 Q290 126 300 155 Q310 131 320 155 Q330 128 340 155 Q350 124 360 155 Q370 130 380 155 Q390 127 400 155 Q410 132 420 155 L420 180 L0 180 Z" fill="#2a1a2a" opacity="0.6"/>
-                <path d="M0 162 Q15 145 30 162 Q45 140 60 162 Q75 142 90 162 Q105 138 120 162 Q135 143 150 162 Q165 140 180 162 Q195 137 210 162 Q225 142 240 162 Q255 139 270 162 Q285 144 300 162 Q315 141 330 162 Q345 138 360 162 Q375 143 390 162 Q405 140 420 162 L420 180 L0 180 Z" fill="#1a0a12" opacity="0.8"/>
-
-                <!-- 草叶上的粉色小花点缀 -->
-                <circle cx="30" cy="150" r="2" fill="#FFB6C1" opacity="0.5"/>
-                <circle cx="80" cy="145" r="1.8" fill="#FF69B4" opacity="0.4"/>
-                <circle cx="150" cy="142" r="2.2" fill="#FF85C8" opacity="0.5"/>
-                <circle cx="270" cy="148" r="1.5" fill="#FFB6C1" opacity="0.4"/>
-                <circle cx="340" cy="143" r="2" fill="#FF69B4" opacity="0.5"/>
-                <circle cx="390" cy="150" r="1.8" fill="#FF85C8" opacity="0.4"/>
-
-                <!-- 飘落的爱心 -->
-                <g opacity="0.4">
-                    <text x="80" y="40" font-size="10" fill="#FF69B4">♥</text>
-                    <text x="320" y="35" font-size="8" fill="#FFB6C1">♥</text>
-                    <text x="180" y="25" font-size="7" fill="#FF85C8">♥</text>
-                    <text x="260" y="45" font-size="9" fill="#FF69B4">♥</text>
-                    <text x="140" y="50" font-size="6" fill="#FFB6C1">♥</text>
-                    <text x="350" y="55" font-size="8" fill="#FF85C8">♥</text>
-                </g>
-
-                <!-- 星星闪烁 -->
-                <g opacity="0.3">
-                    <circle cx="60" cy="25" r="1" fill="#FFF"/>
-                    <circle cx="140" cy="18" r="1.2" fill="#FFF"/>
-                    <circle cx="280" cy="22" r="0.8" fill="#FFF"/>
-                    <circle cx="360" cy="28" r="1" fill="#FFF"/>
-                    <circle cx="100" cy="35" r="0.6" fill="#FFF"/>
-                    <circle cx="330" cy="15" r="0.7" fill="#FFF"/>
-                </g>
-            </svg>
-
-            <div id="popup-body">
-                <div id="popup-title">💐 母亲节快乐 💐</div>
-                <div id="popup-message"></div>
-                <div id="popup-signature">—— CUMEXAL · 2026 母亲节</div>
-            </div>
+    <div id="toc-floating-panel">
+    <div id="toc-panel-toggle" title="目录">目录</div>
+    <div id="toc-panel-content">
+        <div id="toc-panel-header">
+            <span>目录</span>
         </div>
+        <nav id="toc-panel-list"></nav>
     </div>
+</div>
 
-    
+<style>
+    #toc-floating-panel {
+        position: fixed;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 60;
+        display: flex;
+        align-items: stretch;
+        pointer-events: none;
+    }
 
-    <script>
-        // =============================================
-        //  从 SiteConfig 读取数据渲染首页
-        //  如果某些字段缺失，使用硬编码兜底
-        // =============================================
-        var cfg = window.SiteConfig || {};
+    #toc-panel-toggle {
+        pointer-events: auto;
+        writing-mode: vertical-rl;
+        letter-spacing: 0.15em;
+        font-size: 0.7rem;
+        padding: 0.6rem 0.25rem;
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(255,255,255,0.08);
+        border-right: none;
+        border-radius: 0.4rem 0 0 0.4rem;
+        color: rgba(255,255,255,0.4);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        flex-shrink: 0;
+    }
 
-        if (cfg.hero) {
-            document.getElementById('main-title').innerHTML = cfg.hero.title || 'CODE<br><span class="text-transparent" style="-webkit-text-stroke: 2px var(--primary);">LOGIC</span>';
-            document.getElementById('bio-text').innerText = cfg.hero.subtitle || '打破常规，重构逻辑';
-            document.getElementById('bg-title').innerText = cfg.hero.bgTitle || 'FRAGMENT';
+    #toc-panel-toggle:hover {
+        background: rgba(0,229,255,0.1);
+        color: var(--accent);
+    }
+
+    #toc-panel-content {
+        pointer-events: auto;
+        width: 0;
+        max-height: 70vh;
+        background: rgba(13,13,13,0.92);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255,255,255,0.06);
+        border-right: none;
+        overflow: hidden;
+        transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        display: flex;
+        flex-direction: column;
+    }
+
+    #toc-floating-panel.open #toc-panel-content {
+        width: 16rem;
+    }
+
+    #toc-panel-header {
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+        flex-shrink: 0;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    #toc-panel-header span {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #fff;
+        letter-spacing: 0.02em;
+    }
+
+    #toc-panel-list {
+        flex: 1;
+        overflow-y: auto;
+        padding: 0.5rem 0;
+        white-space: nowrap;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(255,255,255,0.06) transparent;
+    }
+
+    #toc-panel-list::-webkit-scrollbar {
+        width: 3px;
+    }
+
+    #toc-panel-list::-webkit-scrollbar-thumb {
+        background: rgba(255,255,255,0.1);
+        border-radius: 2px;
+    }
+
+    .toc-p-item {
+        display: block;
+        padding: 0.3rem 1rem 0.3rem 1.25rem;
+        color: rgba(255,255,255,0.4);
+        font-size: 0.75rem;
+        line-height: 1.4;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        border-left: 2px solid transparent;
+        cursor: pointer;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .toc-p-item:hover {
+        color: rgba(255,255,255,0.7);
+        background: rgba(255,255,255,0.02);
+    }
+
+    .toc-p-item.active {
+        color: var(--accent);
+        border-left-color: var(--accent);
+        background: rgba(0,229,255,0.04);
+    }
+
+    .toc-p-item.h3 {
+        padding-left: 2rem;
+        font-size: 0.7rem;
+    }
+
+    @media (max-width: 768px) {
+        #toc-panel-toggle {
+            font-size: 0.6rem;
+            padding: 0.4rem 0.2rem;
         }
 
-        if (cfg.avatar) {
-            var avatarImg = document.getElementById('avatar-img');
-            if (avatarImg && cfg.avatar.image) {
-                avatarImg.src = cfg.avatar.image;
-            }
+        #toc-floating-panel.open #toc-panel-content {
+            width: 13rem;
         }
 
-        var stackConfig = cfg.techStack || {};
-        if (stackConfig.title) {
-            document.getElementById('stack-title').innerText = stackConfig.title;
+        .toc-p-item {
+            padding: 0.25rem 0.75rem 0.25rem 1rem;
+            font-size: 0.7rem;
         }
-        var stackItems = stackConfig.items || ["嵌入式", "硬件", "物联网", "计算机"];
-        var stackList = document.getElementById('tech-stack');
-        stackItems.forEach(function (item) {
-            var li = document.createElement('li');
-            li.innerText = '> ' + item;
-            stackList.appendChild(li);
+
+        .toc-p-item.h3 {
+            padding-left: 1.5rem;
+            font-size: 0.65rem;
+        }
+
+        #toc-panel-header {
+            padding: 0.6rem 0.75rem;
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var content = document.querySelector('.doc-content');
+        if (!content) return;
+
+        var panel = document.getElementById('toc-floating-panel');
+        var toggleBtn = document.getElementById('toc-panel-toggle');
+        var listEl = document.getElementById('toc-panel-list');
+
+        var headings = content.querySelectorAll('h2, h3');
+
+        // 过滤掉已被隐藏的正文目录，并构建面板条目
+        var filteredHeadings = [];
+        headings.forEach(function (h) {
+            if (h.id === '目录') return;
+            filteredHeadings.push(h);
         });
 
-        // Latest Log —— 自动绑定最新文档
-        var latestTitle = '三轴步进驱动控制器';
-        var latestLink = 'docs/stepmotor-controller/';
-        if (latestTitle) {
-            document.getElementById('log-title').innerHTML = 'Latest<br>Log_';
-            document.getElementById('latest-post').innerText = latestTitle;
-            document.getElementById('frag-log').onclick = function () { window.location.href = '/' + latestLink; };
-        } else {
-            var logConfig = cfg.latestLog || {};
-            if (logConfig.title) {
-                document.getElementById('log-title').innerHTML = logConfig.title;
-            }
-            document.getElementById('latest-post').innerText = logConfig.content || '智能球门';
-            if (logConfig.link) {
-                document.getElementById('frag-log').onclick = function () { window.location.href = logConfig.link; };
-            }
+        if (filteredHeadings.length < 2) {
+            panel.style.display = 'none';
+            return;
         }
 
-        window.addEventListener('load', function () {
-            var tl = gsap.timeline();
-
-            tl.fromTo('#bg-title',
-                { opacity: 0, scale: 0.5 },
-                { duration: 2, opacity: 0.05, scale: 1, ease: "expo.out" },
-            0)
-
-            .fromTo('#hero-title-block',
-                { opacity: 0, scale: 0, rotation: -15, x: 200 },
-                { duration: 1.5, opacity: 1, scale: 1, rotation: 0, x: 0, ease: "back.out(1.5)" },
-            0.1)
-
-            .fromTo('.fragment-block',
-                { opacity: 0, scale: 0,
-                    rotation: function () { return Math.random() * 180 - 90; },
-                    x: function () { return Math.random() * 800 - 400; },
-                    y: function () { return Math.random() * 800 - 400; }
-                },
-                { duration: 1.5, opacity: 1, scale: 1, rotation: 0, x: 0, y: 0,
-                    stagger: 0.1, ease: "expo.out",
-                    onComplete: function () {
-                        requestAnimationFrame(function () {
-                            document.querySelectorAll('.fouc-hidden').forEach(function (el) {
-                                el.classList.remove('fouc-hidden');
-                                el.style.transform = '';
-                                el.style.opacity = '';
-                            });
-                            document.querySelectorAll('.fragment-block').forEach(function (el) {
-                                el.classList.add('ready');
-                            });
-                            if (typeof initTiltEffect === 'function') initTiltEffect();
-                            // 主页动画完成后再显示通知弹窗
-                            setTimeout(showPopup, 500);
-                        });
-                    }
-                },
-            0.15);
+        filteredHeadings.forEach(function (h) {
+            var item = document.createElement('a');
+            item.className = 'toc-p-item' + (h.tagName === 'H3' ? ' h3' : '');
+            var id = h.id || h.textContent.trim().toLowerCase().replace(/\s+/g, '-').replace(/[^\w\u4e00-\u9fff-]/g, '');
+            if (!h.id) h.id = id;
+            item.href = '#' + id;
+            item.textContent = h.textContent.trim();
+            item.addEventListener('click', function (e) {
+                e.preventDefault();
+                var target = document.getElementById(id);
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+            listEl.appendChild(item);
         });
 
-        /* ========== 通知弹窗逻辑 ========== */
-        var popupCfg = cfg.popup || {};
-
-        // 填充消息内容
-        function renderPopupMessage() {
-            var msgEl = document.getElementById('popup-message');
-            if (!msgEl) return;
-            var lines = popupCfg.message || [];
-            lines.forEach(function (line) {
-                var p = document.createElement('p');
-                if (line === '') {
-                    p.className = 'empty';
-                }
-                p.innerText = line;
-                msgEl.appendChild(p);
+        var items = listEl.querySelectorAll('.toc-p-item');
+        function updateActive() {
+            var scrollY = window.scrollY + 100;
+            var activeIdx = -1;
+            filteredHeadings.forEach(function (h, i) {
+                if (h.offsetTop <= scrollY) activeIdx = i;
             });
-            // 标题
-            var titleEl = document.getElementById('popup-title');
-            if (titleEl && popupCfg.title) {
-                titleEl.innerHTML = popupCfg.title;
-            }
-            // 签名
-            var sigEl = document.getElementById('popup-signature');
-            if (sigEl && popupCfg.signature) {
-                sigEl.innerText = popupCfg.signature;
-            }
-        }
-
-        function showPopup() {
-            if (!popupCfg.enabled) return;
-            var overlay = document.getElementById('popup-overlay');
-            var card = document.getElementById('popup-card');
-            if (!overlay || !card) return;
-
-            renderPopupMessage();
-
-            // 先显示 overlay
-            overlay.classList.add('active');
-
-            // GSAP 动画：卡片弹入
-            gsap.fromTo(card,
-                { scale: 0.7, y: 60, opacity: 0 },
-                { duration: 0.8, scale: 1, y: 0, opacity: 1, ease: "back.out(1.7)" }
-            );
-
-            // overlay 淡入
-            gsap.fromTo(overlay,
-                { opacity: 0 },
-                { duration: 0.4, opacity: 1, ease: "power2.out", overwrite: true }
-            );
-        }
-
-        function closePopup() {
-            var overlay = document.getElementById('popup-overlay');
-            var card = document.getElementById('popup-card');
-            if (!overlay || !card) return;
-
-            gsap.to(card, {
-                duration: 0.4,
-                scale: 0.8,
-                y: 40,
-                opacity: 0,
-                ease: "power2.in"
-            });
-
-            gsap.to(overlay, {
-                duration: 0.3,
-                opacity: 0,
-                ease: "power2.in",
-                onComplete: function () {
-                    overlay.classList.remove('active');
-                }
+            items.forEach(function (item, i) {
+                item.classList.toggle('active', i === activeIdx);
             });
         }
 
-        // 绑定关闭事件
-        document.addEventListener('DOMContentLoaded', function () {
-            var closeBtn = document.getElementById('popup-close');
-            var overlay = document.getElementById('popup-overlay');
-            if (closeBtn) closeBtn.addEventListener('click', closePopup);
-            if (overlay) overlay.addEventListener('click', function (e) {
-                if (e.target === overlay) closePopup();
-            });
+        window.addEventListener('scroll', updateActive);
+        updateActive();
+
+        toggleBtn.addEventListener('click', function () {
+            panel.classList.toggle('open');
         });
-        </script>
-
-    <!-- 不蒜子访问计数（隐藏触发，首页即统计） -->
-    <span id="busuanzi_value_site_pv" style="display:none"></span>
+    });
+</script>
 </body>
 </html>
