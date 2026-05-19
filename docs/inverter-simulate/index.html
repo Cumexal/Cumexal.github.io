@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>(∼‾▽‾)→))*‾▽‾*)o[手指戳戳]</title>
+    <link rel="icon" href="/images/web.jpg">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="/js/site-config.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <link rel="preload" href="/fonts/ChillReunion_Sans.woff2" as="font" type="font/woff2" crossorigin>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;700&family=Syne:wght@800&display=swap');
+
+        @font-face {
+            font-family: 'CangJiGaoDeGuoMiaoHei';
+            src: url('/fonts/ChillReunion_Sans.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        :root {
+            --bg: #0a0a0a;
+            --primary: #FF3E00;
+            --accent: #00E5FF;
+            --card-bg: rgba(255,255,255,0.03);
+        }
+
+        body {
+            background-color: var(--bg);
+            color: white;
+            font-family: 'CangJiGaoDeGuoMiaoHei', 'Space Grotesk', sans-serif;
+            overflow-x: hidden;
+            cursor: crosshair;
+        }
+
+        .shatter-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            position: relative;
+        }
+
+        .shatter-card.ready,
+        .fragment-block.ready {
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .shatter-card.ready:hover,
+        .fragment-block.ready:hover {
+            transform: scale(1.02) translateY(-5px) rotate(1deg);
+            box-shadow: 10px 10px 0px var(--accent);
+            z-index: 10;
+        }
+
+        .tilt-card {
+            transform-style: preserve-3d;
+            will-change: transform;
+        }
+
+        .hero-text {
+            font-family: 'Syne', sans-serif;
+            letter-spacing: -0.05em;
+        }
+
+        /* FOUC: 在 GSAP 接管之前隐藏动画元素 */
+        .fouc-hidden {
+            opacity: 0;
+        }
+
+        /* ===== 全局滚动条样式（暗黑风格） ===== */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.08);
+            border-radius: 0;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,255,255,0.15);
+        }
+
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.08) transparent;
+        }
+    </style>
+
+    <script>
+        function initTiltEffect() {
+            document.querySelectorAll('.tilt-card').forEach(function (card) {
+                card.addEventListener('mousemove', handleTiltMouse);
+                card.addEventListener('mouseleave', handleTiltReset);
+                card.addEventListener('touchmove', handleTiltTouch, { passive: true });
+                card.addEventListener('touchend', handleTiltReset);
+            });
+        }
+
+        function handleTiltMouse(e) {
+            var card = this;
+            var rect = card.getBoundingClientRect();
+            var x = e.clientX - rect.left;
+            var y = e.clientY - rect.top;
+            var centerX = rect.width / 2;
+            var centerY = rect.height / 2;
+            var rotateY = ((x - centerX) / centerX) * 5;
+            var rotateX = ((centerY - y) / centerY) * 5;
+            card.style.transform = 'perspective(1000px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) scale3d(1.015, 1.015, 1.015)';
+        }
+
+        function handleTiltTouch(e) {
+            var card = this;
+            var touch = e.touches[0];
+            var rect = card.getBoundingClientRect();
+            var x = touch.clientX - rect.left;
+            var y = touch.clientY - rect.top;
+            var centerX = rect.width / 2;
+            var centerY = rect.height / 2;
+            var rotateY = ((x - centerX) / centerX) * 4;
+            var rotateX = ((centerY - y) / centerY) * 4;
+            card.style.transform = 'perspective(1000px) rotateX(' + rotateX + 'deg) rotateY(' + rotateY + 'deg) scale3d(1.01, 1.01, 1.01)';
+        }
+
+        function handleTiltReset() {
+            var card = this;
+            card.style.transition = 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)';
+            card.style.transform = '';
+            setTimeout(function () {
+                card.style.transition = '';
+            }, 450);
+        }
+    </script>
+
+    <style>
+        /* 字体加载前隐藏页面，防止 FOUT（字体闪烁） */
+        html.fonts-not-ready body {
+            opacity: 0;
+        }
+    </style>
+    <script>
+        (function() {
+            var html = document.documentElement;
+            html.classList.add('fonts-not-ready');
+            if (document.fonts && document.fonts.ready) {
+                document.fonts.ready.then(function() {
+                    html.classList.remove('fonts-not-ready');
+                });
+            } else {
+                html.classList.remove('fonts-not-ready');
+            }
+        })();
+    </script>
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body class="overflow-x-hidden">
+    <nav class="fixed top-0 left-0 w-full p-6 flex justify-between z-50" id="main-nav">
+    <a href="/" class="text-3xl font-bold tracking-tighter whitespace-nowrap" id="brand">CUMEXAL</a>
+    <div class="text-[1.3rem] uppercase tracking-widest whitespace-nowrap" id="nav-links">
+        <a href="/archives/" class="hover:text-[var(--accent)] transition-colors">文档</a>
+        <a href="/links/" class="hover:text-[var(--accent)] transition-colors">友链</a>
+        <a href="/about/" class="hover:text-[var(--accent)] transition-colors">关于</a>
+    </div>
+</nav>
+
+<style>
+    #main-nav {
+        background: rgba(10,10,10,0.6);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    #main-nav #brand,
+    #main-nav #nav-links a {
+        color: rgba(255,255,255,0.85);
+    }
+
+    #main-nav #nav-links {
+        display: flex;
+        gap: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+        #main-nav {
+            padding: 0.75rem 1.25rem;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        #main-nav #brand {
+            font-size: 1.8rem;
+            line-height: 1.2;
+            letter-spacing: 0.02em;
+            text-align: left;
+        }
+
+        #main-nav #nav-links {
+            font-size: 1.2rem;
+            letter-spacing: 0.1em;
+            display: flex;
+            justify-content: flex-end;
+            gap: 1.5rem;
+        }
+
+        #main-nav #nav-links a {
+            padding: 0.15rem 0;
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        var brand = document.getElementById('brand');
+        var navContainer = document.getElementById('nav-links');
+        if (brand && window.SiteConfig && SiteConfig.site.brand) {
+            brand.innerText = SiteConfig.site.brand;
+        }
+        if (navContainer && window.SiteConfig && SiteConfig.nav && SiteConfig.nav.links) {
+            navContainer.innerHTML = '';
+            SiteConfig.nav.links.forEach(function (link) {
+                var a = document.createElement('a');
+                a.href = link.url;
+                a.className = "hover:text-[var(--accent)] transition-colors";
+                a.innerText = link.name;
+                navContainer.appendChild(a);
+            });
+        }
+    });
+</script>
+
+    <style>
+        .doc-wrapper {
+            max-width: 48rem;
+            width: 100%;
+            margin: 0 auto;
+            padding: 2rem 3.5rem 4rem 1.5rem;
+        }
+
+        .doc-header {
+            margin-bottom: 2.5rem;
+            padding-bottom: 1.5rem;
+        }
+
+        .doc-header h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #fff;
+            line-height: 1.2;
+            letter-spacing: -0.03em;
+            margin-bottom: 0.8rem;
+        }
+
+        .doc-meta {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.4);
+        }
+
+        .doc-meta .doc-tag {
+            display: inline-block;
+            padding: 0.15rem 0.6rem;
+            border-radius: 0.25rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: rgba(255,255,255,0.5);
+            font-size: 0.7rem;
+        }
+
+        .doc-content {
+            font-size: 0.95rem;
+            line-height: 1.9;
+            color: rgba(255,255,255,0.82);
+        }
+
+        .doc-content h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #fff;
+            margin: 2rem 0 0.8rem;
+            padding-bottom: 0.4rem;
+            letter-spacing: -0.02em;
+        }
+
+        .doc-content h2 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #fff;
+            margin: 2rem 0 0.8rem;
+            padding-bottom: 0.4rem;
+            letter-spacing: -0.02em;
+        }
+
+        .doc-content h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin: 1.5rem 0 0.5rem;
+        }
+
+        /* 隐藏正文中的目录内容，只由侧边浮动面板提供 */
+        .doc-content h2#目录 {
+            display: none;
+        }
+        .doc-content h2#目录 + ol,
+        .doc-content h2#目录 + ul,
+        .doc-content h2#目录 + hr {
+            display: none;
+        }
+
+        .doc-content p {
+            margin-bottom: 1rem;
+        }
+
+        .doc-content strong {
+            color: #fff;
+        }
+
+        .doc-content code {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 0.15rem 0.4rem;
+            border-radius: 0.25rem;
+            font-size: 0.85em;
+            color: var(--accent);
+        }
+
+        .doc-content pre {
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 0.75rem;
+            padding: 1.2rem;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 1.2rem 0;
+        }
+
+        .doc-content pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            color: rgba(255,255,255,0.85);
+            font-size: 0.8rem;
+            line-height: 1.6;
+        }
+
+        .doc-content ul, .doc-content ol {
+            margin: 0.5rem 0 1rem;
+            padding-left: 1.5rem;
+        }
+
+        .doc-content li {
+            margin-bottom: 0.3rem;
+        }
+
+        .doc-content blockquote {
+            border-left: 2px solid var(--accent);
+            padding: 0.5rem 0 0.5rem 1.2rem;
+            margin: 1.2rem 0;
+            background: rgba(0,229,255,0.03);
+            border-radius: 0 0.5rem 0.5rem 0;
+            color: rgba(255,255,255,0.6);
+        }
+
+        .doc-content a {
+            color: var(--accent);
+            text-decoration: underline;
+            text-underline-offset: 2px;
+            transition: opacity 0.2s;
+        }
+
+        .doc-content a:hover {
+            opacity: 0.7;
+        }
+
+        .doc-content img {
+            max-width: 100%;
+            border-radius: 0.75rem;
+            margin: 1.5rem 0;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .doc-content hr {
+            border: none;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            margin: 2rem 0;
+        }
+
+        .doc-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.85rem;
+            overflow-x: auto;
+            display: block;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .doc-content th, .doc-content td {
+            padding: 0.6rem 0.8rem;
+            border: 1px solid rgba(255,255,255,0.06);
+            text-align: left;
+        }
+
+        .doc-content th {
+            background: rgba(255,255,255,0.03);
+            color: rgba(255,255,255,0.6);
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .doc-wrapper {
+                padding: 0.75rem 0.75rem 3rem;
+                max-width: 100%;
+            }
+
+            .doc-content {
+                overflow-x: hidden;
+                font-size: 0.88rem;
+                line-height: 1.8;
+            }
+
+            .doc-header {
+                margin-bottom: 1.5rem;
+                padding-bottom: 0.75rem;
+            }
+
+            .doc-header h1 {
+                font-size: 1.4rem;
+            }
+
+            .doc-content h1 {
+                font-size: 1.3rem;
+            }
+
+            .doc-meta {
+                font-size: 0.7rem;
+                gap: 0.5rem;
+            }
+
+            .doc-content h2 {
+                font-size: 1.15rem;
+            }
+
+            .doc-content h3 {
+                font-size: 0.95rem;
+            }
+
+            .doc-content pre {
+                padding: 0.6rem;
+                font-size: 0.75rem;
+            }
+
+            .doc-content table {
+                font-size: 0.75rem;
+            }
+
+            .doc-content th,
+            .doc-content td {
+                padding: 0.4rem 0.5rem;
+            }
+
+            .doc-content blockquote {
+                padding: 0.4rem 0 0.4rem 0.8rem;
+                margin: 0.8rem 0;
+            }
+
+            .doc-content img {
+                margin: 1rem 0;
+            }
+        }
+    </style>
+
+    <main class="relative w-full min-h-screen pt-24" id="page-main">
+        <h1 class="hero-text fixed z-0 text-[18vw] md:text-[22vw] text-white opacity-[0.03] whitespace-nowrap top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none select-none">DOCS</h1>
+
+        <div class="doc-wrapper">
+            <div class="doc-header">
+                <h1>变频器仿真在线教学系统</h1>
+                <div class="doc-meta">
+                    
+                    <time>2026-05-15</time>
+                    
+                    
+                    
+                        
+                            <span class="doc-tag">#Html</span>
+                        
+                            <span class="doc-tag">#JavaScript</span>
+                        
+                            <span class="doc-tag">#Python</span>
+                        
+                            <span class="doc-tag">#Web</span>
+                        
+                    
+                </div>
+            </div>
+
+            <div class="doc-content">
+                <h1 id="变频器仿真教学系统-使用说明"><a href="#变频器仿真教学系统-使用说明" class="headerlink" title="变频器仿真教学系统 - 使用说明"></a>变频器仿真教学系统 - 使用说明</h1><h2 id="项目简介"><a href="#项目简介" class="headerlink" title="项目简介"></a>项目简介</h2><p>本系统是一款专为电气工程专业设计的<strong>变频器仿真教学平台</strong>，支持教师在线发布作业、管理班级、批改学生作品，同时为学生提供真实的变频器接线与参数设置仿真实验环境。系统采用 Web 技术构建，无需安装任何软件，通过浏览器即可访问使用。</p>
+<hr>
+<h2 id="系统架构"><a href="#系统架构" class="headerlink" title="系统架构"></a>系统架构</h2><p>系统由三大核心部分组成：</p>
+<ol>
+<li><strong>教师端（管理员后台）</strong> - 班级管理、作业发布、成绩评定</li>
+<li><strong>学生端</strong> - 作业接收、考勤签到、仿真练习</li>
+<li><strong>核心仿真引擎</strong> - 变频器仿真、电路连接、三相电系统模拟</li>
+</ol>
+<hr>
+<h2 id="一、教师端使用说明"><a href="#一、教师端使用说明" class="headerlink" title="一、教师端使用说明"></a>一、教师端使用说明</h2><h3 id="1-1-登录与访问"><a href="#1-1-登录与访问" class="headerlink" title="1.1 登录与访问"></a>1.1 登录与访问</h3><ol>
+<li>打开浏览器，访问系统地址</li>
+<li>使用管理员账号登录（账号信息由系统管理员提供）</li>
+<li>登录后自动进入管理员后台</li>
+</ol>
+<h3 id="1-2-班级管理"><a href="#1-2-班级管理" class="headerlink" title="1.2 班级管理"></a>1.2 班级管理</h3><p>班级是系统的核心管理单位，所有学生、作业、考勤数据都归属于特定班级。</p>
+<h4 id="创建班级"><a href="#创建班级" class="headerlink" title="创建班级"></a>创建班级</h4><ol>
+<li>在右侧班级列表上方点击”新建班级”按钮</li>
+<li>输入班级名称（如：电气0000）</li>
+<li>点击确认，班级创建成功</li>
+</ol>
+<h4 id="切换班级"><a href="#切换班级" class="headerlink" title="切换班级"></a>切换班级</h4><ul>
+<li>点击右侧班级列表中的班级名称即可切换</li>
+<li>当前选中班级会高亮显示</li>
+</ul>
+<h4 id="删除班级"><a href="#删除班级" class="headerlink" title="删除班级"></a>删除班级</h4><ol>
+<li>先选中要删除的班级</li>
+<li>点击”删除班级”按钮</li>
+<li>确认删除后，该班级及其所有数据将被清除</li>
+</ol>
+<h3 id="1-3-人员管理"><a href="#1-3-人员管理" class="headerlink" title="1.3 人员管理"></a>1.3 人员管理</h3><p>点击”人员管理”磁贴进入学生管理界面：</p>
+<h4 id="添加学生"><a href="#添加学生" class="headerlink" title="添加学生"></a>添加学生</h4><ol>
+<li>点击”添加学生”按钮</li>
+<li>填写学生信息：<ul>
+<li><strong>学号</strong>：学生的唯一标识，用于登录</li>
+<li><strong>姓名</strong>：学生姓名</li>
+<li><strong>密码</strong>：初始登录密码</li>
+</ul>
+</li>
+<li>点击保存</li>
+</ol>
+<h4 id="编辑学生信息"><a href="#编辑学生信息" class="headerlink" title="编辑学生信息"></a>编辑学生信息</h4><ul>
+<li>点击学生列表中的”编辑”按钮</li>
+<li>可修改学生姓名和密码</li>
+<li>学号不可修改</li>
+</ul>
+<h4 id="删除学生"><a href="#删除学生" class="headerlink" title="删除学生"></a>删除学生</h4><ul>
+<li>点击学生列表中的”删除”按钮</li>
+<li>删除后该学生的所有作业记录也将被清除</li>
+</ul>
+<h4 id="批量导入学生"><a href="#批量导入学生" class="headerlink" title="批量导入学生"></a>批量导入学生</h4><ol>
+<li>准备 Excel 表格，包含三列：<strong>学号</strong>、<strong>姓名</strong>、<strong>密码</strong></li>
+<li>点击”导入表格”按钮</li>
+<li>选择 Excel 文件并上传</li>
+<li>系统自动导入所有学生信息</li>
+</ol>
+<h4 id="导出学生名单"><a href="#导出学生名单" class="headerlink" title="导出学生名单"></a>导出学生名单</h4><ul>
+<li>点击”导出表格”按钮</li>
+<li>下载包含班级所有学生信息的 Excel 文件</li>
+</ul>
+<h4 id="搜索学生"><a href="#搜索学生" class="headerlink" title="搜索学生"></a>搜索学生</h4><ul>
+<li>在搜索框输入学号或姓名</li>
+<li>系统实时筛选显示匹配的学生</li>
+</ul>
+<h3 id="1-4-作业管理"><a href="#1-4-作业管理" class="headerlink" title="1.4 作业管理"></a>1.4 作业管理</h3><h4 id="发布作业"><a href="#发布作业" class="headerlink" title="发布作业"></a>发布作业</h4><ol>
+<li>点击”发布作业”按钮</li>
+<li>填写作业信息：<ul>
+<li><strong>作业标题</strong>：简洁明了的标题</li>
+<li><strong>作业描述</strong>：详细的要求说明</li>
+<li><strong>截止时间</strong>：可选，超过截止时间学生将无法提交</li>
+<li><strong>满分</strong>：默认100分，可根据需要调整</li>
+</ul>
+</li>
+<li>点击确认发布</li>
+</ol>
+<h4 id="查看作业列表"><a href="#查看作业列表" class="headerlink" title="查看作业列表"></a>查看作业列表</h4><ul>
+<li>在班级管理页面下方查看所有已发布作业</li>
+<li>显示作业标题、截止时间、提交人数等信息</li>
+</ul>
+<h4 id="批改作业"><a href="#批改作业" class="headerlink" title="批改作业"></a>批改作业</h4><ol>
+<li>点击作业卡片或”批改”按钮进入批改界面</li>
+<li>查看学生提交列表：<ul>
+<li>绿色：已提交</li>
+<li>灰色：未提交</li>
+</ul>
+</li>
+<li>点击学生姓名进入评分界面</li>
+<li>在仿真环境中查看学生作品</li>
+<li>输入分数（0-100）和评语</li>
+<li>点击保存评分</li>
+</ol>
+<h4 id="删除作业"><a href="#删除作业" class="headerlink" title="删除作业"></a>删除作业</h4><ol>
+<li>点击作业卡片上的”删除”按钮</li>
+<li>确认删除后，该作业及所有提交记录将被清除</li>
+</ol>
+<h3 id="1-5-考勤管理"><a href="#1-5-考勤管理" class="headerlink" title="1.5 考勤管理"></a>1.5 考勤管理</h3><p>点击”考勤管理”磁贴：</p>
+<h4 id="发布考勤"><a href="#发布考勤" class="headerlink" title="发布考勤"></a>发布考勤</h4><ol>
+<li>点击”发布考勤”按钮</li>
+<li>设置考勤标题和截止时间</li>
+<li>发布后学生可在规定时间内签到</li>
+</ol>
+<h4 id="查看考勤记录"><a href="#查看考勤记录" class="headerlink" title="查看考勤记录"></a>查看考勤记录</h4><ul>
+<li>显示所有考勤活动列表</li>
+<li>查看每次考勤的签到情况</li>
+</ul>
+<h4 id="删除考勤"><a href="#删除考勤" class="headerlink" title="删除考勤"></a>删除考勤</h4><ul>
+<li>点击考勤记录旁的”删除”按钮可删除该次考勤</li>
+</ul>
+<h3 id="1-6-成绩占比设置"><a href="#1-6-成绩占比设置" class="headerlink" title="1.6 成绩占比设置"></a>1.6 成绩占比设置</h3><p>点击”成绩占比”磁贴：</p>
+<ul>
+<li>设置<strong>作业成绩</strong>在总评中的占比（0-100%）</li>
+<li>设置<strong>考勤成绩</strong>在总评中的占比（0-100%）</li>
+<li>两者之和应等于100%</li>
+<li>设置后点击保存</li>
+</ul>
+<h3 id="1-7-数据导出"><a href="#1-7-数据导出" class="headerlink" title="1.7 数据导出"></a>1.7 数据导出</h3><p>点击”数据导出”磁贴：</p>
+<p>系统自动生成 Excel 文件，包含两个工作表：</p>
+<p><strong>工作表1 - 学生名单</strong></p>
+<ul>
+<li>学号、姓名、密码</li>
+</ul>
+<p><strong>工作表2 - 成绩汇总</strong></p>
+<ul>
+<li>各次作业得分</li>
+<li>作业平均分</li>
+<li>考勤得分</li>
+<li>总评成绩</li>
+</ul>
+<h3 id="1-8-进入仿真教学"><a href="#1-8-进入仿真教学" class="headerlink" title="1.8 进入仿真教学"></a>1.8 进入仿真教学</h3><ul>
+<li>点击顶部”进入仿真”按钮</li>
+<li>在新窗口打开仿真环境</li>
+<li>教师可在此进行教学演示或准备作业示例</li>
+</ul>
+<hr>
+<h2 id="二、学生端使用说明"><a href="#二、学生端使用说明" class="headerlink" title="二、学生端使用说明"></a>二、学生端使用说明</h2><h3 id="2-1-登录"><a href="#2-1-登录" class="headerlink" title="2.1 登录"></a>2.1 登录</h3><ol>
+<li>访问系统登录页面</li>
+<li>输入<strong>学号</strong>和<strong>密码</strong></li>
+<li>点击”登录”按钮</li>
+</ol>
+<blockquote>
+<p><strong>提示</strong>：也可以选择”访客进入”体验仿真功能，但访客模式无法接收作业和保存成绩。</p>
+</blockquote>
+<h3 id="2-2-主页功能"><a href="#2-2-主页功能" class="headerlink" title="2.2 主页功能"></a>2.2 主页功能</h3><p>登录后进入学生主页，显示四个功能磁贴：</p>
+<h4 id="作业详细"><a href="#作业详细" class="headerlink" title="作业详细"></a>作业详细</h4><ul>
+<li>查看教师发布的所有作业</li>
+<li>查看作业要求、截止时间、得分和评语</li>
+<li>点击进入作业仿真环境</li>
+</ul>
+<h4 id="考勤签到"><a href="#考勤签到" class="headerlink" title="考勤签到"></a>考勤签到</h4><ul>
+<li>查看当前有效的考勤活动</li>
+<li>在规定时间内点击签到</li>
+<li>查看自己的签到记录</li>
+</ul>
+<h4 id="考勤记录"><a href="#考勤记录" class="headerlink" title="考勤记录"></a>考勤记录</h4><ul>
+<li>查看历史考勤记录</li>
+<li>显示每次考勤的签到状态和时间</li>
+</ul>
+<h4 id="进入仿真"><a href="#进入仿真" class="headerlink" title="进入仿真"></a>进入仿真</h4><ul>
+<li>直接进入自由仿真模式</li>
+<li>可随意练习，不受作业限制</li>
+<li>练习结果不会作为作业提交</li>
+</ul>
+<h3 id="2-3-作业模式"><a href="#2-3-作业模式" class="headerlink" title="2.3 作业模式"></a>2.3 作业模式</h3><h4 id="接收作业"><a href="#接收作业" class="headerlink" title="接收作业"></a>接收作业</h4><ol>
+<li>点击”作业详细”磁贴</li>
+<li>查看作业列表</li>
+<li>点击未完成的作业进入仿真环境</li>
+</ol>
+<h4 id="作业仿真界面"><a href="#作业仿真界面" class="headerlink" title="作业仿真界面"></a>作业仿真界面</h4><ul>
+<li><strong>左侧工具栏</strong>：选择元器件进行接线</li>
+<li><strong>中间画布</strong>：绘制电路图</li>
+<li><strong>右侧作业面板</strong>：查看作业要求和提交</li>
+</ul>
+<h4 id="完成作业步骤"><a href="#完成作业步骤" class="headerlink" title="完成作业步骤"></a>完成作业步骤</h4><ol>
+<li>从工具栏选择需要的元器件（变频器、电动机、空气开关等）</li>
+<li>在画布上放置元器件</li>
+<li>使用”连线模式”连接各元器件端子</li>
+<li>设置变频器参数（双击变频器打开面板）</li>
+<li>点击”仿真”按钮测试电路</li>
+<li>确认无误后点击”提交作业”</li>
+</ol>
+<h4 id="查看成绩"><a href="#查看成绩" class="headerlink" title="查看成绩"></a>查看成绩</h4><ul>
+<li>提交后等待教师批改</li>
+<li>批改完成后可在作业详情中查看分数和评语（评分后无法修改）</li>
+</ul>
+<hr>
+<h2 id="三、核心仿真功能使用说明"><a href="#三、核心仿真功能使用说明" class="headerlink" title="三、核心仿真功能使用说明"></a>三、核心仿真功能使用说明</h2><h3 id="3-1-仿真环境概述"><a href="#3-1-仿真环境概述" class="headerlink" title="3.1 仿真环境概述"></a>3.1 仿真环境概述</h3><p>仿真环境是系统的核心，提供以下功能：</p>
+<ul>
+<li><strong>元器件库</strong>：变频器、三相异步电动机、空气开关、电源等</li>
+<li><strong>连线系统</strong>：可视化拖拽连线</li>
+<li><strong>参数设置</strong>：完整的变频器参数配置</li>
+<li><strong>实时仿真</strong>：三相电信号模拟、电机转动动画</li>
+<li><strong>安全检测</strong>：短路检测、接地检测、断电保护</li>
+</ul>
+<h3 id="3-2-基本操作"><a href="#3-2-基本操作" class="headerlink" title="3.2 基本操作"></a>3.2 基本操作</h3><h4 id="模式切换"><a href="#模式切换" class="headerlink" title="模式切换"></a>模式切换</h4><ul>
+<li><strong>选择模式</strong>：选择、移动、删除元器件</li>
+<li><strong>连线模式</strong>：连接元器件端子</li>
+</ul>
+<h4 id="添加元器件"><a href="#添加元器件" class="headerlink" title="添加元器件"></a>添加元器件</h4><ol>
+<li>确保处于”选择模式”</li>
+<li>点击左侧工具栏的元器件按钮</li>
+<li>在画布上点击放置</li>
+</ol>
+<h4 id="删除元器件"><a href="#删除元器件" class="headerlink" title="删除元器件"></a>删除元器件</h4><ol>
+<li>右键点击要删除的元器件</li>
+<li>选择”删除”选项</li>
+</ol>
+<h4 id="连接导线"><a href="#连接导线" class="headerlink" title="连接导线"></a>连接导线</h4><ol>
+<li>切换到”连线模式”</li>
+<li>点击第一个端子（起点）</li>
+<li>点击第二个端子（终点）</li>
+<li>系统自动创建连线</li>
+</ol>
+<h4 id="删除连线"><a href="#删除连线" class="headerlink" title="删除连线"></a>删除连线</h4><ul>
+<li>右键点击连线，选择”删除”</li>
+</ul>
+<h3 id="3-3-快捷键说明"><a href="#3-3-快捷键说明" class="headerlink" title="3.3 快捷键说明"></a>3.3 快捷键说明</h3><p>系统提供丰富的键盘快捷键，提高操作效率。</p>
+<h4 id="通用快捷键"><a href="#通用快捷键" class="headerlink" title="通用快捷键"></a>通用快捷键</h4><table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>功能说明</th>
+<th>使用条件</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>X &#x2F; Delete</strong></td>
+<td>删除选中的元器件或导线</td>
+<td>选中对象时</td>
+</tr>
+<tr>
+<td><strong>B</strong></td>
+<td>修改导线颜色</td>
+<td>选中导线时</td>
+</tr>
+<tr>
+<td><strong>M</strong></td>
+<td>移动元器件</td>
+<td>选中未连接导线的元器件时</td>
+</tr>
+<tr>
+<td><strong>S</strong></td>
+<td>标记当前位置</td>
+<td>非输入框焦点时</td>
+</tr>
+<tr>
+<td><strong>E</strong></td>
+<td>打开&#x2F;关闭查找面板</td>
+<td>非输入框焦点时</td>
+</tr>
+<tr>
+<td><strong>Q</strong></td>
+<td>快速切换仿真模式</td>
+<td>非输入框焦点时</td>
+</tr>
+<tr>
+<td><strong>Ctrl + Z</strong></td>
+<td>撤销上一步操作</td>
+<td>非仿真模式时</td>
+</tr>
+<tr>
+<td><strong>Ctrl + Y</strong></td>
+<td>恢复撤销的操作</td>
+<td>非仿真模式时</td>
+</tr>
+<tr>
+<td><strong>ESC</strong></td>
+<td>关闭弹窗&#x2F;取消操作&#x2F;搜索框失焦</td>
+<td>任何时候</td>
+</tr>
+</tbody></table>
+<h4 id="查找面板快捷键（面板打开时）"><a href="#查找面板快捷键（面板打开时）" class="headerlink" title="查找面板快捷键（面板打开时）"></a>查找面板快捷键（面板打开时）</h4><table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>功能说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>A</strong></td>
+<td>切换到上一个标签页（左循环）</td>
+</tr>
+<tr>
+<td><strong>D</strong></td>
+<td>切换到下一个标签页（右循环）</td>
+</tr>
+<tr>
+<td><strong>X</strong></td>
+<td>删除标记（在标记标签页时）</td>
+</tr>
+</tbody></table>
+<h4 id="仿真模式快捷键"><a href="#仿真模式快捷键" class="headerlink" title="仿真模式快捷键"></a>仿真模式快捷键</h4><p>仿真模式下，可使用数字键控制变频器面板：</p>
+<table>
+<thead>
+<tr>
+<th>键盘按键</th>
+<th>对应按钮</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>1</strong></td>
+<td>JOG</td>
+<td>点动功能</td>
+</tr>
+<tr>
+<td><strong>2</strong></td>
+<td>▲</td>
+<td>数值增加</td>
+</tr>
+<tr>
+<td><strong>3</strong></td>
+<td>▼</td>
+<td>数值减少</td>
+</tr>
+<tr>
+<td><strong>4</strong></td>
+<td>ENT</td>
+<td>确认&#x2F;进入</td>
+</tr>
+<tr>
+<td><strong>5</strong></td>
+<td>▷</td>
+<td>移位</td>
+</tr>
+<tr>
+<td><strong>6</strong></td>
+<td>RUN</td>
+<td>运行</td>
+</tr>
+<tr>
+<td><strong>7</strong></td>
+<td>STOP</td>
+<td>停止</td>
+</tr>
+<tr>
+<td><strong>8</strong></td>
+<td>MENU</td>
+<td>菜单&#x2F;编程</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>提示</strong>：使用快捷键前，需先选中变频器（点击画布上的变频器）。</p>
+</blockquote>
+<h3 id="3-4-查找与标记功能"><a href="#3-4-查找与标记功能" class="headerlink" title="3.4 查找与标记功能"></a>3.4 查找与标记功能</h3><h4 id="查找面板"><a href="#查找面板" class="headerlink" title="查找面板"></a>查找面板</h4><p>按 <strong>E</strong> 键打开查找面板，可查看：</p>
+<ul>
+<li><strong>A</strong>：切换到上一个标签页（左循环）</li>
+<li><strong>D</strong>：切换到下一个标签页（右循环）</li>
+<li><strong>说明</strong>：作业要求说明</li>
+<li><strong>标记</strong>：用户添加的位置标记</li>
+<li><strong>元器件</strong>：当前画布上的所有元器件列表</li>
+<li><strong>导线</strong>：当前画布上的所有导线列表</li>
+</ul>
+<h4 id="添加标记"><a href="#添加标记" class="headerlink" title="添加标记"></a>添加标记</h4><ol>
+<li>将画布移动到需要标记的位置</li>
+<li>按 <strong>S</strong> 键添加标记</li>
+<li>标记会记录在查找面板的”标记”标签页中</li>
+<li>选择导线、元器件会标记对应的标记项</li>
+</ol>
+<h4 id="跳转到标记"><a href="#跳转到标记" class="headerlink" title="跳转到标记"></a>跳转到标记</h4><ul>
+<li>在查找面板的”标记”标签页中</li>
+<li>点击标记项，画布自动跳转到标记位置</li>
+</ul>
+<h4 id="删除标记"><a href="#删除标记" class="headerlink" title="删除标记"></a>删除标记</h4><ul>
+<li>鼠标悬停在标记项上，按 <strong>X</strong> 键删除</li>
+<li>或点击标记项旁的删除按钮</li>
+</ul>
+<h3 id="3-5-画布操作"><a href="#3-5-画布操作" class="headerlink" title="3.5 画布操作"></a>3.5 画布操作</h3><h4 id="移动画布"><a href="#移动画布" class="headerlink" title="移动画布"></a>移动画布</h4><ul>
+<li><strong>鼠标中键拖拽</strong>：平移画布</li>
+<li><strong>按住空格 + 鼠标拖拽</strong>：平移画布</li>
+</ul>
+<h4 id="缩放画布"><a href="#缩放画布" class="headerlink" title="缩放画布"></a>缩放画布</h4><ul>
+<li><strong>鼠标滚轮</strong>：放大&#x2F;缩小画布</li>
+<li>缩放以鼠标指针位置为中心</li>
+</ul>
+<h4 id="双击操作"><a href="#双击操作" class="headerlink" title="双击操作"></a>双击操作</h4><ul>
+<li><strong>双击变频器</strong>：打开变频器面板（仿真模式下）</li>
+</ul>
+<h3 id="3-6-右键菜单功能"><a href="#3-6-右键菜单功能" class="headerlink" title="3.6 右键菜单功能"></a>3.6 右键菜单功能</h3><p>在画布上右键点击可打开快捷菜单：</p>
+<h4 id="元器件右键菜单"><a href="#元器件右键菜单" class="headerlink" title="元器件右键菜单"></a>元器件右键菜单</h4><ul>
+<li><strong>编辑</strong>：编辑元器件属性</li>
+<li><strong>删除</strong>：删除该元器件</li>
+</ul>
+<h4 id="导线右键菜单"><a href="#导线右键菜单" class="headerlink" title="导线右键菜单"></a>导线右键菜单</h4><ul>
+<li><strong>改颜色</strong>：修改导线显示颜色</li>
+<li><strong>删除</strong>：删除该导线</li>
+</ul>
+<h4 id="空白处右键菜单"><a href="#空白处右键菜单" class="headerlink" title="空白处右键菜单"></a>空白处右键菜单</h4><ul>
+<li><strong>粘贴</strong>：粘贴剪贴板内容（如有）</li>
+<li><strong>取消</strong>：关闭菜单</li>
+</ul>
+<h3 id="3-7-文件操作"><a href="#3-7-文件操作" class="headerlink" title="3.7 文件操作"></a>3.7 文件操作</h3><h4 id="保存工程"><a href="#保存工程" class="headerlink" title="保存工程"></a>保存工程</h4><ol>
+<li>点击菜单栏”文件” → “保存”</li>
+<li>输入文件名</li>
+<li>下载 .vfd 格式的工程文件</li>
+</ol>
+<h4 id="导入工程"><a href="#导入工程" class="headerlink" title="导入工程"></a>导入工程</h4><ol>
+<li>点击菜单栏”文件” → “导入”</li>
+<li>选择之前保存的 .vfd 文件</li>
+<li>系统自动加载电路图和参数设置</li>
+</ol>
+<hr>
+<h2 id="四、常见问题解答"><a href="#四、常见问题解答" class="headerlink" title="四、常见问题解答"></a>四、常见问题解答</h2><h3 id="Q1：无法登录怎么办？"><a href="#Q1：无法登录怎么办？" class="headerlink" title="Q1：无法登录怎么办？"></a>Q1：无法登录怎么办？</h3><ul>
+<li>检查学号和密码是否输入正确</li>
+<li>确认是否选择了正确的班级</li>
+<li>联系教师重置密码</li>
+</ul>
+<h3 id="Q2：仿真时电机不转？"><a href="#Q2：仿真时电机不转？" class="headerlink" title="Q2：仿真时电机不转？"></a>Q2：仿真时电机不转？</h3><ul>
+<li>检查主回路接线是否正确</li>
+<li>检查变频器是否有电源输入</li>
+<li>检查参数设置是否正确（P0-02、P0-03）</li>
+<li>确认已点击”仿真”按钮</li>
+</ul>
+<h3 id="Q3：如何修改已提交的作业？"><a href="#Q3：如何修改已提交的作业？" class="headerlink" title="Q3：如何修改已提交的作业？"></a>Q3：如何修改已提交的作业？</h3><ul>
+<li>在截止时间前可重新提交</li>
+<li>新的提交会覆盖之前的版本</li>
+<li>截止时间后无法修改</li>
+</ul>
+<h3 id="Q4：变频器参数设置无效？"><a href="#Q4：变频器参数设置无效？" class="headerlink" title="Q4：变频器参数设置无效？"></a>Q4：变频器参数设置无效？</h3><ul>
+<li>确认已进入编程模式（按 MENU 键）</li>
+<li>参数修改后需要按 ENT 保存</li>
+<li>部分参数需要在停机状态下修改</li>
+</ul>
+<h3 id="Q5：连线时提示无法连接？"><a href="#Q5：连线时提示无法连接？" class="headerlink" title="Q5：连线时提示无法连接？"></a>Q5：连线时提示无法连接？</h3><ul>
+<li>检查端子类型是否匹配</li>
+<li>电源端子只能连接电源端子</li>
+<li>控制端子只能连接控制端子</li>
+</ul>
+<hr>
+<h2 id="五、系统要求"><a href="#五、系统要求" class="headerlink" title="五、系统要求"></a>五、系统要求</h2><h3 id="浏览器支持"><a href="#浏览器支持" class="headerlink" title="浏览器支持"></a>浏览器支持</h3><ul>
+<li>Chrome 90+</li>
+<li>Firefox 88+</li>
+<li>Edge 90+</li>
+<li>Safari 14+</li>
+</ul>
+<h3 id="推荐配置"><a href="#推荐配置" class="headerlink" title="推荐配置"></a>推荐配置</h3><ul>
+<li>分辨率：1920×1080 或更高</li>
+<li>内存：4GB 及以上</li>
+<li>网络：稳定的互联网连接</li>
+</ul>
+<hr>
+<h2 id="六、技术支持"><a href="#六、技术支持" class="headerlink" title="六、技术支持"></a>六、技术支持</h2><p>如在使用过程中遇到问题，请联系：</p>
+<ul>
+<li>系统管理员</li>
+<li>授课教师</li>
+<li>或查看系统内置的帮助文档</li>
+</ul>
+<hr>
+<p><em>文档版本：v1.0 | 最后更新：2026-05-15</em><br><em>作者：<a target="_blank" rel="noopener" href="https://github.com/CUMEXAL">CUMEXAL</a></em></p>
+
+            </div>
+        </div>
+    </main>
+
+    <div id="toc-floating-panel">
+    <div id="toc-panel-toggle" title="目录">目录</div>
+    <div id="toc-panel-content">
+        <div id="toc-panel-header">
+            <span>目录</span>
+        </div>
+        <nav id="toc-panel-list"></nav>
+    </div>
+</div>
+
+<style>
+    #toc-floating-panel {
+        position: fixed;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 60;
+        display: flex;
+        align-items: stretch;
+        pointer-events: none;
+    }
+
+    #toc-panel-toggle {
+        pointer-events: auto;
+        writing-mode: vertical-rl;
+        letter-spacing: 0.15em;
+        font-size: 0.7rem;
+        padding: 0.6rem 0.25rem;
+        background: rgba(255,255,255,0.03);
+        border: 1px solid rgba(255,255,255,0.08);
+        border-right: none;
+        border-radius: 0.4rem 0 0 0.4rem;
+        color: rgba(255,255,255,0.4);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        flex-shrink: 0;
+    }
+
+    #toc-panel-toggle:hover {
+        background: rgba(0,229,255,0.1);
+        color: var(--accent);
+    }
+
+    #toc-panel-content {
+        pointer-events: auto;
+        width: 0;
+        max-height: 70vh;
+        background: rgba(13,13,13,0.92);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255,255,255,0.06);
+        border-right: none;
+        overflow: hidden;
+        transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        display: flex;
+        flex-direction: column;
+    }
+
+    #toc-floating-panel.open #toc-panel-content {
+        width: 16rem;
+    }
+
+    #toc-panel-header {
+        padding: 0.75rem 1rem;
+        border-bottom: 1px solid rgba(255,255,255,0.06);
+        flex-shrink: 0;
+        white-space: nowrap;
+        overflow: hidden;
+    }
+
+    #toc-panel-header span {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #fff;
+        letter-spacing: 0.02em;
+    }
+
+    #toc-panel-list {
+        flex: 1;
+        overflow-y: auto;
+        padding: 0.5rem 0;
+        white-space: nowrap;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(255,255,255,0.06) transparent;
+    }
+
+    #toc-panel-list::-webkit-scrollbar {
+        width: 3px;
+    }
+
+    #toc-panel-list::-webkit-scrollbar-thumb {
+        background: rgba(255,255,255,0.1);
+        border-radius: 2px;
+    }
+
+    .toc-p-item {
+        display: block;
+        padding: 0.3rem 1rem 0.3rem 1.25rem;
+        color: rgba(255,255,255,0.4);
+        font-size: 0.75rem;
+        line-height: 1.4;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        border-left: 2px solid transparent;
+        cursor: pointer;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .toc-p-item:hover {
+        color: rgba(255,255,255,0.7);
+        background: rgba(255,255,255,0.02);
+    }
+
+    .toc-p-item.active {
+        color: var(--accent);
+        border-left-color: var(--accent);
+        background: rgba(0,229,255,0.04);
+    }
+
+    .toc-p-item.h3 {
+        padding-left: 2rem;
+        font-size: 0.7rem;
+    }
+
+    @media (max-width: 768px) {
+        #toc-panel-toggle {
+            font-size: 0.6rem;
+            padding: 0.4rem 0.2rem;
+        }
+
+        #toc-floating-panel.open #toc-panel-content {
+            width: 13rem;
+        }
+
+        .toc-p-item {
+            padding: 0.25rem 0.75rem 0.25rem 1rem;
+            font-size: 0.7rem;
+        }
+
+        .toc-p-item.h3 {
+            padding-left: 1.5rem;
+            font-size: 0.65rem;
+        }
+
+        #toc-panel-header {
+            padding: 0.6rem 0.75rem;
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var content = document.querySelector('.doc-content');
+        if (!content) return;
+
+        var panel = document.getElementById('toc-floating-panel');
+        var toggleBtn = document.getElementById('toc-panel-toggle');
+        var listEl = document.getElementById('toc-panel-list');
+
+        var headings = content.querySelectorAll('h2, h3');
+
+        // 过滤掉已被隐藏的正文目录，并构建面板条目
+        var filteredHeadings = [];
+        headings.forEach(function (h) {
+            if (h.id === '目录') return;
+            filteredHeadings.push(h);
+        });
+
+        if (filteredHeadings.length < 2) {
+            panel.style.display = 'none';
+            return;
+        }
+
+        filteredHeadings.forEach(function (h) {
+            var item = document.createElement('a');
+            item.className = 'toc-p-item' + (h.tagName === 'H3' ? ' h3' : '');
+            var id = h.id || h.textContent.trim().toLowerCase().replace(/\s+/g, '-').replace(/[^\w\u4e00-\u9fff-]/g, '');
+            if (!h.id) h.id = id;
+            item.href = '#' + id;
+            item.textContent = h.textContent.trim();
+            item.addEventListener('click', function (e) {
+                e.preventDefault();
+                var target = document.getElementById(id);
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+            listEl.appendChild(item);
+        });
+
+        var items = listEl.querySelectorAll('.toc-p-item');
+        function updateActive() {
+            var scrollY = window.scrollY + 100;
+            var activeIdx = -1;
+            filteredHeadings.forEach(function (h, i) {
+                if (h.offsetTop <= scrollY) activeIdx = i;
+            });
+            items.forEach(function (item, i) {
+                item.classList.toggle('active', i === activeIdx);
+            });
+        }
+
+        window.addEventListener('scroll', updateActive);
+        updateActive();
+
+        toggleBtn.addEventListener('click', function () {
+            panel.classList.toggle('open');
+        });
+    });
+</script>
+</body>
+</html>

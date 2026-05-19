@@ -20,8 +20,8 @@ const SiteConfig = {
     //  1. 站点基础信息
     // ==========================================
     site: {
-        title: "CUMEXAL",              // 浏览器标签页标题
-        brand: "CUMEXAL",              // 导航栏左上角品牌名
+        title: "C U M E X A L",              // 浏览器标签页标题
+        brand: "C U M E X A L",              // 导航栏左上角品牌名
         description: "打破常规，重构逻辑", // 站点描述（SEO用）
     },
 
